@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>श्री शिवाजी शिक्षण संस्था कराड - शिक्षक भरती निवड सूची २०२५ (सर्व ४२ उमेदवार)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font: Inter & Marathi support -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans Devanagari', sans-serif;
+            width: 100vw;
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col w-full m-0 p-0">
+
+    <!-- Top Header Bar -->
+    <header class="bg-slate-900 text-white shadow-md sticky top-0 z-40 border-b border-amber-500/30 w-full">
+        <div class="max-w-full px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-2">
+            <div class="flex items-center gap-3">
+                <div class="bg-amber-500 text-slate-900 p-2.5 rounded-lg font-black text-xl shadow">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div>
+                    <h1 class="text-base md:text-lg font-bold tracking-tight text-white">श्री शिवाजी शिक्षण संस्था, कराड</h1>
+                    <p class="text-xs text-amber-400 font-medium">शिक्षक भरती पात्रता व निवड पोर्टल २०२५ (जाहिरात क्र. 273102SC083) - सर्व ४२ उमेदवार</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 text-xs font-semibold">
+                <span class="bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-md text-slate-300">
+                    <i class="fa-solid fa-users text-amber-400 mr-1.5"></i> एकूण पदे: <span class="text-white font-bold">16</span>
+                </span>
+                <span class="bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-md text-slate-300">
+                    <i class="fa-solid fa-circle-check text-emerald-400 mr-1.5"></i> निवडलेले: <span id="headerSelectedCount" class="text-emerald-400 font-bold">0</span>/16
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="w-full px-2 sm:px-4 py-6 flex-grow flex flex-col space-y-6">
+
+        <!-- Notice / Banner -->
+        <div class="bg-gradient-to-r from-amber-500 to-amber-600 rounded-xl p-4 text-slate-900 shadow-md flex flex-col md:flex-row items-center justify-between gap-4 w-full">
+            <div class="flex items-center gap-3">
+                <div class="bg-white/20 p-3 rounded-lg text-slate-900 text-xl">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <div>
+                    <h2 class="font-bold text-sm md:text-base">अधिकृत पीडीएफ अहवालातील सर्व ४२ उमेदवारांची यादी</h2>
+                    <p class="text-xs opacity-90">प्राथमिक आणि माध्यमिक विभागातील सर्व पात्र व गुणानुक्रमित उमेदवारांचा सविस्तर तपशील.</p>
+                </div>
+            </div>
+            <button onclick="resetManualSelections()" class="bg-slate-900 text-white hover:bg-slate-800 px-4 py-2 rounded-lg text-xs font-bold transition shadow whitespace-nowrap">
+                <i class="fa-solid fa-rotate-right mr-1.5 text-amber-400"></i> सर्व निवडी रीसेट करा
+            </button>
+        </div>
+
+        <!-- Selection Summary Dashboard & Detailed Goshwara (गोषवारा) -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 space-y-4 w-full">
+            <div class="flex items-center justify-between border-b pb-3">
+                <div class="flex items-center gap-2">
+                    <div class="bg-amber-100 text-amber-800 p-2 rounded-lg text-sm font-bold">
+                        <i class="fa-solid fa-chart-pie"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-slate-900">निवडघोषवारा व विषयनिहाय/प्रवर्गनिहाय गोषवारा (Selection Summary & Goshwara)</h3>
+                        <p class="text-[11px] text-slate-500">श्री शिवाजी शिक्षण संस्था कराड (एकूण पदे: १६ | प्राथमिक: २, माध्यमिक: १४)</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 text-xs">
+                    <span class="bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1 rounded-lg font-bold">
+                        निवडलेले: <span id="dashSelectedCount" class="text-emerald-700">0</span>/16
+                    </span>
+                    <span class="bg-amber-50 text-amber-800 border border-amber-200 px-3 py-1 rounded-lg font-bold">
+                        रिक्त पदे: <span id="dashRemainingCount" class="text-amber-700">16</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Quick Cards Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+                <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 flex flex-col justify-between">
+                    <span class="text-slate-500 font-medium">प्राथमिक विभाग (Std 1–5)</span>
+                    <div class="flex items-baseline justify-between mt-2">
+                        <span id="dashPrimaryText" class="font-bold text-slate-800 text-sm">0 / 2 निवडले</span>
+                        <span class="text-[10px] bg-slate-200 text-slate-700 px-2 py-0.5 rounded font-mono font-bold">2 पदे</span>
+                    </div>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 flex flex-col justify-between">
+                    <span class="text-slate-500 font-medium">माध्यमिक विभाग (Std 6–10)</span>
+                    <div class="flex items-baseline justify-between mt-2">
+                        <span id="dashSecondaryText" class="font-bold text-slate-800 text-sm">0 / 14 निवडले</span>
+                        <span class="text-[10px] bg-slate-200 text-slate-700 px-2 py-0.5 rounded font-mono font-bold">14 पदे</span>
+                    </div>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 flex flex-col justify-between">
+                    <span class="text-slate-500 font-medium">जनरल जागा (General - NA)</span>
+                    <div class="flex items-baseline justify-between mt-2">
+                        <span id="dashGeneralText" class="font-bold text-slate-800 text-sm">0 / 2 भरल्या</span>
+                        <span class="text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-mono font-bold">2 जागा</span>
+                    </div>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 flex flex-col justify-between">
+                    <span class="text-slate-500 font-medium">रद्द / Not Available उमेदवार</span>
+                    <div class="flex items-baseline justify-between mt-2">
+                        <span id="dashDisqText" class="font-bold text-rose-600 text-sm">0 नोंद</span>
+                        <span class="text-[10px] bg-rose-100 text-rose-800 px-2 py-0.5 rounded font-mono font-bold">सक्रिय</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subject-wise & Category-wise Detailed Goshwara Tables -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                <!-- Primary Goshwara -->
+                <div class="border border-slate-200 rounded-lg overflow-hidden">
+                    <div class="bg-slate-100 px-3 py-2 font-bold text-xs text-slate-800 flex justify-between items-center">
+                        <span><i class="fa-solid fa-child mr-1.5 text-amber-600"></i> प्राथमिक विभाग गोषवारा (Std 1-5)</span>
+                        <span id="primaryGoshwaraTotal" class="text-[10px] bg-amber-200 text-amber-900 px-2 py-0.5 rounded font-mono">0 / 2 भरली</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-50 text-[10px] text-slate-600 border-b">
+                                <tr>
+                                    <th class="p-2">प्रवर्ग / श्रेणी</th>
+                                    <th class="p-2 text-center">जाहिरात पदे</th>
+                                    <th class="p-2 text-center">निवडलेली पदे</th>
+                                    <th class="p-2 text-center">स्थिती</th>
+                                </tr>
+                            </thead>
+                            <tbody id="primaryGoshwaraBody">
+                                <!-- Populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Secondary Subject-wise Goshwara -->
+                <div class="border border-slate-200 rounded-lg overflow-hidden">
+                    <div class="bg-slate-100 px-3 py-2 font-bold text-xs text-slate-800 flex justify-between items-center">
+                        <span><i class="fa-solid fa-book-open mr-1.5 text-amber-600"></i> माध्यमिक विषयनिहाय गोषवारा (Std 6-10)</span>
+                        <span id="secondaryGoshwaraTotal" class="text-[10px] bg-amber-200 text-amber-900 px-2 py-0.5 rounded font-mono">0 / 14 भरली</span>
+                    </div>
+                    <div class="overflow-x-auto max-h-48 overflow-y-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-50 text-[10px] text-slate-600 border-b sticky top-0 bg-slate-50">
+                                <tr>
+                                    <th class="p-2">विषय / पद</th>
+                                    <th class="p-2 text-center">जाहिरात पदे</th>
+                                    <th class="p-2 text-center">निवडलेली</th>
+                                    <th class="p-2 text-center">स्थिती</th>
+                                </tr>
+                            </thead>
+                            <tbody id="secondaryGoshwaraBody">
+                                <!-- Populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter & Search Bar -->
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs w-full">
+            <div>
+                <label class="block font-bold text-slate-700 mb-1">विषय / विभाग</label>
+                <select id="filterSubject" onchange="applyCandidateFilters()" class="w-full border border-slate-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-amber-500 outline-none font-medium">
+                    <option value="">सर्व विषय (All Subjects)</option>
+                </select>
+            </div>
+            <div>
+                <label class="block font-bold text-slate-700 mb-1">शिफारस प्रवर्ग (Recommendation Category)</label>
+                <select id="filterRecCategory" onchange="applyCandidateFilters()" class="w-full border border-slate-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-amber-500 outline-none font-medium">
+                    <option value="">सर्व प्रवर्ग (All Categories)</option>
+                </select>
+            </div>
+            <div>
+                <label class="block font-bold text-slate-700 mb-1">उमेदवार शोधा (नाव / ID)</label>
+                <div class="relative">
+                    <input type="text" id="searchInput" oninput="applyCandidateFilters()" placeholder="नाव किंवा टीआयटी गुण..." class="w-full border border-slate-300 rounded-lg p-2 pl-8 bg-white focus:ring-2 focus:ring-amber-500 outline-none font-medium">
+                    <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-400"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="flex border-b border-slate-200 gap-2 overflow-x-auto w-full">
+            <button onclick="switchTab('primary')" id="tabBtnPrimary" class="px-5 py-2.5 font-bold text-xs rounded-t-lg transition border-b-2 border-amber-500 bg-white text-amber-600 shadow-sm flex items-center gap-2 whitespace-nowrap">
+                <i class="fa-solid fa-child"></i> प्राथमिक विभाग (Std 1–5) <span id="badgePrimary" class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full text-[10px]">6</span>
+            </button>
+            <button onclick="switchTab('secondary')" id="tabBtnSecondary" class="px-5 py-2.5 font-bold text-xs rounded-t-lg transition border-b-2 border-transparent text-slate-600 hover:bg-white/50 flex items-center gap-2 whitespace-nowrap">
+                <i class="fa-solid fa-book-open"></i> माध्यमिक विभाग (Std 6–10) <span id="badgeSecondary" class="bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full text-[10px]">36</span>
+            </button>
+            <button onclick="switchTab('disqualified')" id="tabBtnDisqualified" class="px-5 py-2.5 font-bold text-xs rounded-t-lg transition border-b-2 border-transparent text-slate-600 hover:bg-white/50 flex items-center gap-2 whitespace-nowrap">
+                <i class="fa-solid fa-ban text-rose-500"></i> रद्द / Not Available यादी <span id="badgeDisqualified" class="bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full text-[10px]">0</span>
+            </button>
+            <button onclick="switchTab('summary')" id="tabBtnSummary" class="px-5 py-2.5 font-bold text-xs rounded-t-lg transition border-b-2 border-transparent text-slate-600 hover:bg-white/50 flex items-center gap-2 whitespace-nowrap">
+                <i class="fa-solid fa-file-invoice"></i> अंतिम शिफारस अहवाल <span id="badgeSummary" class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[10px]">0</span>
+            </button>
+        </div>
+
+        <!-- Tab 1: Primary Candidates -->
+        <div id="tabContentPrimary" class="tab-content bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden w-full">
+            <div class="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+                <div>
+                    <h3 class="font-bold text-sm text-slate-800">प्राथमिक विभाग (इयत्ता १ ली ते ५ वी) - एकूण पदे: २</h3>
+                    <p class="text-xs text-slate-500">पीडीएफ मधील प्राथमिक स्तरावरील सर्व पात्र उमेदवार</p>
+                </div>
+                <div class="text-xs font-bold bg-amber-50 text-amber-800 px-3 py-1 rounded border border-amber-200">
+                    निवडलेले: <span id="primarySelectedCount">0</span> / 2
+                </div>
+            </div>
+            <div class="overflow-x-auto w-full">
+                <table class="w-full text-left border-collapse min-w-[700px]">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700 uppercase text-[10px] tracking-wider font-bold border-b border-slate-200">
+                            <th class="p-2.5 text-center">अ.क्र.</th>
+                            <th class="p-2.5">उमेदवाराचे नाव</th>
+                            <th class="p-2.5 text-center">जन्मतारीख</th>
+                            <th class="p-2.5 text-center">टीआयटी गुण</th>
+                            <th class="p-2.5 text-center">पसंती क्र.</th>
+                            <th class="p-2.5">पद / विषय</th>
+                            <th class="p-2.5 text-center">शिफारस प्रवर्ग</th>
+                            <th class="p-2.5 text-center">सध्याची स्थिती (कारण)</th>
+                            <th class="p-2.5 text-center">कृती</th>
+                        </tr>
+                    </thead>
+                    <tbody id="primaryTableBody">
+                        <!-- Populated via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tab 2: Secondary Candidates -->
+        <div id="tabContentSecondary" class="tab-content bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hidden w-full">
+            <div class="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+                <div>
+                    <h3 class="font-bold text-sm text-slate-800">माध्यमिक विभाग (इयत्ता ६ वी ते १० वी) - एकूण पदे: १४</h3>
+                    <p class="text-xs text-slate-500">अधिकृत पीडीएफ मधील माध्यमिक स्तरावरील सर्व पात्र उमेदवार</p>
+                </div>
+                <div class="text-xs font-bold bg-amber-50 text-amber-800 px-3 py-1 rounded border border-amber-200">
+                    निवडलेले: <span id="secondarySelectedCount">0</span> / 14
+                </div>
+            </div>
+            <div class="overflow-x-auto w-full">
+                <table class="w-full text-left border-collapse min-w-[700px]">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700 uppercase text-[10px] tracking-wider font-bold border-b border-slate-200">
+                            <th class="p-2.5 text-center">अ.क्र.</th>
+                            <th class="p-2.5">उमेदवाराचे नाव</th>
+                            <th class="p-2.5 text-center">जन्मतारीख</th>
+                            <th class="p-2.5 text-center">टीआयटी गुण</th>
+                            <th class="p-2.5 text-center">पसंती क्र.</th>
+                            <th class="p-2.5">पद / विषय</th>
+                            <th class="p-2.5 text-center">शिफारस प्रवर्ग</th>
+                            <th class="p-2.5 text-center">सध्याची स्थिती (कारण)</th>
+                            <th class="p-2.5 text-center">कृती</th>
+                        </tr>
+                    </thead>
+                    <tbody id="secondaryTableBody">
+                        <!-- Populated via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tab 3: Disqualified / Vacated List -->
+        <div id="tabContentDisqualified" class="tab-content bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hidden w-full">
+            <div class="p-4 bg-rose-50 border-b border-rose-100 flex justify-between items-center">
+                <div>
+                    <h3 class="font-bold text-sm text-rose-900">रद्द / Not Available for Selection यादी</h3>
+                    <p class="text-xs text-rose-700">विषय कोटा किंवा शिफारस प्रवर्ग भरला गेल्यामुळे नॉट अवेलेबल असलेल्या उमेदवारांचा तपशील.</p>
+                </div>
+                <span id="disqCountBadge" class="bg-rose-200 text-rose-900 px-2.5 py-0.5 rounded-full text-xs font-bold">0</span>
+            </div>
+            <div class="overflow-x-auto w-full">
+                <table class="w-full text-left border-collapse min-w-[600px]">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700 uppercase text-[10px] tracking-wider font-bold border-b border-slate-200">
+                            <th class="p-2.5 text-center">अ.क्र.</th>
+                            <th class="p-2.5">उमेदवाराचे नाव</th>
+                            <th class="p-2.5 text-center">विषय</th>
+                            <th class="p-2.5 text-center">शिफारस प्रवर्ग</th>
+                            <th class="p-2.5">न मिळण्याचे कारण व संबंधित निवडलेला उमेदवार</th>
+                        </tr>
+                    </thead>
+                    <tbody id="disqualifiedTableBody">
+                        <!-- Populated via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tab 4: Summary Report -->
+        <div id="tabContentSummary" class="tab-content bg-white rounded-xl shadow-sm border border-slate-200 p-6 hidden space-y-6 w-full">
+            <div class="border-b pb-4 flex justify-between items-center">
+                <div>
+                    <h3 class="font-bold text-base text-slate-900"><i class="fa-solid fa-file-shield text-amber-600 mr-2"></i> अंतिम शिफारस व निवड अहवाल</h3>
+                    <p class="text-xs text-slate-500">श्री शिवाजी शिक्षण संस्था कराड (संस्था कोड: 273102SC083)</p>
+                </div>
+                <button onclick="window.print()" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-slate-800 transition shadow">
+                    <i class="fa-solid fa-print mr-1.5 text-amber-400"></i> प्रिंट / डाऊनलोड करा
+                </button>
+            </div>
+            <div id="summaryContentContainer" class="space-y-4 text-xs w-full">
+                <!-- Populated via JS -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Candidate Details Modal -->
+    <div id="candidateModal" class="fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 border border-slate-100 relative">
+            <button onclick="closeCandidateModal()" class="absolute right-4 top-4 text-slate-400 hover:text-slate-700 bg-slate-100 w-8 h-8 rounded-full flex items-center justify-center font-bold">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="flex items-center gap-3 border-b pb-3">
+                <div class="bg-amber-100 text-amber-800 p-3 rounded-xl text-lg font-bold">
+                    <i class="fa-solid fa-user-graduate"></i>
+                </div>
+                <div>
+                    <h4 id="modalCandidateName" class="font-bold text-base text-slate-900">उमेदवाराचे नाव</h4>
+                    <p id="modalCandidateId" class="text-xs text-slate-500 font-mono">ID: --</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3 text-xs">
+                <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+                    <span class="text-slate-500 block">जन्मतारीख</span>
+                    <strong id="modalDob" class="text-slate-800">--</strong>
+                </div>
+                <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+                    <span class="text-slate-500 block">टीआयटी गुण</span>
+                    <strong id="modalTait" class="text-amber-600 font-bold">--</strong>
+                </div>
+                <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+                    <span class="text-slate-500 block">पसंती क्रम</span>
+                    <strong id="modalPref" class="text-slate-800 font-mono">--</strong>
+                </div>
+                <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+                    <span class="text-slate-500 block">विभाग</span>
+                    <strong id="modalLevel" class="text-slate-800 font-semibold">--</strong>
+                </div>
+                <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200 col-span-2">
+                    <span class="text-slate-500 block">विषय व पद</span>
+                    <strong id="modalSubjectPost" class="text-slate-800">--</strong>
+                </div>
+                <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200 col-span-2">
+                    <span class="text-slate-500 block">शिफारस प्रवर्ग (Recommendation Category)</span>
+                    <strong id="modalRecCategory" class="text-purple-700 font-bold">--</strong>
+                </div>
+            </div>
+            <div class="pt-2 flex justify-end">
+                <button onclick="closeCandidateModal()" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-slate-800 transition">बंद करा</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Force Selection Confirmation Modal -->
+    <div id="forceSelectModal" class="fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 border border-amber-200 relative">
+            <div class="flex items-center gap-3 border-b pb-3">
+                <div class="bg-amber-100 text-amber-700 p-3 rounded-xl text-xl font-bold">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-900 text-sm">कॅंडिडेट सक्तीने (Forcefully) निवड करणे</h4>
+                    <p class="text-[11px] text-amber-700 font-medium">इतर संबंधित निवडी रद्द होणार आहेत</p>
+                </div>
+            </div>
+            <div id="forceModalBody" class="text-xs text-slate-700 space-y-2 bg-amber-50/60 p-3 rounded-lg border border-amber-200">
+                <!-- Dynamic conflict details -->
+            </div>
+            <div class="pt-2 flex gap-2 justify-end">
+                <button onclick="closeForceModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2 rounded-lg text-xs font-bold transition">रद्द करा</button>
+                <button id="confirmForceBtn" onclick="executeForceSelection()" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg text-xs font-bold transition shadow">सक्तीने निवड करा (Force Select)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Modal -->
+    <div id="alertModal" class="fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 border border-slate-100 text-center">
+            <div id="alertModalIcon" class="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto text-xl font-bold">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h4 id="alertModalTitle" class="font-bold text-base text-slate-900">सूचना</h4>
+            <p id="alertModalMessage" class="text-xs text-slate-600 leading-relaxed">संदेश</p>
+            <div class="pt-2">
+                <button onclick="closeAlertModal()" class="bg-slate-900 text-white px-6 py-2 rounded-lg text-xs font-bold hover:bg-slate-800 transition shadow">ठिक आहे</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Official Post Capacity Caps based on PDF
+        const postCapacities = {
+            "All Subjects (1-5)": 2,
+            "Language (Sanskrit)": 1,
+            "History": 2,
+            "Language (English)": 2,
+            "Mathematics": 1,
+            "Science": 1,
+            "Special Teacher (Work Education)": 1,
+            "Physical Education": 2,
+            "Language (Marathi)": 1,
+            "Language (Hindi)": 1
+        };
+
+        // Exactly 6 Primary Candidates (Std 1-5) from official PDF
+        const primaryCandidates = [
+            { id: "PRI-01", name: "उर्मिला वसंत माळी (URMILA VASANT MALI)", dob: "25/01/1992", tait: 120.00, pref: 4, subject: "All Subjects (1-5)", post: "Under Graduate Teacher (1-5)", recCategory: "OBC - (NA)", level: "Primary", category: "OBC" },
+            { id: "PRI-02", name: "संजीवनी सागर कुंभार (SANJIVANI SAGAR KUMBHAR)", dob: "28/08/1992", tait: 120.00, pref: 4, subject: "All Subjects (1-5)", post: "Under Graduate Teacher (1-5)", recCategory: "OBC - (NA)", level: "Primary", category: "OBC" },
+            { id: "PRI-03", name: "अनंता विठोबा शिंगणे (ANANTA VITHOBA SHINGNE)", dob: "20/07/1987", tait: 119.00, pref: 39, subject: "All Subjects (1-5)", post: "Under Graduate Teacher (1-5)", recCategory: "OBC - (NA)", level: "Primary", category: "OBC" },
+            { id: "PRI-04", name: "महेन्द्र दिनकर धुम (MAHENDRA DINKAR DHUM)", dob: "13/06/1989", tait: 96.00, pref: 13, subject: "All Subjects (1-5)", post: "Under Graduate Teacher (1-5)", recCategory: "ST - (NA)", level: "Primary", category: "ST" },
+            { id: "PRI-05", name: "इब्राहिम वळवी (IBRAHIM VALVI)", dob: "14/11/1989", tait: 96.00, pref: 1, subject: "All Subjects (1-5)", post: "Under Graduate Teacher (1-5)", recCategory: "ST - (NA)", level: "Primary", category: "ST" },
+            { id: "PRI-06", name: "प्रकाश पुनाजी जोपाळे (PRAKASH PUNAJI JOPALE)", dob: "31/05/1991", tait: 96.00, pref: 32, subject: "All Subjects (1-5)", post: "Under Graduate Teacher (1-5)", recCategory: "ST - (NA)", level: "Primary", category: "ST" }
+        ];
+
+        // Exactly 36 Secondary Candidates (Std 6-10) from official PDF
+        const secondaryCandidates = [
+            { id: "SEC-01", name: "गौरी भूषण कुलकर्णी (GAURI BHUSHAN KULKARNI)", dob: "22/02/1989", tait: 140.00, pref: 1, subject: "Language (Sanskrit)", post: "Graduate Teacher (9-10)", recCategory: "General - Women", level: "Secondary" },
+            { id: "SEC-02", name: "पुष्पलता संदीप पाटील (PUSHPALATA SANDEEP PATIL)", dob: "17/05/1987", tait: 139.00, pref: 6, subject: "History", post: "Graduate Teacher (9-10)", recCategory: "General - (NA)", level: "Secondary" },
+            { id: "SEC-03", name: "अमोल भोसले (AMOL BHOSALE)", dob: "10/09/1997", tait: 137.00, pref: 4, subject: "Language (English)", post: "Graduate Teacher (9-10)", recCategory: "General - (NA)", level: "Secondary" },
+            { id: "SEC-04", name: "स्नेहल सुहास यादव (SNEHAL SUHAS YADAV)", dob: "09/06/1983", tait: 135.00, pref: 1, subject: "Language (Marathi)", post: "Graduate Teacher (9-10)", recCategory: "General - (NA)", level: "Secondary" },
+            { id: "SEC-05", name: "शालवी अविनाश पवार (SHALVI AVINASH PAWAR)", dob: "11/04/2001", tait: 133.00, pref: 1, subject: "Language (Sanskrit)", post: "Graduate Teacher (9-10)", recCategory: "General - (NA)", level: "Secondary" },
+            { id: "SEC-06", name: "कल्याणी ओंकार पाटील (KALYANI OMKAR PATIL)", dob: "17/04/1995", tait: 132.00, pref: 1, subject: "Mathematics", post: "Graduate Teacher (6-8)", recCategory: "General - (NA)", level: "Secondary" },
+            { id: "SEC-07", name: "वैशाली महेश पवार (VAISHALI MAHESH PAWAR)", dob: "07/05/1988", tait: 131.00, pref: 2, subject: "Language (Marathi)", post: "Graduate Teacher (9-10)", recCategory: "General - (NA)", level: "Secondary" },
+            { id: "SEC-08", name: "सोनाली सुनील चव्हाण (SONALI SUNIL CHAVAN)", dob: "16/07/1995", tait: 131.00, pref: 1, subject: "Language (English)", post: "Graduate Teacher (9-10)", recCategory: "General - (NA)", level: "Secondary" },
+            { id: "SEC-09", name: "मंगेश विठ्ठल हिरवे (MANGESH VITTHAL HIRVE)", dob: "03/01/1994", tait: 129.00, pref: 4, subject: "Mathematics", post: "Graduate Teacher (6-8)", recCategory: "NT-C - (NA)", level: "Secondary" },
+            { id: "SEC-10", name: "शितल अमोल जाधव (SHITAL AMOL JADHAV)", dob: "25/07/1985", tait: 126.00, pref: 5, subject: "Language (English)", post: "Graduate Teacher (6-8)", recCategory: "SEBC - (Women)", level: "Secondary" },
+            { id: "SEC-11", name: "मयूरी रामचंद्र माळी (MAYURI RAMCHANDRA MALI)", dob: "21/01/1988", tait: 126.00, pref: 2, subject: "Language (English)", post: "Graduate Teacher (6-8)", recCategory: "OBC - (Women)", level: "Secondary" },
+            { id: "SEC-12", name: "संध्या सुधीर लोखंडे (SANDHYA SUDHIR LOKHANDE)", dob: "23/03/1988", tait: 125.00, pref: 11, subject: "Language (Marathi)", post: "Graduate Teacher (9-10)", recCategory: "OBC - (Women)", level: "Secondary" },
+            { id: "SEC-13", name: "स्मिता शेषरावजी गायकवाड (SMITA SHESHRAOJI GAIKWAD)", dob: "23/01/1986", tait: 125.00, pref: 9, subject: "Language (English)", post: "Graduate Teacher (9-10)", recCategory: "OBC - (Women)", level: "Secondary" },
+            { id: "SEC-14", name: "अश्विनी राजेंद्र खरात (ASHWINI RAJENDRA KHARAT)", dob: "30/12/1997", tait: 125.00, pref: 22, subject: "Mathematics", post: "Graduate Teacher (6-8)", recCategory: "NT-C", level: "Secondary" },
+            { id: "SEC-15", name: "सारिका चंद्रकांत कदम (SARIKA CHANDRAKANT KADAM)", dob: "10/05/1986", tait: 124.00, pref: 14, subject: "Science", post: "Graduate Teacher (6-8)", recCategory: "SEBC - (Women)", level: "Secondary" },
+            { id: "SEC-16", name: "स्नेहल विवेक देसाई (SNEHAL VIVEK DESAI)", dob: "11/11/1992", tait: 124.00, pref: 8, subject: "Science", post: "Graduate Teacher (6-8)", recCategory: "SEBC - (NA)", level: "Secondary" },
+            { id: "SEC-17", name: "रूपोली लाकडे (RUPALI LAKADE)", dob: "23/01/1986", tait: 122.00, pref: 22, subject: "All Subjects (1-5)", post: "Under Graduate Teacher (1-5)", recCategory: "NA", level: "Secondary" },
+            { id: "SEC-18", name: "स्वाती एकनाथ सासने (SWATI EKNATH SASNE)", dob: "28/03/2002", tait: 120.00, pref: 28, subject: "Language (Hindi)", post: "Graduate Teacher (6-8)", recCategory: "SEBC - (NA)", level: "Secondary" },
+            { id: "SEC-19", name: "अजित तुकाराम घाडगे (AJIT TUKARAM GHADAGE)", dob: "10/11/1988", tait: 119.00, pref: 5, subject: "Language (Sanskrit)", post: "Graduate Teacher (9-10)", recCategory: "SEBC - (NA)", level: "Secondary" },
+            { id: "SEC-20", name: "दयानंद नामदेव राऊत (DAYANAND NAMDEV RAUT)", dob: "14/11/1989", tait: 117.00, pref: 3, subject: "Language (Hindi)", post: "Graduate Teacher (6-8)", recCategory: "OBC - (NA)", level: "Secondary" },
+            { id: "SEC-21", name: "राहुल सुरेश कांबळे (RAHUL SURESH KAMBLE)", dob: "15/06/1990", tait: 115.00, pref: 2, subject: "History", post: "Graduate Teacher (9-10)", recCategory: "SC - (NA)", level: "Secondary" },
+            { id: "SEC-22", name: "प्रियंका संतोष माने (PRIYANKA SANTOSH MANE)", dob: "12/09/1993", tait: 114.00, pref: 4, subject: "Mathematics", post: "Graduate Teacher (6-8)", recCategory: "SC - (Women)", level: "Secondary" },
+            { id: "SEC-23", name: "विकास अनंत शेलार (VIKAS ANANT SHELAR)", dob: "05/12/1988", tait: 112.00, pref: 7, subject: "Science", post: "Graduate Teacher (6-8)", recCategory: "SC - (NA)", level: "Secondary" },
+            { id: "SEC-24", name: "दीपक पांडुरंग कांबळे (DEEPAK PANDURANG KAMBLE)", dob: "20/01/1987", tait: 111.00, pref: 3, subject: "Language (Hindi)", post: "Graduate Teacher (6-8)", recCategory: "SBC - (NA)", level: "Secondary" },
+            { id: "SEC-25", name: "सुषमा बाळकृष्ण जगताप (SUSHMA BALKRISHNA JAGTAP)", dob: "18/04/1991", tait: 110.00, pref: 1, subject: "Language (Marathi)", post: "Graduate Teacher (9-10)", recCategory: "SC - (Women)", level: "Secondary" },
+            { id: "SEC-26", name: "किरण संजय गायकवाड (KIRAN SANJAY GAIKWAD)", dob: "25/08/1994", tait: 108.00, pref: 6, subject: "Language (English)", post: "Graduate Teacher (6-8)", recCategory: "SC - (NA)", level: "Secondary" },
+            { id: "SEC-27", name: "प्रशांत रामचंद्र मोरे (PRASHANT RAMCHANDRA MORE)", dob: "11/02/1989", tait: 105.00, pref: 9, subject: "History", post: "Graduate Teacher (9-10)", recCategory: "SC - (NA)", level: "Secondary" },
+            { id: "SEC-28", name: "पूजा सुनील सावंत (POOJA SUNIL SAWANT)", dob: "04/07/1995", tait: 102.00, pref: 12, subject: "Science", post: "Graduate Teacher (6-8)", recCategory: "SC - (Women)", level: "Secondary" },
+            { id: "SEC-29", name: "अतुल नामदेव हरळे (ATUL NAMDEV HARALE)", dob: "03/08/1994", tait: 100.00, pref: 23, subject: "Language (English)", post: "Graduate Teacher (9-10)", recCategory: "NT-C - (NA)", level: "Secondary" },
+            { id: "SEC-30", name: "शिवशंकर विक्रम गोमसाळे (SHIVSHANKAR VIKRAM GOMSALE)", dob: "19/03/1996", tait: 100.00, pref: 35, subject: "History", post: "Graduate Teacher (9-10)", recCategory: "PH - (Ortho)", level: "Secondary" },
+            { id: "SEC-31", name: "प्रदीप बंडू जाधव (PRADIP BANDU JADHAV)", dob: "09/10/1992", tait: 90.00, pref: 13, subject: "Physical Education", post: "Graduate Teacher (9-10)", recCategory: "VJ-A - (NA)", level: "Secondary" },
+            { id: "SEC-32", name: "विनायक प्रभाकर वाघेरे (VINAYAK PRABHAKAR WAGHERE)", dob: "23/06/1987", tait: 87.00, pref: 23, subject: "Special Teacher (Work Education)", post: "Graduate Teacher (6-8)", recCategory: "ST - (NA)", level: "Secondary" },
+            { id: "SEC-33", name: "फुलचंद राठोड (FULCHAND RATHOD)", dob: "10/05/1989", tait: 84.00, pref: 3, subject: "Physical Education", post: "Graduate Teacher (9-10)", recCategory: "VJ-A - (NA)", level: "Secondary" },
+            { id: "SEC-34", name: "पूनम संजय जाधव (POONAM SANJAY JADHAV)", dob: "31/12/1992", tait: 80.00, pref: 3, subject: "Special Teacher (Work Education)", post: "Graduate Teacher (6-8)", recCategory: "VJ-A - (NA)", level: "Secondary" },
+            { id: "SEC-35", name: "रमेश रघु वसावे (RAMESH RAGHU VASAVE)", dob: "31/05/1991", tait: 75.00, pref: 32, subject: "Special Teacher (Work Education)", post: "Graduate Teacher (6-8)", recCategory: "ST - (NA)", level: "Secondary" },
+            { id: "SEC-36", name: "अंकुश राजेश हादाल (ANKUSH RAJESH HADAL)", dob: "03/02/1992", tait: 72.00, pref: 18, subject: "Physical Education", post: "Graduate Teacher (9-10)", recCategory: "ST - (NA)", level: "Secondary" }
+        ];
+
+        const allCandidatesCombined = [...primaryCandidates, ...secondaryCandidates];
+        let selectedCandidatesMap = new Map();
+        let pendingForceCandidate = null;
+        let pendingConflictsList = [];
+
+        window.onload = function() {
+            populateDropdowns();
+            applyCandidateFilters();
+            updateAllUI();
+        };
+
+        function populateDropdowns() {
+            const subjects = [...new Set(allCandidatesCombined.map(c => c.subject))];
+            const subjSelect = document.getElementById('filterSubject');
+            subjects.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s;
+                opt.textContent = s;
+                subjSelect.appendChild(opt);
+            });
+
+            const recCategories = [...new Set(allCandidatesCombined.map(c => c.recCategory))];
+            const recSelect = document.getElementById('filterRecCategory');
+            recCategories.forEach(rc => {
+                const opt = document.createElement('option');
+                opt.value = rc;
+                opt.textContent = rc;
+                recSelect.appendChild(opt);
+            });
+        }
+
+        function switchTab(tabKey) {
+            ['primary', 'secondary', 'disqualified', 'summary'].forEach(t => {
+                const btn = document.getElementById(`tabBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
+                const content = document.getElementById(`tabContent${t.charAt(0).toUpperCase() + t.slice(1)}`);
+                if (btn && content) {
+                    if (t === tabKey) {
+                        btn.className = "px-5 py-2.5 font-bold text-xs rounded-t-lg transition border-b-2 border-amber-500 bg-white text-amber-600 shadow-sm flex items-center gap-2 whitespace-nowrap";
+                        content.classList.remove('hidden');
+                    } else {
+                        btn.className = "px-5 py-2.5 font-bold text-xs rounded-t-lg transition border-b-2 border-transparent text-slate-600 hover:bg-white/50 flex items-center gap-2 whitespace-nowrap";
+                        content.classList.add('hidden');
+                    }
+                }
+            });
+
+            if (tabKey === 'disqualified') {
+                renderDisqualifiedTable(calculateDisqualifiedCandidates());
+            } else if (tabKey === 'summary') {
+                renderSummaryReport();
+            }
+        }
+
+        function applyCandidateFilters() {
+            const subj = document.getElementById('filterSubject').value;
+            const recCat = document.getElementById('filterRecCategory').value;
+            const search = document.getElementById('searchInput').value.toLowerCase().trim();
+
+            const filterFn = (c) => {
+                const matchSubj = !subj || c.subject === subj;
+                const matchRec = !recCat || c.recCategory === recCat;
+                const matchSearch = !search || c.name.toLowerCase().includes(search) || c.id.toLowerCase().includes(search) || c.tait.toString().includes(search);
+                return matchSubj && matchRec && matchSearch;
+            };
+
+            const getSortWeight = (c, selectedPrimaryList, secondarySelectedList) => {
+                const isSelected = selectedCandidatesMap.has(c.id);
+                if (isSelected) return 2;
+
+                let isNotAvailable = false;
+                if (c.level === 'Primary') {
+                    const matchingCatSelected = selectedPrimaryList.find(x => x.category === c.category);
+                    const isTotalFull = selectedPrimaryList.length >= 2;
+                    isNotAvailable = Boolean(matchingCatSelected) || isTotalFull;
+                } else {
+                    const maxCap = postCapacities[c.subject] || 1;
+                    const sameSubjectSelected = secondarySelectedList.filter(x => x.subject === c.subject);
+                    const generalNaSelectedCount = secondarySelectedList.filter(x => x.recCategory === "General - (NA)").length;
+                    
+                    const isSubjectQuotaFull = sameSubjectSelected.length >= maxCap;
+                    const isGeneralNaFull = c.recCategory === "General - (NA)" && generalNaSelectedCount >= 2;
+                    
+                    let sameRecCatSelected = null;
+                    if (c.recCategory !== "General - (NA)" && c.recCategory !== "General - Women") {
+                        sameRecCatSelected = secondarySelectedList.find(x => x.recCategory === c.recCategory);
+                    }
+                    isNotAvailable = isSubjectQuotaFull || isGeneralNaFull || Boolean(sameRecCatSelected);
+                }
+
+                if (isNotAvailable) return 3;
+                return 1;
+            };
+
+            const selectedPrimaryList = [];
+            const secondarySelectedList = [];
+            selectedCandidatesMap.forEach(val => {
+                if (val.level === 'Primary') selectedPrimaryList.push(val);
+                if (val.level === 'Secondary') secondarySelectedList.push(val);
+            });
+
+            const sortComparator = (a, b) => {
+                const weightA = getSortWeight(a, selectedPrimaryList, secondarySelectedList);
+                const weightB = getSortWeight(b, selectedPrimaryList, secondarySelectedList);
+                if (weightA !== weightB) return weightA - weightB;
+                return b.tait - a.tait;
+            };
+
+            const filteredPrimary = primaryCandidates.filter(filterFn).sort(sortComparator);
+            const filteredSecondary = secondaryCandidates.filter(filterFn).sort(sortComparator);
+
+            renderPrimaryTable(filteredPrimary);
+            renderSecondaryTable(filteredSecondary);
+        }
+
+        function toggleCandidateSelection(id, subject, pref) {
+            const candidate = allCandidatesCombined.find(c => c.id === id);
+            if (!candidate) return;
+
+            if (selectedCandidatesMap.has(id)) {
+                selectedCandidatesMap.delete(id);
+                updateAllUI();
+                applyCandidateFilters();
+                return;
+            }
+
+            let conflictCandidates = [];
+
+            if (candidate.level === "Primary") {
+                let primaryCount = 0;
+                let sameCatSelected = null;
+                selectedCandidatesMap.forEach(val => {
+                    if (val.level === "Primary") {
+                        primaryCount++;
+                        if (val.category === candidate.category) sameCatSelected = val;
+                    }
+                });
+
+                if (primaryCount >= 2) {
+                    selectedCandidatesMap.forEach(val => {
+                        if (val.level === "Primary" && conflictCandidates.length === 0) conflictCandidates.push(val);
+                    });
+                } else if (sameCatSelected) {
+                    conflictCandidates.push(sameCatSelected);
+                }
+            } else {
+                let currentSubjCount = 0;
+                let generalNaCount = 0;
+                const maxSubjCap = postCapacities[subject] || 1;
+                let sameSubjectSelectedList = [];
+                let sameRecCatSelected = null;
+                let genNaSelectedList = [];
+
+                selectedCandidatesMap.forEach(val => {
+                    if (val.level === "Secondary") {
+                        if (val.subject === subject) {
+                            currentSubjCount++;
+                            sameSubjectSelectedList.push(val);
+                        }
+                        if (val.recCategory === "General - (NA)") {
+                            generalNaCount++;
+                            genNaSelectedList.push(val);
+                        }
+                        if (candidate.recCategory !== "General - (NA)" && candidate.recCategory !== "General - Women" && val.recCategory === candidate.recCategory) {
+                            sameRecCatSelected = val;
+                        }
+                    }
+                });
+
+                if (currentSubjCount >= maxSubjCap) {
+                    conflictCandidates = [...sameSubjectSelectedList];
+                } else if (candidate.recCategory === "General - (NA)" && generalNaCount >= 2) {
+                    conflictCandidates = [...genNaSelectedList];
+                } else if (sameRecCatSelected) {
+                    conflictCandidates.push(sameRecCatSelected);
+                }
+            }
+
+            if (conflictCandidates.length > 0) {
+                pendingForceCandidate = { id, subject, pref };
+                pendingConflictsList = conflictCandidates;
+                openForceModal(candidate, conflictCandidates);
+            } else {
+                executeNormalSelection(id, subject, pref);
+            }
+        }
+
+        function executeNormalSelection(id, subject, pref) {
+            const candidate = allCandidatesCombined.find(c => c.id === id);
+            if (!candidate) return;
+            selectedCandidatesMap.set(id, { ...candidate, subject, pref });
+            updateAllUI();
+            applyCandidateFilters();
+        }
+
+        function openForceModal(candidate, conflicts) {
+            const modal = document.getElementById('forceSelectModal');
+            const body = document.getElementById('forceModalBody');
+            
+            body.innerHTML = `
+                <p><strong>${candidate.name}</strong> (${candidate.subject}, गुण: ${candidate.tait}) हा उमेदवार सध्या नॉट अवेलेबल आहे.</p>
+                <p class="font-semibold text-amber-900 mt-1">हा उमेदवार सक्तीने निवडल्यास खालील आधीच निवडलेल्या उमेदवारांची निवड रद्द (Replace) होईल:</p>
+                <ul class="list-disc pl-4 space-y-1 mt-1 font-mono text-[11px] text-slate-800">
+                    ${conflicts.map(x => `<li><strong>${x.name}</strong> (${x.subject}, प्रवर्ग: ${x.recCategory})</li>`).join('')}
+                </ul>
+            `;
+            modal.classList.remove('hidden');
+        }
+
+        function closeForceModal() {
+            document.getElementById('forceSelectModal').classList.add('hidden');
+            pendingForceCandidate = null;
+            pendingConflictsList = [];
+        }
+
+        function executeForceSelection() {
+            if (!pendingForceCandidate) return;
+
+            pendingConflictsList.forEach(conf => {
+                selectedCandidatesMap.delete(conf.id);
+            });
+
+            const candidate = allCandidatesCombined.find(c => c.id === pendingForceCandidate.id);
+            if (candidate) {
+                selectedCandidatesMap.set(candidate.id, { ...candidate, subject: pendingForceCandidate.subject, pref: pendingForceCandidate.pref });
+            }
+
+            closeForceModal();
+            updateAllUI();
+            applyCandidateFilters();
+        }
+
+        function calculateDisqualifiedCandidates() {
+            const disq = [];
+
+            const selectedPrimaryList = [];
+            selectedCandidatesMap.forEach(c => {
+                if (c.level === "Primary") selectedPrimaryList.push(c);
+            });
+
+            primaryCandidates.forEach(c => {
+                if (!selectedCandidatesMap.has(c.id)) {
+                    if (selectedPrimaryList.length >= 2) {
+                        disq.push({ ...c, reason: `प्राथमिक विभागाची सर्व २ पदे पूर्ण झाल्यामुळे Not Available (उदा. ${selectedPrimaryList.map(x => x.name).join(', ')} यांची निवड झाल्यामुळे).` });
+                    } else {
+                        const matchingCatSelected = selectedPrimaryList.find(x => x.category === c.category);
+                        if (matchingCatSelected) {
+                            disq.push({ ...c, reason: `प्राथमिक पद भरतीमध्ये '${c.category}' प्रवर्गाची जागा '${matchingCatSelected.name}' यांच्याद्वारे आधीच भरल्यामुळे Not Available.` });
+                        }
+                    }
+                }
+            });
+
+            const secondarySelectedList = [];
+            selectedCandidatesMap.forEach(c => {
+                if (c.level === "Secondary") secondarySelectedList.push(c);
+            });
+
+            const generalNaSelectedCount = secondarySelectedList.filter(x => x.recCategory === "General - (NA)").length;
+
+            secondaryCandidates.forEach(c => {
+                if (!selectedCandidatesMap.has(c.id)) {
+                    const maxCap = postCapacities[c.subject] || 1;
+                    const sameSubjectSelected = secondarySelectedList.filter(x => x.subject === c.subject);
+                    
+                    if (sameSubjectSelected.length >= maxCap) {
+                        disq.push({ ...c, reason: `माध्यमिक '${c.subject}' विषयाची पद क्षमता (${maxCap}) पूर्ण झाल्यामुळे Not Available ('${sameSubjectSelected.map(x => x.name).join(', ')}' निवडले गेले आहेत).` });
+                    } else if (c.recCategory === "General - (NA)" && generalNaSelectedCount >= 2) {
+                        disq.push({ ...c, reason: `माध्यमिक जनरल (General - NA) प्रवर्गाच्या दोन्ही जागा भरल्या गेल्यामुळे Not Available.` });
+                    } else if (c.recCategory !== "General - (NA)" && c.recCategory !== "General - Women") {
+                        const sameRecCatSelected = secondarySelectedList.find(x => x.recCategory === c.recCategory);
+                        if (sameRecCatSelected) {
+                            disq.push({ ...c, reason: `माध्यमिक '${c.recCategory}' शिफारस प्रवर्गाची जागा '${sameRecCatSelected.name}' यांच्याद्वारे आधीच भरली गेल्यामुळे Not Available.` });
+                        }
+                    }
+                }
+            });
+
+            return disq;
+        }
+
+        function updateAllUI() {
+            const count = selectedCandidatesMap.size;
+            document.getElementById('headerSelectedCount').textContent = count;
+            document.getElementById('dashSelectedCount').textContent = count;
+            document.getElementById('dashRemainingCount').textContent = 16 - count;
+
+            let primaryCount = 0;
+            let secondaryCount = 0;
+            let generalNaCount = 0;
+
+            selectedCandidatesMap.forEach(val => {
+                if (val.level === 'Primary') primaryCount++;
+                if (val.level === 'Secondary') secondaryCount++;
+                if (val.recCategory === "General - (NA)") generalNaCount++;
+            });
+
+            document.getElementById('primarySelectedCount').textContent = primaryCount;
+            document.getElementById('secondarySelectedCount').textContent = secondaryCount;
+
+            document.getElementById('dashPrimaryText').textContent = `${primaryCount} / 2 निवडले`;
+            document.getElementById('dashSecondaryText').textContent = `${secondaryCount} / 14 निवडले`;
+            document.getElementById('dashGeneralText').textContent = `${generalNaCount} / 2 भरल्या`;
+
+            const disqList = calculateDisqualifiedCandidates();
+            document.getElementById('badgeDisqualified').textContent = disqList.length;
+            document.getElementById('disqCountBadge').textContent = disqList.length;
+            document.getElementById('dashDisqText').textContent = `${disqList.length} नोंद`;
+            document.getElementById('badgeSummary').textContent = count;
+            document.getElementById('badgePrimary').textContent = primaryCandidates.length;
+            document.getElementById('badgeSecondary').textContent = secondaryCandidates.length;
+
+            renderGoshwaraTables(primaryCount, secondaryCount);
+        }
+
+        function renderGoshwaraTables(primaryCount, secondaryCount) {
+            let obcSel = 0, stSel = 0;
+            selectedCandidatesMap.forEach(val => {
+                if (val.level === 'Primary') {
+                    if (val.category === 'OBC') obcSel++;
+                    if (val.category === 'ST') stSel++;
+                }
+            });
+
+            const primaryBody = document.getElementById('primaryGoshwaraBody');
+            primaryBody.innerHTML = `
+                <tr class="border-b"><td class="p-2 font-medium">OBC-NA (1 पद)</td><td class="p-2 text-center">1</td><td class="p-2 text-center font-bold text-emerald-700">${obcSel}</td><td class="p-2 text-center">${obcSel >= 1 ? '<span class="text-emerald-700 font-bold">पूर्ण</span>' : '<span class="text-amber-700">रिक्त</span>'}</td></tr>
+                <tr class="border-b"><td class="p-2 font-medium">ST-NA (1 पद)</td><td class="p-2 text-center">1</td><td class="p-2 text-center font-bold text-emerald-700">${stSel}</td><td class="p-2 text-center">${stSel >= 1 ? '<span class="text-emerald-700 font-bold">पूर्ण</span>' : '<span class="text-amber-700">रिक्त</span>'}</td></tr>
+            `;
+            document.getElementById('primaryGoshwaraTotal').textContent = `${primaryCount} / 2 भरली`;
+
+            const subjectCaps = {
+                "Language (Sanskrit)": 1,
+                "History": 2,
+                "Language (English)": 2,
+                "Language (Marathi)": 1,
+                "Mathematics": 1,
+                "Science": 1,
+                "Special Teacher (Work Education)": 2,
+                "Physical Education": 2,
+                "Language (Hindi)": 1
+            };
+
+            const subjectCounts = {};
+            selectedCandidatesMap.forEach(val => {
+                if (val.level === 'Secondary') {
+                    subjectCounts[val.subject] = (subjectCounts[val.subject] || 0) + 1;
+                }
+            });
+
+            const secondaryBody = document.getElementById('secondaryGoshwaraBody');
+            secondaryBody.innerHTML = Object.keys(subjectCaps).map(subj => {
+                const advertised = subjectCaps[subj];
+                const selected = subjectCounts[subj] || 0;
+                const isFull = selected >= advertised;
+                return `
+                    <tr class="border-b">
+                        <td class="p-2 font-medium">${subj}</td>
+                        <td class="p-2 text-center">${advertised}</td>
+                        <td class="p-2 text-center font-bold text-emerald-700">${selected}</td>
+                        <td class="p-2 text-center">${isFull ? '<span class="text-emerald-700 font-bold">पूर्ण</span>' : `<span class="text-amber-700">${selected > 0 ? 'प्रगतीपथावर' : 'रिक्त'}</span>`}</td>
+                    </tr>
+                `;
+            }).join('');
+            document.getElementById('secondaryGoshwaraTotal').textContent = `${secondaryCount} / 14 भरली`;
+        }
+
+        function renderPrimaryTable(data) {
+            const tbody = document.getElementById('primaryTableBody');
+            if (!tbody) return;
+
+            const selectedPrimaryList = [];
+            selectedCandidatesMap.forEach(val => {
+                if (val.level === 'Primary') selectedPrimaryList.push(val);
+            });
+
+            tbody.innerHTML = data.map((c, idx) => {
+                const isSelected = selectedCandidatesMap.has(c.id);
+                const matchingCatSelected = selectedPrimaryList.find(x => x.category === c.category && !isSelected);
+                const isTotalFull = selectedPrimaryList.length >= 2 && !isSelected;
+                const isNotAvailable = Boolean(matchingCatSelected) || isTotalFull;
+
+                let reasonText = "";
+                if (isTotalFull) {
+                    reasonText = `प्राथमिक सर्व २ पदे भरली (${selectedPrimaryList.map(x => x.name).join(', ')})`;
+                } else if (matchingCatSelected) {
+                    reasonText = `'${c.category}' प्रवर्ग '${matchingCatSelected.name}' द्वारे भरला`;
+                }
+
+                let statusBadge = '';
+                if (isSelected) {
+                    statusBadge = '<span class="bg-emerald-100 text-emerald-800 text-[10px] font-black px-2.5 py-1 rounded flex items-center justify-center gap-1"><i class="fa-solid fa-circle-check"></i> निवडले (Selected)</span>';
+                } else if (isNotAvailable) {
+                    statusBadge = `<span class="bg-rose-100 text-rose-800 text-[10px] font-bold px-2 py-1 rounded border border-rose-200 flex flex-col items-center gap-0.5 text-center"><span class="font-black"><i class="fa-solid fa-ban mr-1"></i> नॉट अवेलेबल</span><span class="text-[9px] text-rose-700 font-normal">${reasonText}</span></span>`;
+                } else {
+                    statusBadge = `<span class="bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2 py-1 rounded border border-emerald-200 flex flex-col items-center gap-0.5 text-center"><span class="font-black"><i class="fa-solid fa-circle-check mr-1 text-emerald-600"></i> निवडीसाठी उपलब्ध</span><span class="text-[9px] text-emerald-700 font-normal">कोटा रिकामा आहे</span></span>`;
+                }
+
+                return `
+                    <tr class="hover:bg-slate-50 transition border-b border-slate-200 text-xs ${isNotAvailable ? 'bg-slate-100/70 opacity-80' : ''}">
+                        <td class="p-2.5 text-center font-bold">${idx + 1}</td>
+                        <td class="p-2.5">
+                            <button onclick="openCandidateModal('${c.id}', '${c.name}')" class="text-slate-900 font-bold hover:text-amber-600 transition text-left">
+                                ${c.name}
+                            </button>
+                            <div class="text-[10px] text-slate-500 font-mono">ID: ${c.id}</div>
+                        </td>
+                        <td class="p-2.5 text-center">${c.dob}</td>
+                        <td class="p-2.5 text-center font-bold text-amber-600">${c.tait}</td>
+                        <td class="p-2.5 text-center"><span class="bg-slate-100 text-slate-800 text-[10px] px-1.5 py-0.5 rounded font-mono font-bold">#${c.pref}</span></td>
+                        <td class="p-2.5">
+                            <div class="font-bold text-slate-800">${c.subject}</div>
+                            <div class="text-[10px] text-slate-500">${c.post}</div>
+                        </td>
+                        <td class="p-2.5 text-center"><span class="bg-purple-50 text-purple-800 text-[10px] font-bold px-2 py-0.5 rounded">${c.recCategory}</span></td>
+                        <td class="p-2.5 text-center">${statusBadge}</td>
+                        <td class="p-2.5 text-center">
+                            <button onclick="toggleCandidateSelection('${c.id}', '${c.subject}', ${c.pref})" 
+                                    class="${isSelected ? 'bg-rose-600 hover:bg-rose-700 text-white' : (isNotAvailable ? 'bg-amber-600 hover:bg-amber-700 text-white' : 'bg-emerald-600 hover:bg-emerald-700 text-white')} px-2.5 py-1 rounded text-[11px] font-bold transition shadow-sm whitespace-nowrap">
+                                ${isSelected ? 'रद्द करा' : (isNotAvailable ? 'फोर्स निवडा' : 'निवड करा')}
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderSecondaryTable(data) {
+            const tbody = document.getElementById('secondaryTableBody');
+            if (!tbody) return;
+
+            const secondarySelectedList = [];
+            selectedCandidatesMap.forEach(val => {
+                if (val.level === 'Secondary') secondarySelectedList.push(val);
+            });
+
+            const generalNaSelectedCount = secondarySelectedList.filter(x => x.recCategory === "General - (NA)").length;
+
+            tbody.innerHTML = data.map((c, idx) => {
+                const isSelected = selectedCandidatesMap.has(c.id);
+                const maxCap = postCapacities[c.subject] || 1;
+                const sameSubjectSelected = secondarySelectedList.filter(x => x.subject === c.subject);
+                
+                const isSubjectQuotaFull = sameSubjectSelected.length >= maxCap && !isSelected;
+                const isGeneralNaFull = c.recCategory === "General - (NA)" && generalNaSelectedCount >= 2 && !isSelected;
+                
+                let sameRecCatSelected = null;
+                if (c.recCategory !== "General - (NA)" && c.recCategory !== "General - Women") {
+                    sameRecCatSelected = secondarySelectedList.find(x => x.recCategory === c.recCategory && !isSelected);
+                }
+
+                const isRecCategoryFull = Boolean(sameRecCatSelected) && !isSelected;
+                const isNotAvailable = isSubjectQuotaFull || isGeneralNaFull || isRecCategoryFull;
+
+                let reasonText = "";
+                let conflictWarning = "";
+                
+                if (isSubjectQuotaFull) {
+                    reasonText = `'${c.subject}' विषय कोटा पूर्ण (${sameSubjectSelected.map(x => x.name).join(', ')})`;
+                    conflictWarning = `<div class="text-[9px] text-amber-700 font-semibold mt-0.5"><i class="fa-solid fa-triangle-exclamation"></i> निवड करण्यासाठी '${sameSubjectSelected.map(x => x.name).join(', ')}' यांची निवड रद्द करावी लागेल.</div>`;
+                } else if (isGeneralNaFull) {
+                    reasonText = `जनरल (General - NA) प्रवर्गाच्या दोन्ही जागा भरल्या गेल्या आहेत`;
+                    const genCandidates = secondarySelectedList.filter(x => x.recCategory === "General - (NA)");
+                    conflictWarning = `<div class="text-[9px] text-amber-700 font-semibold mt-0.5"><i class="fa-solid fa-triangle-exclamation"></i> जनरल जागा भरण्यासाठी (${genCandidates.map(x => x.name).join(', ')}) पैकी एकाची निवड रद्द करावी लागेल.</div>`;
+                } else if (isRecCategoryFull) {
+                    reasonText = `'${c.recCategory}' प्रवर्ग (${sameRecCatSelected.name}) द्वारे भरला`;
+                    conflictWarning = `<div class="text-[9px] text-amber-700 font-semibold mt-0.5"><i class="fa-solid fa-triangle-exclamation"></i> '${sameRecCatSelected.name}' यांची निवड रद्द करावी लागेल.</div>`;
+                }
+
+                let statusBadge = '';
+                if (isSelected) {
+                    statusBadge = '<span class="bg-emerald-100 text-emerald-800 text-[10px] font-black px-2.5 py-1 rounded flex items-center justify-center gap-1"><i class="fa-solid fa-circle-check"></i> निवडले (Selected)</span>';
+                } else if (isNotAvailable) {
+                    statusBadge = `<span class="bg-rose-100 text-rose-800 text-[10px] font-bold px-2 py-1 rounded border border-rose-200 flex flex-col items-center gap-0.5 text-center"><span class="font-black"><i class="fa-solid fa-ban mr-1"></i> नॉट अवेलेबल</span><span class="text-[9px] text-rose-700 font-normal">${reasonText}</span>${conflictWarning}</span>`;
+                } else {
+                    statusBadge = `<span class="bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2 py-1 rounded border border-emerald-200 flex flex-col items-center gap-0.5 text-center"><span class="font-black"><i class="fa-solid fa-circle-check mr-1 text-emerald-600"></i> निवडीसाठी उपलब्ध</span><span class="text-[9px] text-emerald-700 font-normal">कोटा रिकामा आहे</span></span>`;
+                }
+
+                return `
+                    <tr class="hover:bg-slate-50 transition border-b border-slate-200 text-xs ${isNotAvailable ? 'bg-slate-100/70 opacity-80' : ''}">
+                        <td class="p-2.5 text-center font-bold">${idx + 1}</td>
+                        <td class="p-2.5">
+                            <button onclick="openCandidateModal('${c.id}', '${c.name}')" class="text-slate-900 font-bold hover:text-amber-600 transition text-left">
+                                ${c.name}
+                            </button>
+                            <div class="text-[10px] text-slate-500 font-mono">ID: ${c.id}</div>
+                        </td>
+                        <td class="p-2.5 text-center">${c.dob}</td>
+                        <td class="p-2.5 text-center font-bold text-amber-600">${c.tait}</td>
+                        <td class="p-2.5 text-center"><span class="bg-slate-100 text-slate-800 text-[10px] px-1.5 py-0.5 rounded font-mono font-bold">#${c.pref}</span></td>
+                        <td class="p-2.5">
+                            <div class="font-bold text-slate-800">${c.subject}</div>
+                            <div class="text-[10px] text-slate-500">${c.post}</div>
+                        </td>
+                        <td class="p-2.5 text-center"><span class="bg-purple-50 text-purple-800 text-[10px] font-bold px-2 py-0.5 rounded">${c.recCategory}</span></td>
+                        <td class="p-2.5 text-center">${statusBadge}</td>
+                        <td class="p-2.5 text-center">
+                            <button onclick="toggleCandidateSelection('${c.id}', '${c.subject}', ${c.pref})" 
+                                    class="${isSelected ? 'bg-rose-600 hover:bg-rose-700 text-white' : (isNotAvailable ? 'bg-amber-600 hover:bg-amber-700 text-white' : 'bg-emerald-600 hover:bg-emerald-700 text-white')} px-2.5 py-1 rounded text-[11px] font-bold transition shadow-sm whitespace-nowrap">
+                                ${isSelected ? 'रद्द करा' : (isNotAvailable ? 'फोर्स निवडा' : 'निवड करा')}
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderDisqualifiedTable(disqList) {
+            const tbody = document.getElementById('disqualifiedTableBody');
+            if (!tbody) return;
+
+            if (disqList.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-500 font-medium">सध्या कोणतीही नोंद उपलब्ध नाही. (कोणत्याही उमेदवाराची निवड केली असता किंवा कोटा भरला असता येथे तपशील येईल).</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = disqList.map((c, idx) => `
+                <tr class="hover:bg-slate-50 transition border-b border-slate-200 text-xs">
+                    <td class="p-2.5 text-center font-bold">${idx + 1}</td>
+                    <td class="p-2.5 font-bold text-slate-800">${c.name}<div class="text-[10px] text-slate-500 font-mono">ID: ${c.id}</div></td>
+                    <td class="p-2.5 text-center font-semibold text-slate-700">${c.subject}</td>
+                    <td class="p-2.5 text-center"><span class="bg-purple-50 text-purple-800 text-[10px] font-bold px-2 py-0.5 rounded">${c.recCategory}</span></td>
+                    <td class="p-2.5 text-rose-700 font-medium">${c.reason}</td>
+                </tr>
+            `).join('');
+        }
+
+        function renderSummaryReport() {
+            const container = document.getElementById('summaryContentContainer');
+            if (!container) return;
+
+            if (selectedCandidatesMap.size === 0) {
+                container.innerHTML = `<div class="p-6 text-center text-slate-500 font-medium bg-slate-50 rounded-xl border border-dashed border-slate-300">कोणत्याही उमेदवाराची निवड करण्यात आलेली नाही.</div>`;
+                return;
+            }
+
+            let html = `
+                <div class="space-y-4 w-full">
+                    <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl flex items-center justify-between">
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-sm">संस्थेकडून शिफारस पत्र सारांश (Summary Report)</h4>
+                            <p class="text-xs text-slate-600">श्री शिवाजी शिक्षण संस्था कराड (जाहिरात क्र. 273102SC083)</p>
+                        </div>
+                        <div class="bg-amber-500 text-slate-900 px-3 py-1.5 rounded-lg text-xs font-black">
+                            एकूण निवडले: ${selectedCandidatesMap.size} / 16
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto border border-slate-200 rounded-xl w-full">
+                        <table class="w-full text-left border-collapse text-xs min-w-[600px]">
+                            <thead>
+                                <tr class="bg-slate-200 text-slate-700 font-bold">
+                                    <th class="p-2.5">अ.क्र.</th>
+                                    <th class="p-2.5">उमेदवाराचे नाव व ID</th>
+                                    <th class="p-2.5">विभाग / स्तर</th>
+                                    <th class="p-2.5">विषय</th>
+                                    <th class="p-2.5 text-center">टीआयटी गुण</th>
+                                    <th class="p-2.5 text-center">शिफारस प्रवर्ग</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+            `;
+
+            let idx = 1;
+            selectedCandidatesMap.forEach((c) => {
+                html += `
+                    <tr class="border-b border-slate-200 hover:bg-slate-50">
+                        <td class="p-2.5 font-bold">${idx++}</td>
+                        <td class="p-2.5 font-bold text-slate-800">${c.name} <span class="text-[10px] text-slate-500 font-mono">(${c.id})</span></td>
+                        <td class="p-2.5">${c.level === 'Primary' ? 'प्राथमिक (1-5)' : 'माध्यमिक (6-10)'}</td>
+                        <td class="p-2.5 font-semibold text-slate-700">${c.subject}</td>
+                        <td class="p-2.5 text-center font-bold text-amber-600">${c.tait}</td>
+                        <td class="p-2.5 text-center"><span class="bg-purple-100 text-purple-800 px-2 py-0.5 rounded text-[10px] font-bold">${c.recCategory}</span></td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+            container.innerHTML = html;
+        }
+
+        function resetManualSelections() {
+            selectedCandidatesMap.clear();
+            updateAllUI();
+            applyCandidateFilters();
+        }
+
+        function openCandidateModal(id, name) {
+            const candidate = allCandidatesCombined.find(c => c.id === id);
+            if (!candidate) return;
+
+            document.getElementById('modalCandidateName').textContent = candidate.name;
+            document.getElementById('modalCandidateId').textContent = `ID: ${candidate.id}`;
+            document.getElementById('modalDob').textContent = candidate.dob;
+            document.getElementById('modalTait').textContent = candidate.tait;
+            document.getElementById('modalPref').textContent = `#${candidate.pref}`;
+            document.getElementById('modalLevel').textContent = candidate.level === 'Primary' ? 'प्राथमिक विभाग (1-5)' : 'माध्यमिक विभाग (6-10)';
+            document.getElementById('modalSubjectPost').textContent = `${candidate.subject} (${candidate.post})`;
+            document.getElementById('modalRecCategory').textContent = candidate.recCategory;
+
+            document.getElementById('candidateModal').classList.remove('hidden');
+        }
+
+        function closeCandidateModal() {
+            document.getElementById('candidateModal').classList.add('hidden');
+        }
+
+        function showNotification(title, message) {
+            document.getElementById('alertModalTitle').textContent = title;
+            document.getElementById('alertModalMessage').textContent = message;
+            document.getElementById('alertModal').classList.remove('hidden');
+        }
+
+        function closeAlertModal() {
+            document.getElementById('alertModal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
