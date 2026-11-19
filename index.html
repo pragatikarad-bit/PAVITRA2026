@@ -214,7 +214,7 @@
 
         function extractSansthaName(raw) {
             const lines = raw.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-            for (let i = 0; i < Math.min(lines.length, 30); i++) {
+            for (let i = 0; i < Math.min(lines.length, 40); i++) {
                 let line = lines[i];
 
                 let labelMatch = line.match(/^(?:Sanstha|Management|Institute|Organization|Society)\s*(?:Name)?\s*[:\-]\s*(.+)$/i);
@@ -235,7 +235,7 @@
                 }
             }
 
-            for (let i = 0; i < Math.min(lines.length, 25); i++) {
+            for (let i = 0; i < Math.min(lines.length, 30); i++) {
                 let line = lines[i];
                 if (/^(?:Print\s+Date|Page\s+\d|General\s+Merit|Category|POST\s+SUBJECT|Applicant\s+Name|Sr\.)/i.test(line)) continue;
                 if (/\b(?:Sanstha|Mandal|Society|Trust|Parishad|Foundation|Pratishthan|Vidya\s*Prasarak|Shikshan)\b/i.test(line)) {
@@ -303,13 +303,7 @@
         function getTotalAdvertisedPosts() {
             const subSum = Object.values(subjectLimits).reduce((a, b) => a + b, 0);
             const catSum = Object.values(categoryLimits).reduce((a, b) => a + b, 0);
-            if (catSum > 0 && subSum > 0) return Math.min(subSum, catSum) === subSum ? subSum : catSum;
             return Math.max(subSum, catSum) || 1;
-        }
-
-        function getDefaultSubLimit() {
-            const catSum = Object.values(categoryLimits).reduce((a, b) => a + b, 0);
-            return catSum > 0 ? catSum : 1;
         }
 
         function toggleTaitLock() {
@@ -329,173 +323,181 @@
             });
         }
 
+        function stripPayAndAidTags(text) {
+            return text
+                .replace(/\(\s*Consolidated\s+Pay\b[^()]*?(?:\([^()]*\)[^()]*?)*\)/gi, ' ')
+                .replace(/\(\s*(?:Partialy|Partially)?\s*(?:Aided|Unaided|Self\s*Financed)\b[^()]*?(?:\([^()]*\)[^()]*?)*\)/gi, ' ')
+                .replace(/\(\s*S-\d+\s*:[^()]*\)/gi, ' ')
+                .replace(/\s+/g, ' ');
+        }
+
         function cleanSubjectName(s) {
-            // Remove pay-scale & aid percentage brackets like (Partialy Aided 40%) (S-10: 29200-92300)
-            let str = s.replace(/\([^)]*(?:Aided|Unaided|S-\d+|29200|35400|38600|41800|25500|%)[^)]*\)/gi, ' ')
-                       .replace(/\s+/g, ' ')
-                       .trim();
+            let str = stripPayAndAidTags(s).trim();
             if (!str || str === '--' || str === '-' || /^all\s*subjects?$/i.test(str)) return "All Subjects";
             if (/Work Education/i.test(str)) return "Work Education";
             return str;
         }
 
         function parseFullPDF() {
-            const raw = document.getElementById('pdfRawText').value;
-            if (!raw.trim()) {
-                alert("प्रथम PDF मधील मजकूर पेस्ट करा!");
-                return;
-            }
-
-            let currentInputVal = document.getElementById('sansthaNameInput').value.trim();
-            let detectedName = extractSansthaName(raw);
-            let finalSanstha = detectedName || currentInputVal;
-            document.getElementById('sansthaNameInput').value = finalSanstha;
-            syncSansthaName(finalSanstha);
-
-            let flatText = raw.replace(/[\r\n\t]+/g, ' ')
-                              .replace(/\s+/g, ' ')
-                              .replace(/std\s*\(\s*9\s*-\s*10\s*\)/gi, 'std(9-10)')
-                              .replace(/std\s*\(\s*6\s*-\s*8\s*\)/gi, 'std(6-8)')
-                              .replace(/std\s*\(\s*1\s*-\s*4\/5\s*\)/gi, 'std(1-4/5)')
-                              .replace(/std\s*\(\s*11\s*-\s*12\s*\)/gi, 'std(11-12)')
-                              .replace(/Non-\s+PH/gi, 'Non-PH')
-                              .replace(/Non-\s+Orphan/gi, 'Non-Orphan')
-                              .replace(/PH\s*-\s*\(\s*Ortho\s*\)/gi, 'PH - (Ortho)');
-
-            // Strip pay-scale and aid-type parenthetical tags so 40% or 29200-92300 never pollute subject names or post counts
-            let cleanFlatText = flatText.replace(/\([^)]*(?:Aided|Unaided|S-\d+|29200|35400|38600|41800|25500|%)[^)]*\)/gi, ' ')
-                                        .replace(/\s+/g, ' ');
-
-            // 1. Parse Category Limits
-            categoryLimits = {};
-            categoryDisplayNames = {};
-            let catEndIdx = cleanFlatText.search(/End\s+Report|POST\s+SUBJECT/i);
-            let catPart = catEndIdx !== -1 ? cleanFlatText.substring(0, catEndIdx) : cleanFlatText;
-
-            const catRegex = /((?:General|ST|SC|OBC|VJ-A|NT-B|NT-C|NT-D|SBC|SEBC|EWS|Nomadic\s+Tribes\s*\(NT-C\))\s*-\s*\(?[A-Za-z_\s]+\)?)\s+(\d+|--)\s+\d+\s+(?:\d+|--)/gi;
-            let cm;
-            while ((cm = catRegex.exec(catPart)) !== null) {
-                let cKey = makeCatKey(cm[1]);
-                let cDisp = formatCategoryDisplay(cm[1]);
-                let posts = cm[2] === '--' ? 0 : parseInt(cm[2], 10);
-                if (posts > 0) {
-                    categoryLimits[cKey] = (categoryLimits[cKey] || 0) + posts;
-                    categoryDisplayNames[cKey] = cDisp;
+            try {
+                const raw = document.getElementById('pdfRawText').value;
+                if (!raw.trim()) {
+                    alert("प्रथम PDF मधील मजकूर पेस्ट करा!");
+                    return;
                 }
-            }
 
-            // 2. Parse Subject Limits
-            subjectLimits = {};
-            let subjPart = cleanFlatText.split(/Applicant\s+Name|APPLICANT\s+MERIT\s+LIST/i)[0] || "";
-            const subjRegex = /(Under Graduate Teacher std\(1-4\/5\)|Graduate Teacher std\(6-8\)|Graduate Teacher std\(9-10\)|Higher Secondary Teacher std\(11-12\))\s+([A-Za-z0-9\(\)\/\-\s]+?)\s+(?:Marathi|English|Hindi|Urdu|Gujarati|Kannada|Telugu|--)\s+(?:Aided|Unaided|Partialy\s*Aided|Partially\s*Aided|Self\s*Financed|--)\s+(\d+)/gi;
-            let sm;
-            while ((sm = subjRegex.exec(subjPart)) !== null) {
-                let pName = sm[1].trim();
-                let sName = cleanSubjectName(sm[2]);
-                let pCount = parseInt(sm[3], 10);
-                let key = `${pName} | ${sName}`;
-                subjectLimits[key] = (subjectLimits[key] || 0) + pCount;
-            }
+                let currentInputVal = document.getElementById('sansthaNameInput').value.trim();
+                let detectedName = extractSansthaName(raw);
+                let finalSanstha = detectedName || currentInputVal;
+                document.getElementById('sansthaNameInput').value = finalSanstha;
+                syncSansthaName(finalSanstha);
 
-            // 3. Parse Candidates
-            let firstApplicantHeader = cleanFlatText.search(/Applicant\s+Name|APPLICANT\s+MERIT\s+LIST/i);
-            let meritText = firstApplicantHeader !== -1 ? cleanFlatText.substring(firstApplicantHeader) : cleanFlatText;
-            meritText = meritText.replace(/Print Date:.*?Recom\s*mended\s*on\s*Orphan/gi, ' ');
+                let flatText = raw.replace(/[\r\n\t]+/g, ' ')
+                                  .replace(/\s+/g, ' ')
+                                  .replace(/std\s*\(\s*9\s*-\s*10\s*\)/gi, 'std(9-10)')
+                                  .replace(/std\s*\(\s*6\s*-\s*8\s*\)/gi, 'std(6-8)')
+                                  .replace(/std\s*\(\s*1\s*-\s*4\/5\s*\)/gi, 'std(1-4/5)')
+                                  .replace(/std\s*\(\s*11\s*-\s*12\s*\)/gi, 'std(11-12)')
+                                  .replace(/Non-\s+PH/gi, 'Non-PH')
+                                  .replace(/Non-\s+Orphan/gi, 'Non-Orphan')
+                                  .replace(/PH\s*-\s*\(\s*Ortho\s*\)/gi, 'PH - (Ortho)');
 
-            const candRegex = /([A-Z][A-Z\s\.]+?\(\d{8,12}\))\s+(\d{2}[\/\.\-]\d{2}[\/\.\-]\d{4})\s+(\d+(?:\.\d+)?)\s+([\s\S]*?)(?=[A-Z][A-Z\s\.]+?\(\d{8,12}\)\s+\d{2}[\/\.\-]\d{2}[\/\.\-]\d{4}|\*{5,}|General\s+Merit\s+List|End\s+Report|$)/g;
+                let cleanFlatText = stripPayAndAidTags(flatText);
 
-            candidatesList = [];
-            let match;
+                // 1. Parse Category Limits
+                categoryLimits = {};
+                categoryDisplayNames = {};
+                let catEndIdx = cleanFlatText.search(/End\s+Report|POST\s+SUBJECT/i);
+                let catPart = catEndIdx !== -1 ? cleanFlatText.substring(0, catEndIdx) : cleanFlatText;
 
-            while ((match = candRegex.exec(meritText)) !== null) {
-                let name = match[1].trim();
-                let taitRaw = parseFloat(match[3]);
-                let rest = match[4].trim();
+                const catRegex = /((?:General|ST|SC|OBC|VJ-A|NT-B|NT-C|NT-D|SBC|SEBC|EWS|Nomadic\s+Tribes\s*\(NT-C\))\s*-\s*\(?[A-Za-z_\-\s]+\)?)\s+(\d+|--)\s+\d+\s+(?:\d+|--)/gi;
+                let cm;
+                while ((cm = catRegex.exec(catPart)) !== null) {
+                    let cKey = makeCatKey(cm[1]);
+                    let cDisp = formatCategoryDisplay(cm[1]);
+                    let posts = cm[2] === '--' ? 0 : parseInt(cm[2], 10);
+                    if (posts > 0) {
+                        categoryLimits[cKey] = (categoryLimits[cKey] || 0) + posts;
+                        categoryDisplayNames[cKey] = cDisp;
+                    }
+                }
 
-                let post = "Graduate Teacher std(6-8)";
-                let subject = "All Subjects";
+                // 2. Parse Subject Limits from POST SUBJECT DETAILS
+                subjectLimits = {};
+                let subjPart = cleanFlatText.split(/Applicant\s+Name|APPLICANT\s+MERIT\s+LIST/i)[0] || "";
+                const subjRegex = /(Under Graduate Teacher std\(1-4\/5\)|Graduate Teacher std\(6-8\)|Graduate Teacher std\(9-10\)|Higher Secondary Teacher std\(11-12\))\s+([A-Za-z0-9\(\)\/\-\s]{1,60}?)\s+(?:Marathi|English|Hindi|Urdu|Gujarati|Kannada|Telugu|--)\s+(?:Aided|Unaided|Partialy\s*Aided|Partially\s*Aided|Self\s*Financed|Consolidated\s*Pay|--)\s+(\d+)/gi;
+                let sm;
+                while ((sm = subjRegex.exec(subjPart)) !== null) {
+                    let pName = sm[1].trim();
+                    let sName = cleanSubjectName(sm[2]);
+                    let pCount = parseInt(sm[3], 10);
+                    let key = `${pName} | ${sName}`;
+                    subjectLimits[key] = (subjectLimits[key] || 0) + pCount;
+                }
 
-                let postSubMatch = rest.match(/(Under Graduate Teacher std\(1-4\/5\)|Graduate Teacher std\(6-8\)|Graduate Teacher std\(9-10\)|Higher Secondary Teacher std\(11-12\))\s+([\s\S]*?)\s+(?:Marathi|English|Hindi|Urdu|Gujarati|Kannada|Telugu|--)\s+(?:General|OBC|SEBC|EWS|SC|ST|VJ-A|NT-B|NT-C|NT-D|SBC)\b/i);
-                if (postSubMatch) {
-                    post = postSubMatch[1].trim();
-                    subject = cleanSubjectName(postSubMatch[2]);
+                // 3. Parse Candidates
+                let firstApplicantHeader = cleanFlatText.search(/Applicant\s+Name|APPLICANT\s+MERIT\s+LIST/i);
+                let meritText = firstApplicantHeader !== -1 ? cleanFlatText.substring(firstApplicantHeader) : cleanFlatText;
+                meritText = meritText.replace(/Print Date:.*?Recom\s*mended\s*on\s*Orphan/gi, ' ');
+
+                const candRegex = /([A-Z][A-Z\s\.]+?\(\d{8,12}\))\s+(\d{2}[\/\.\-]\d{2}[\/\.\-]\d{4})\s+(\d+(?:\.\d+)?)\s+([\s\S]*?)(?=[A-Z][A-Z\s\.]+?\(\d{8,12}\)\s+\d{2}[\/\.\-]\d{2}[\/\.\-]\d{4}|\*{5,}|General\s+Merit\s+List|End\s+Report|$)/g;
+
+                candidatesList = [];
+                let match;
+
+                while ((match = candRegex.exec(meritText)) !== null) {
+                    let name = match[1].trim();
+                    let taitRaw = parseFloat(match[3]);
+                    let rest = match[4].trim();
+
+                    let post = "Graduate Teacher std(6-8)";
+                    let subject = "All Subjects";
+
+                    let postSubMatch = rest.match(/(Under Graduate Teacher std\(1-4\/5\)|Graduate Teacher std\(6-8\)|Graduate Teacher std\(9-10\)|Higher Secondary Teacher std\(11-12\))\s+([\s\S]*?)\s+(?:Marathi|English|Hindi|Urdu|Gujarati|Kannada|Telugu|--)\s+(?:General|OBC|SEBC|EWS|SC|ST|VJ-A|NT-B|NT-C|NT-D|SBC)\b/i);
+                    if (postSubMatch) {
+                        post = postSubMatch[1].trim();
+                        subject = cleanSubjectName(postSubMatch[2]);
+                    } else {
+                        if (/Under Graduate Teacher std\(1-4\/5\)/i.test(rest)) post = "Under Graduate Teacher std(1-4/5)";
+                        else if (/Graduate Teacher std\(9-10\)/i.test(rest)) post = "Graduate Teacher std(9-10)";
+                        else if (/Graduate Teacher std\(6-8\)/i.test(rest)) post = "Graduate Teacher std(6-8)";
+                        else if (/Higher Secondary Teacher std\(11-12\)/i.test(rest)) post = "Higher Secondary Teacher std(11-12)";
+
+                        if (/Language\s*\([A-Za-z]+\)/i.test(rest)) subject = rest.match(/Language\s*\([A-Za-z]+\)/i)[0];
+                        else if (/Mathematics/i.test(rest)) subject = "Mathematics";
+                        else if (/Science/i.test(rest)) subject = "Science";
+                        else if (/Social\s*Science/i.test(rest)) subject = "Social Science";
+                        else if (/History/i.test(rest)) subject = "History";
+                        else if (/Physical Education/i.test(rest)) subject = "Physical Education";
+                        else if (/Work Education/i.test(rest)) subject = "Work Education";
+                    }
+
+                    let casteMatch = rest.match(/(?:Marathi|English|Hindi|Urdu|Gujarati|Kannada|Telugu|--)\s+(General|OBC|SEBC|EWS|SC|ST|VJ-A|NT-B|NT-C|NT-D|SBC)\b/i);
+                    let caste = casteMatch ? casteMatch[1].toUpperCase() : "General";
+
+                    let recMatch = rest.match(/((?:General|OBC|SEBC|EWS|SC|ST|VJ-A|NT-B|NT-C|NT-D|SBC)\s*-\s*\(?[A-Za-z_\-\s]+\)?)/i);
+                    let rawRec = recMatch ? recMatch[1] : `${caste} - (NA)`;
+                    let recCategoryDisplay = formatCategoryDisplay(rawRec);
+                    let recCategoryKey = makeCatKey(rawRec);
+                    if (!categoryDisplayNames[recCategoryKey]) {
+                        categoryDisplayNames[recCategoryKey] = recCategoryDisplay;
+                    }
+
+                    let isPH = /PH\s*-\s*\(Ortho\)|PH_Ortho/i.test(rest);
+                    let appIdMatch = name.match(/\((\d+)\)/);
+                    let appId = appIdMatch ? appIdMatch[1] : name;
+
+                    candidatesList.push({
+                        id: candidatesList.length + 1,
+                        appId: appId,
+                        name: name,
+                        post: post,
+                        subject: subject,
+                        caste: caste,
+                        recCategory: recCategoryDisplay,
+                        recCatKey: recCategoryKey,
+                        isPH: isPH,
+                        taitRaw: taitRaw,
+                        prof1: 0,
+                        prof2: 0,
+                        acad1: 0,
+                        acad2: 0,
+                        interview: 0,
+                        lesson: 0,
+                        globalRank: candidatesList.length + 1,
+                        isSelected: false
+                    });
+                }
+
+                if (candidatesList.length === 0) {
+                    alert("कोणताही उमेदवार आढळला नाही. कृपया PDF मधील संपूर्ण मजकूर पेस्ट केला आहे का ते तपासा.");
+                    return;
+                }
+
+                const uniqueSubKeys = [...new Set(candidatesList.map(c => `${c.post} | ${c.subject}`))];
+                const totalCatQuota = Object.values(categoryLimits).reduce((a, b) => a + b, 0);
+                if (uniqueSubKeys.length === 1) {
+                    let onlyKey = uniqueSubKeys[0];
+                    let currentSubVal = subjectLimits[onlyKey] || 0;
+                    if (totalCatQuota > 0 && currentSubVal !== totalCatQuota) {
+                        subjectLimits[onlyKey] = totalCatQuota;
+                    }
                 } else {
-                    if (/Under Graduate Teacher std\(1-4\/5\)/i.test(rest)) post = "Under Graduate Teacher std(1-4/5)";
-                    else if (/Graduate Teacher std\(9-10\)/i.test(rest)) post = "Graduate Teacher std(9-10)";
-                    else if (/Graduate Teacher std\(6-8\)/i.test(rest)) post = "Graduate Teacher std(6-8)";
-                    else if (/Higher Secondary Teacher std\(11-12\)/i.test(rest)) post = "Higher Secondary Teacher std(11-12)";
-
-                    if (/Language\s*\([A-Za-z]+\)/i.test(rest)) subject = rest.match(/Language\s*\([A-Za-z]+\)/i)[0];
-                    else if (/Mathematics/i.test(rest)) subject = "Mathematics";
-                    else if (/Science/i.test(rest)) subject = "Science";
-                    else if (/Social\s*Science/i.test(rest)) subject = "Social Science";
-                    else if (/History/i.test(rest)) subject = "History";
-                    else if (/Physical Education/i.test(rest)) subject = "Physical Education";
-                    else if (/Work Education/i.test(rest)) subject = "Work Education";
+                    uniqueSubKeys.forEach(k => {
+                        if (!subjectLimits[k]) subjectLimits[k] = 1;
+                    });
                 }
 
-                let casteMatch = rest.match(/(?:Marathi|English|Hindi|Urdu|Gujarati|Kannada|Telugu|--)\s+(General|OBC|SEBC|EWS|SC|ST|VJ-A|NT-B|NT-C|NT-D|SBC)\b/i);
-                let caste = casteMatch ? casteMatch[1].toUpperCase() : "General";
+                let subSummary = Object.entries(subjectLimits).map(([k, v]) => `${k}: ${v}`).join(' | ');
+                let catSummary = Object.entries(categoryLimits).map(([k, v]) => `${k}: ${v}`).join(' | ');
+                document.getElementById('parseStatus').textContent = `✅ Loaded ${candidatesList.length} candidates | Posts (${Object.values(subjectLimits).reduce((a,b)=>a+b,0)}): ${subSummary} | Quotas (${totalCatQuota}): ${catSummary}`;
+                populateDropdown();
+                recalculateRanks();
 
-                let recMatch = rest.match(/((?:General|OBC|SEBC|EWS|SC|ST|VJ-A|NT-B|NT-C|NT-D|SBC)\s*-\s*\(?[A-Za-z_\-\s]+\)?)/i);
-                let rawRec = recMatch ? recMatch[1] : `${caste} - (NA)`;
-                let recCategoryDisplay = formatCategoryDisplay(rawRec);
-                let recCategoryKey = makeCatKey(rawRec);
-                if (!categoryDisplayNames[recCategoryKey]) {
-                    categoryDisplayNames[recCategoryKey] = recCategoryDisplay;
-                }
-
-                let isPH = /PH\s*-\s*\(Ortho\)|PH_Ortho/i.test(rest);
-                let appIdMatch = name.match(/\((\d+)\)/);
-                let appId = appIdMatch ? appIdMatch[1] : name;
-
-                candidatesList.push({
-                    id: candidatesList.length + 1,
-                    appId: appId,
-                    name: name,
-                    post: post,
-                    subject: subject,
-                    caste: caste,
-                    recCategory: recCategoryDisplay,
-                    recCatKey: recCategoryKey,
-                    isPH: isPH,
-                    taitRaw: taitRaw,
-                    prof1: 0,
-                    prof2: 0,
-                    acad1: 0,
-                    acad2: 0,
-                    interview: 0,
-                    lesson: 0,
-                    globalRank: candidatesList.length + 1,
-                    isSelected: false
-                });
+                switchToTab('step2-tab');
+            } catch (err) {
+                alert("Error parsing PDF data: " + err.message);
             }
-
-            if (candidatesList.length === 0) {
-                alert("कोणताही उमेदवार आढळला नाही. कृपया PDF मधील संपूर्ण मजकूर पेस्ट केला आहे का ते तपासा.");
-                return;
-            }
-
-            // Sync subjectLimits if single Post|Subject or empty subjectLimits
-            const uniqueSubKeys = [...new Set(candidatesList.map(c => `${c.post} | ${c.subject}`))];
-            const totalCatQuota = Object.values(categoryLimits).reduce((a, b) => a + b, 0);
-            if (uniqueSubKeys.length === 1) {
-                let onlyKey = uniqueSubKeys[0];
-                let currentSubVal = subjectLimits[onlyKey] || 0;
-                if (totalCatQuota > 0 && currentSubVal !== totalCatQuota) {
-                    subjectLimits[onlyKey] = totalCatQuota;
-                }
-            } else if (Object.keys(subjectLimits).length === 0) {
-                uniqueSubKeys.forEach(k => subjectLimits[k] = 1);
-            }
-
-            let subSummary = Object.entries(subjectLimits).map(([k, v]) => `${k}: ${v}`).join(' | ');
-            let catSummary = Object.entries(categoryLimits).map(([k, v]) => `${k}: ${v}`).join(' | ');
-            document.getElementById('parseStatus').textContent = `✅ Loaded ${candidatesList.length} candidates | Posts: ${subSummary} | Quotas: ${catSummary}`;
-            populateDropdown();
-            recalculateRanks();
-
-            switchToTab('step2-tab');
         }
 
         function populateDropdown() {
@@ -560,6 +562,28 @@
             return { usedSub, subWinners, usedCat, catWinners, selectedAppMap, totalSelected };
         }
 
+        // Check if a candidate is currently eligible for their subject & category
+        function isCandidateCurrentlyEligible(cand, details) {
+            const { usedSub, usedCat, selectedAppMap } = details;
+            let subKey = `${cand.post} | ${cand.subject}`;
+            let maxSub = subjectLimits[subKey] !== undefined ? subjectLimits[subKey] : 1;
+            let maxCat = categoryLimits[cand.recCatKey] !== undefined ? categoryLimits[cand.recCatKey] : 1;
+
+            if (selectedAppMap[cand.appId]) return false;
+            if ((usedSub[subKey] || 0) >= maxSub) return false;
+            if (!cand.isPH && (usedCat[cand.recCatKey] || 0) >= maxCat) return false;
+            return true;
+        }
+
+        // Find any higher-ranked candidate who is eligible but not yet selected
+        function getHigherEligibleUnselected(cand, details) {
+            return candidatesList.find(other =>
+                other.globalRank < cand.globalRank &&
+                !other.isSelected &&
+                isCandidateCurrentlyEligible(other, details)
+            );
+        }
+
         function toggleSelectCandidate(id) {
             if (isRankDirty) {
                 alert("प्रथम 'Update Rank' बटणावर क्लिक करा!");
@@ -574,7 +598,8 @@
                 return;
             }
 
-            const { usedSub, subWinners, usedCat, catWinners, selectedAppMap } = getSelectionDetails();
+            const details = getSelectionDetails();
+            const { usedSub, subWinners, usedCat, catWinners, selectedAppMap } = details;
             let subKey = `${cand.post} | ${cand.subject}`;
             let maxSub = subjectLimits[subKey] !== undefined ? subjectLimits[subKey] : 1;
             let maxCat = categoryLimits[cand.recCatKey] !== undefined ? categoryLimits[cand.recCatKey] : 1;
@@ -589,6 +614,12 @@
             }
             if (!cand.isPH && (usedCat[cand.recCatKey] || 0) >= maxCat) {
                 alert(`Rec. Category (${cand.recCategory}) ची जागा आधीच भरली गेली आहे:\n${catWinners[cand.recCatKey].map(w => w.text).join('\n')}`);
+                return;
+            }
+
+            let blockedByHigher = getHigherEligibleUnselected(cand, details);
+            if (blockedByHigher) {
+                alert(`मेरिट क्रमानुसार आधी Rank #${blockedByHigher.globalRank} (${blockedByHigher.name}) यांची निवड करणे आवश्यक आहे.`);
                 return;
             }
 
@@ -656,6 +687,15 @@
             let isDup = !!selectedAppMap[c.appId];
             let isSubFull = curSubUsed >= maxSub;
             let isCatFull = !c.isPH && curCatUsed >= maxCat;
+
+            let blockedByHigher = getHigherEligibleUnselected(c, details);
+            if (!isDup && !isSubFull && !isCatFull && blockedByHigher) {
+                return {
+                    actionHtml: `<button class="btn btn-outline-secondary btn-sm" disabled>Wait for #${blockedByHigher.globalRank}</button>`,
+                    remarkHtml: `<span class="text-warning fw-semibold">⏳ Waiting for higher merit candidate: <strong>#${blockedByHigher.globalRank} ${blockedByHigher.name}</strong></span>`,
+                    remarkPlain: `Waiting for higher merit candidate: #${blockedByHigher.globalRank} ${blockedByHigher.name}`
+                };
+            }
 
             if (!isDup && !isSubFull && !isCatFull) {
                 return {
@@ -800,7 +840,6 @@
             return sansthaName ? `<span class="sec-sanstha-sub">🏫 ${sansthaName}</span>` : '';
         }
 
-        // Section 1: Subject vs Recommended Category Goshwara Matrix
         function buildGoshwaraMatrixHtml(selectedCands) {
             let allSubKeys = [...new Set([
                 ...Object.keys(subjectLimits),
@@ -852,7 +891,7 @@
                 return `<td class="text-center fw-bold">${filled} / ${quota}</td>`;
             }).join('');
 
-            let totalAdv = allSubKeys.reduce((acc, sk) => acc + (subjectLimits[sk] !== undefined ? subjectLimits[sk] : 1), 0);
+            let totalAdv = getTotalAdvertisedPosts();
             let totalFilled = selectedCands.length;
             let totalVacant = Math.max(0, totalAdv - totalFilled);
 
@@ -882,7 +921,6 @@
             `;
         }
 
-        // Shared Full-Scoring Table Header & Row Builder for Report Lists
         function getFullScoringTableHeadHtml(srLabel = "Sr.", extraColHeader = "Post &amp; Subject", headClass = "table-dark") {
             return `
                 <thead class="${headClass} text-center">
@@ -937,7 +975,6 @@
             `;
         }
 
-        // Section 4: Subject-wise Complete Merit List (All Scoring Fields)
         function buildSubjectWiseListsHtml(details) {
             let allSubKeys = [...new Set([
                 ...Object.keys(subjectLimits),
@@ -965,7 +1002,6 @@
             }).join('');
         }
 
-        // Section 5: Category-wise Complete Merit List (All Scoring Fields)
         function buildCategoryWiseListsHtml(details) {
             let allCatKeys = [...new Set([
                 ...Object.keys(categoryLimits),
@@ -1016,33 +1052,21 @@
             const waitlistedCands = candidatesList.filter(c => !c.isSelected);
             const nowStr = new Date().toLocaleString('en-IN');
 
-            const reportMainTitle = sansthaName
-                ? `${sansthaName}`
-                : `PAVITRA Teacher Recruitment (With Interview) TAIT-2025`;
+            const reportMainTitle = sansthaName ? `${sansthaName}` : `PAVITRA Teacher Recruitment (With Interview) TAIT-2025`;
             const sansthaSubHtml = getSansthaSubBannerHtml();
 
-            // 1. Goshwara Matrix
             const goshwaraHtml = buildGoshwaraMatrixHtml(selectedCands);
-
-            // 2. Selected Candidates List (All Scoring Fields)
             let selectedRows = selectedCands.map((c, idx) => getFullScoringRowHtml(c, idx + 1, true, details)).join('');
-            if (!selectedRows) {
-                selectedRows = `<tr><td colspan="16" class="text-center text-muted">No candidate selected yet.</td></tr>`;
-            }
+            if (!selectedRows) selectedRows = `<tr><td colspan="16" class="text-center text-muted">No candidate selected yet.</td></tr>`;
 
-            // 3. Waitlisted Candidates List (All Scoring Fields)
             let waitlistedRows = waitlistedCands.map((c, idx) => getFullScoringRowHtml(c, idx + 1, true, details)).join('');
-            if (!waitlistedRows) {
-                waitlistedRows = `<tr><td colspan="16" class="text-center text-muted">No waitlisted candidates.</td></tr>`;
-            }
+            if (!waitlistedRows) waitlistedRows = `<tr><td colspan="16" class="text-center text-muted">No waitlisted candidates.</td></tr>`;
 
-            // 4. Subject-wise List & 5. Category-wise List (All Scoring Fields)
             const subjectWiseHtml = buildSubjectWiseListsHtml(details);
             const categoryWiseHtml = buildCategoryWiseListsHtml(details);
 
             container.innerHTML = `
                 <div id="pdfExportContainer">
-                    <!-- PAGE 1: HEADER + DISCLAIMER + GOSHWARA -->
                     <div>
                         <div class="text-center border-bottom pb-2 mb-2">
                             <h4 class="fw-bold text-primary mb-0">${reportMainTitle}</h4>
@@ -1083,7 +1107,6 @@
                         ${goshwaraHtml}
                     </div>
 
-                    <!-- NEW PAGE: PART 2 - SELECTED CANDIDATES LIST -->
                     <div class="pdf-page-break">
                         <div class="sec-banner text-success" style="border-left-color: #198754;">
                             ${sansthaSubHtml}
@@ -1095,7 +1118,6 @@
                         </table>
                     </div>
 
-                    <!-- NEW PAGE: PART 3 - WAITLISTED CANDIDATES LIST -->
                     <div class="pdf-page-break">
                         <div class="sec-banner text-dark" style="border-left-color: #ffc107;">
                             ${sansthaSubHtml}
@@ -1107,7 +1129,6 @@
                         </table>
                     </div>
 
-                    <!-- NEW PAGE: PART 4 - SUBJECT-WISE MERIT LIST -->
                     <div class="pdf-page-break">
                         <div class="sec-banner">
                             ${sansthaSubHtml}
@@ -1116,7 +1137,6 @@
                         ${subjectWiseHtml}
                     </div>
 
-                    <!-- NEW PAGE: PART 5 - CATEGORY-WISE MERIT LIST -->
                     <div class="pdf-page-break">
                         <div class="sec-banner">
                             ${sansthaSubHtml}
@@ -1138,9 +1158,7 @@
             btn.disabled = true;
             btn.textContent = '⏳ Generating PDF...';
 
-            let safeFileName = sansthaName
-                ? sansthaName.replace(/[^a-zA-Z0-9\s\-]/g, '').trim().replace(/\s+/g, '_').substring(0, 45) + '_Goshwara_Report.pdf'
-                : 'Sanstha_Goshwara_Summary_Report.pdf';
+            let safeFileName = sansthaName ? sansthaName.replace(/[^a-zA-Z0-9\s\-]/g, '').trim().replace(/\s+/g, '_').substring(0, 45) + '_Goshwara_Report.pdf' : 'Sanstha_Goshwara_Summary_Report.pdf';
 
             const opt = {
                 margin:       [7, 7, 7, 7],
@@ -1172,7 +1190,7 @@
             }
             const details = getSelectionDetails();
             let headerPrefix = sansthaName ? `${sansthaName} | ` : '';
-            let csv = `${headerPrefix}Created by Bhaskar Thorat (Disclaimer: For helping purpose only; data may be inaccurate; use at your own risk | अस्वीकरण: हे पोर्टल केवळ मदतीसाठी तयार केले आहे; माहिती अचूक असेलच असे नाही; स्वतःच्या जबाबदारीवर वापरावे)\n`;
+            let csv = `${headerPrefix}Created by Bhaskar Thorat (Disclaimer: For helping purpose only; data may be inaccurate; use at your own risk)\n`;
             csv += 'Sr.No,Applicant Name,Post,Subject,Caste,Rec. Category,TAIT (200),TAIT Score (75),Prof (5),Prof Extra (3),Acad (5),Acad Extra (2),Interview (5),Lesson (5),Total (100),Rank,Status,Selection / Rejection Remark\n';
             candidatesList.forEach((c, i) => {
                 let tait75 = (Math.round(((Number(c.taitRaw) / 200) * 75) * 100) / 100).toFixed(2);
