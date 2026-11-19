@@ -4,539 +4,1188 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PAVITRA Teacher Recruitment 100 Marks Merit Portal</title>
-    <!-- Tailwind CSS CDN for styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- html2pdf library for Direct PDF Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        body { background-color: #f4f7f6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .header-box { background: linear-gradient(135deg, #0d6efd, #0dcaf0); color: white; padding: 18px; border-radius: 8px; margin-bottom: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .creator-badge { background: rgba(255,255,255,0.2); padding: 4px 14px; border-radius: 20px; font-size: 0.85rem; display: inline-block; margin-top: 6px; font-weight: 600; }
+        .sanstha-banner { background-color: #e7f1ff; border: 1px solid #b6d4fe; border-left: 5px solid #0d6efd; color: #084298; padding: 10px 15px; border-radius: 6px; font-weight: 700; font-size: 1rem; margin-bottom: 14px; }
+        .disclaimer-box { background-color: #fff3cd; border-left: 5px solid #ffc107; color: #664d03; padding: 10px 15px; border-radius: 6px; font-size: 0.80rem; margin-bottom: 16px; line-height: 1.42; }
+        .card-box { background: white; padding: 18px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .nav-pills .nav-link { font-weight: 700; border: 1px solid #dee2e6; margin-right: 6px; background-color: #ffffff; color: #495057; }
+        .nav-pills .nav-link.active { background-color: #0d6efd; color: #ffffff; border-color: #0d6efd; box-shadow: 0 3px 6px rgba(13,110,253,0.25); }
+        .editable-input { width: 55px; text-align: center; padding: 2px 4px; font-weight: 600; }
+        .tait-locked { width: 62px; text-align: center; padding: 2px 4px; background-color: #e9ecef; border: 1px solid #ced4da; color: #495057; font-weight: bold; cursor: not-allowed; }
+        .tait-unlocked { width: 62px; text-align: center; padding: 2px 4px; background-color: #fff3cd; border: 1px solid #ffc107; font-weight: bold; }
+        table th, table td { font-size: 0.80rem; vertical-align: middle; }
+        .sub-head { display: block; font-size: 0.70rem; color: #ffc107; font-weight: normal; }
+        .remark-box { min-width: 270px; max-width: 330px; font-size: 0.75rem; line-height: 1.38; }
+
+        /* Clean PDF Pagination & Header Rules */
+        #pdfExportContainer { background: #ffffff; color: #000000; padding: 14px; width: 100%; border: 1px solid #dee2e6; border-radius: 6px; }
+        #pdfExportContainer table { width: 100% !important; border-collapse: collapse; margin-bottom: 12px; }
+        #pdfExportContainer table thead { display: table-header-group; }
+        #pdfExportContainer table tr { break-inside: avoid; page-break-inside: avoid; }
+        #pdfExportContainer table th, #pdfExportContainer table td { font-size: 0.60rem; padding: 3px 4px; word-wrap: break-word; }
+        .goshwara-table th, .goshwara-table td { font-size: 0.58rem !important; padding: 3px 3px !important; }
+        .pdf-page-break { page-break-before: always; break-before: page; padding-top: 6px; }
+        .sec-banner { background-color: #e9ecef; border-left: 5px solid #0d6efd; padding: 7px 10px; font-weight: bold; font-size: 0.86rem; margin-bottom: 8px; break-after: avoid; page-break-after: avoid; }
+        .sec-sanstha-sub { display: block; font-size: 0.76rem; color: #0d6efd; font-weight: 700; margin-bottom: 2px; }
+        .sub-sec-block { break-inside: avoid-page; margin-bottom: 14px; }
+        .sub-sec-title { background-color: #f1f3f5; border: 1px solid #ced4da; border-left: 4px solid #0d6efd; padding: 5px 8px; font-weight: bold; font-size: 0.78rem; margin-top: 8px; margin-bottom: 4px; break-after: avoid; page-break-after: avoid; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid px-3 my-3">
+        <!-- Header -->
+        <div class="header-box text-center">
+            <h2 class="mb-1 fw-bold" id="mainHeaderTitle">PAVITRA Teacher Recruitment (With Interview) TAIT-2025</h2>
+            <p class="mb-1">100 Marks Merit List &amp; Interactive Selection Portal</p>
+            <span class="creator-badge">Created by Bhaskar Thorat</span>
+        </div>
+
+        <!-- Disclaimer (English & Marathi) -->
+        <div class="disclaimer-box">
+            <div class="mb-1">
+                <strong>⚠️ Disclaimer:</strong> This tool is created strictly for helping and reference purposes only. Any data, calculation, or merit status shown here may be inaccurate. Please verify with official PAVITRA portal guidelines and use at your own risk.
+            </div>
+            <div>
+                <strong>⚠️ अस्वीकरण (Disclaimer):</strong> हे पोर्टल केवळ मदतीसाठी आणि संदर्भासाठी (Helping &amp; Reference Purpose) तयार करण्यात आले आहे. येथे दर्शविलेली कोणतीही माहिती, गुणांकन किंवा निवड स्थिती अचूक असेलच असे नाही. कृपया अधिकृत पवित्र (PAVITRA) पोर्टलच्या मार्गदर्शक तत्त्वांनुसार पडताळणी करूनच आपल्या स्वतःच्या जबाबदारीवर याचा वापर करावा.
+            </div>
+        </div>
+
+        <!-- Step Navigation Tabs -->
+        <ul class="nav nav-pills mb-3" id="portalTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="step1-tab" data-bs-toggle="pill" data-bs-target="#step1-pane" type="button" role="tab">
+                    📄 Step 1: संस्थेचा PDF डेटा पेस्ट करा
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="step2-tab" data-bs-toggle="pill" data-bs-target="#step2-pane" type="button" role="tab">
+                    ✅ Step 2: Candidate Selection <span id="tabSelectedBadge" class="badge bg-success ms-1">0 / 0</span>
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="step3-tab" data-bs-toggle="pill" data-bs-target="#step3-pane" type="button" role="tab" onclick="renderSummaryReportInTab()">
+                    📊 Step 3: Summary &amp; PDF Report
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab Panes -->
+        <div class="tab-content" id="portalTabsContent">
+
+            <!-- STEP 1 PANE: PASTE PDF DATA -->
+            <div class="tab-pane fade show active" id="step1-pane" role="tabpanel">
+                <div class="card-box">
+                    <h5 class="text-primary fw-bold mb-1">📄 Step 1: संस्थेचा PDF मजकूर पेस्ट करा (Paste Sanstha PDF Text Data)</h5>
+                    <p class="text-muted small mb-3">
+                        संस्थेच्या जनरल मेरिट लिस्ट (General Merit List) पीडीएफमधील संपूर्ण मजकूर कॉपी करून खाली पेस्ट करा आणि <strong>'Parse &amp; Proceed to Step 2'</strong> या बटणावर क्लिक करा.
+                    </p>
+                    <textarea id="pdfRawText" class="form-control mb-3" rows="9" placeholder="संस्थेच्या PDF मधील संपूर्ण मजकूर येथे पेस्ट करा..."></textarea>
+
+                    <div class="row align-items-center g-2 mb-3">
+                        <div class="col-md-8">
+                            <label for="sansthaNameInput" class="form-label small fw-bold text-primary mb-1">🏫 संस्थेचे नाव (Sanstha Name — Auto-detected from PDF, editable if needed):</label>
+                            <input type="text" id="sansthaNameInput" class="form-control form-control-sm fw-bold" placeholder="PDF पेस्ट केल्यानंतर संस्थेचे नाव येथे आपोआप दिसेल..." oninput="syncSansthaName(this.value)">
+                        </div>
+                        <div class="col-md-4 text-md-end mt-4">
+                            <button type="button" class="btn btn-primary px-4 fw-bold w-100" onclick="parseFullPDF()">
+                                Parse &amp; Proceed to Step 2 →
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <span id="parseStatus" class="text-success fw-bold small"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 2 PANE: MARKS & CANDIDATE SELECTION -->
+            <div class="tab-pane fade" id="step2-pane" role="tabpanel">
+                <!-- Sanstha Banner in Step 2 -->
+                <div id="step2SansthaBanner" class="sanstha-banner d-none">
+                    🏫 <span id="step2SansthaText"></span>
+                </div>
+
+                <!-- Alert Banner when Rank Needs Update -->
+                <div id="pendingBanner" class="alert alert-warning py-2 px-3 d-none d-flex justify-content-between align-items-center">
+                    <span>⚠️ <strong>Marks Modified!</strong> Selection buttons locked hain. Rank update karne ke liye button par click karein.</span>
+                    <button type="button" class="btn btn-warning btn-sm fw-bold" onclick="recalculateRanks()">🔄 Update Rank Now</button>
+                </div>
+
+                <!-- Controls / Filters & Live Counter -->
+                <div class="card-box py-3">
+                    <div class="row align-items-center g-2">
+                        <div class="col-md-3">
+                            <label for="subjectFilter" class="form-label fw-bold small mb-1">Filter by Post &amp; Subject:</label>
+                            <select id="subjectFilter" class="form-select form-select-sm" onchange="renderTable()">
+                                <option value="ALL">All Subjects &amp; Posts</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <div class="p-2 bg-light border rounded">
+                                <span class="small text-muted fw-bold">Selected: </span>
+                                <span id="selectionCounter" class="fw-bold text-success fs-6">0 / 0</span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <div class="form-check form-switch d-inline-block text-start">
+                                <input class="form-check-input" type="checkbox" id="unlockTaitSwitch" onchange="toggleTaitLock()">
+                                <label class="form-check-label small fw-bold text-danger" for="unlockTaitSwitch">🔒 Unlock TAIT Edit</label>
+                            </div>
+                        </div>
+                        <div class="col-md-5 text-md-end">
+                            <button type="button" id="updateRankBtn" class="btn btn-warning btn-sm fw-bold me-1 mb-1" onclick="recalculateRanks()">🔄 Update Rank</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm me-1 mb-1" onclick="autoSelectTopMerit()">✨ Auto-Select Top</button>
+                            <button type="button" class="btn btn-outline-danger btn-sm me-1 mb-1" onclick="clearSelections()">Clear</button>
+                            <button type="button" class="btn btn-success btn-sm fw-bold mb-1" onclick="goToStep3Report()">📊 Proceed to Report →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table Container -->
+                <div class="card-box table-responsive">
+                    <table class="table table-bordered table-hover align-middle">
+                        <thead class="table-dark text-center">
+                            <tr>
+                                <th>Sr.</th>
+                                <th>Applicant Name</th>
+                                <th>Post &amp; Subject</th>
+                                <th>Caste</th>
+                                <th>Rec. Category</th>
+                                <th>TAIT<span class="sub-head">(Locked)</span></th>
+                                <th>TAIT Score<span class="sub-head">(Max 75)</span></th>
+                                <th>Prof.<span class="sub-head">(Max 5)</span></th>
+                                <th>Prof. Ext<span class="sub-head">(Max 3)</span></th>
+                                <th>Acad.<span class="sub-head">(Max 5)</span></th>
+                                <th>Acad. Ext<span class="sub-head">(Max 2)</span></th>
+                                <th>Intv.<span class="sub-head">(Max 5)</span></th>
+                                <th>Lesson<span class="sub-head">(Max 5)</span></th>
+                                <th>Total<span class="sub-head">(100)</span></th>
+                                <th>Rank</th>
+                                <th>Step 2 Action</th>
+                                <th>Selection / Rejection Remark (At Candidate's Merit Turn)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <tr><td colspan="17" class="text-center text-muted py-4">प्रथम <strong>Step 1</strong> टॅबमध्ये PDF चा मजकूर पेस्ट करून डेटा लोड करा.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- STEP 3 PANE: SUMMARY & PDF REPORT -->
+            <div class="tab-pane fade" id="step3-pane" role="tabpanel">
+                <div class="card-box py-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+                    <div>
+                        <h5 class="text-danger fw-bold mb-0" id="step3TopHeading">📊 Step 3: Final Selection Goshwara &amp; Merit Summary Report</h5>
+                        <small class="text-muted">Complete report with Subject vs. Category Goshwara, Selected List, Waitlist, Subject-wise &amp; Category-wise lists (All Scoring Fields).</small>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-outline-secondary btn-sm me-1" onclick="switchToTab('step2-tab')">← Back to Step 2</button>
+                        <button type="button" class="btn btn-success btn-sm fw-bold me-1" onclick="exportCSV()">📊 Download CSV</button>
+                        <button type="button" id="downloadPdfBtn" class="btn btn-danger btn-sm fw-bold px-3" onclick="downloadReportPDF()">📥 Download PDF File</button>
+                    </div>
+                </div>
+
+                <div id="summaryReportContent">
+                    <div class="card-box text-center text-muted py-5">
+                        प्रथम <strong>Step 1</strong> मध्ये डेटा लोड करा आणि <strong>Step 2</strong> मध्ये निवड पूर्ण करा.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8' },
-                        secondary: { 50: '#f8fafc', 100: '#f1f5f9', 600: '#475569', 700: '#334155' }
+        let candidatesList = [];
+        let subjectLimits = {};
+        let categoryLimits = {};
+        let categoryDisplayNames = {};
+        let sansthaName = "";
+        let isRankDirty = false;
+        let isTaitUnlocked = false;
+
+        function extractSansthaName(raw) {
+            const lines = raw.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+            for (let i = 0; i < Math.min(lines.length, 30); i++) {
+                let line = lines[i];
+
+                let labelMatch = line.match(/^(?:Sanstha|Management|Institute|Organization|Society)\s*(?:Name)?\s*[:\-]\s*(.+)$/i);
+                if (labelMatch && labelMatch[1].trim().length > 3) {
+                    return labelMatch[1].trim();
+                }
+
+                let gmlMatch = line.match(/General\s+Merit\s+List\s+(?:For|of)\s+(.+)$/i);
+                if (gmlMatch && gmlMatch[1].trim().length > 3) {
+                    return gmlMatch[1].trim();
+                }
+
+                if (/^General\s+Merit\s+List$/i.test(line) && lines[i + 1]) {
+                    let nextLine = lines[i + 1];
+                    if (!/^(?:Category|Sr\.|Print|Page|POST|Applicant|With\s+Interview)/i.test(nextLine) && nextLine.length > 4) {
+                        return nextLine.replace(/^For\s+/i, '').trim();
                     }
                 }
             }
+
+            for (let i = 0; i < Math.min(lines.length, 25); i++) {
+                let line = lines[i];
+                if (/^(?:Print\s+Date|Page\s+\d|General\s+Merit|Category|POST\s+SUBJECT|Applicant\s+Name|Sr\.)/i.test(line)) continue;
+                if (/\b(?:Sanstha|Mandal|Society|Trust|Parishad|Foundation|Pratishthan|Vidya\s*Prasarak|Shikshan)\b/i.test(line)) {
+                    return line;
+                }
+            }
+            return "";
         }
-    </script>
-    <!-- SheetJS (xlsx) for Excel export -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <!-- jsPDF and html2pdf for Report/PDF generation -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-</head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
 
-    <!-- Header -->
-    <header class="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-30">
-        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-                <h1 id="appHeaderTitle" class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">PAVITRA Teacher Recruitment 100 Marks Merit Portal</h1>
-                <p id="appHeaderSub" class="text-xs sm:text-sm text-slate-500 mt-0.5">Interactive Merit Calculator & Selection Portal for Sanstha Recruitment</p>
-            </div>
-            <div class="flex items-center gap-2 flex-wrap">
-                <button onclick="switchTab('step1')" id="tabBtn1" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 text-white shadow-sm transition">📄 Step 1: Sanstha PDF Data</button>
-                <button onclick="switchTab('step2')" id="tabBtn2" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300 transition">✅ Step 2: Selection Portal</button>
-                <button onclick="switchTab('step3')" id="tabBtn3" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300 transition">📊 Step 3: Summary & Report</button>
-            </div>
-        </div>
-    </header>
+        function syncSansthaName(val) {
+            sansthaName = val.trim();
+            const mainTitle = document.getElementById('mainHeaderTitle');
+            const step2Banner = document.getElementById('step2SansthaBanner');
+            const step2Text = document.getElementById('step2SansthaText');
+            const step3Top = document.getElementById('step3TopHeading');
 
-    <!-- Main Container -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6 sm:px-6">
-
-        <!-- Disclaimer Banner -->
-        <div class="mb-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg text-xs sm:text-sm text-amber-900 shadow-sm">
-            <p class="font-bold mb-1">⚠️ Disclaimer / अस्वीकरण:</p>
-            <p class="mb-1">This tool is created strictly for helping and reference purposes only. Any data, calculation, or merit status shown here may be inaccurate. Please verify with official PAVITRA portal guidelines and use at your own risk.</p>
-            <p class="text-amber-800">हे पोर्टल केवळ मदतीसाठी आणि संदर्भासाठी (Helping & Reference Purpose) तयार करण्यात आले आहे. येथे दर्शविलेली कोणतीही माहिती, गुणांकन किंवा निवड स्थिती अचूक असेलच असे नाही. कृपया अधिकृत पवित्र (PAVITRA) पोर्टलच्या मार्गदर्शक तत्त्वांनुसार पडताळणी करूनच आपल्या स्वतःच्या जबाबदारीवर याचा वापर करावा.</p>
-        </div>
-
-        <!-- TAB 1: STEP 1 - PDF PASTE & PARSER -->
-        <section id="tabContent1" class="space-y-6">
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-                <h2 class="text-lg font-bold text-slate-900 mb-2">Step 1: Paste Sanstha Advertised Vacancies & Applicant PDF Text</h2>
-                <p class="text-xs sm:text-sm text-slate-600 mb-4">Copy the text from your Sanstha vacancy advertisement PDF (showing subjects, post counts, and categories) or upload/paste candidate lists. The parser automatically extracts vacancies and computes scores.</p>
-                
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1 uppercase tracking-wider">Sanstha Name / ID</label>
-                        <input type="text" id="sansthaNameInput" value="PDM.DR.VASANTDADA PATIL SHIKSHAN SANSTHA RAHIMATPUR TAL-KOREGAON (273103SC005)" class="w-full text-sm border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1 uppercase tracking-wider">Paste PDF / Vacancy Data Here</label>
-                        <textarea id="rawPdfInput" rows="8" class="w-full text-xs font-mono border border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Paste extracted text from PDF here..."></textarea>
-                    </div>
-                    <div class="flex gap-3">
-                        <button onclick="parseAndLoadData()" class="px-5 py-2.5 bg-blue-600 text-white font-semibold text-sm rounded-lg shadow hover:bg-blue-700 transition">Parse & Load into Selection Portal</button>
-                        <button onclick="loadSampleData()" class="px-5 py-2.5 bg-slate-200 text-slate-700 font-semibold text-sm rounded-lg hover:bg-slate-300 transition">Load Default Demo Dataset</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 2: STEP 2 - SELECTION PORTAL -->
-        <section id="tabContent2" class="space-y-6 hidden">
-            <!-- Controls Bar -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-                <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto">
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 mb-1">Filter by Post & Subject</label>
-                        <select id="subjectFilter" onchange="filterTable()" class="text-xs sm:text-sm border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 bg-white max-w-xs">
-                            <option value="">All Subjects & Posts</option>
-                        </select>
-                    </div>
-                    <div class="flex items-center gap-2 mt-4 sm:mt-0">
-                        <span id="selectionCounterBadge" class="px-3 py-1.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg text-xs font-bold">Selected: 0 / 0</span>
-                        <button onclick="toggleTaitEdit()" id="taitEditBtn" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-100 transition">🔒 Unlock TAIT Edit</button>
-                    </div>
-                </div>
-                <div class="flex flex-wrap items-center gap-2">
-                    <button onclick="recalculateRanks()" class="px-3 py-1.5 text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg border border-slate-300 transition flex items-center gap-1.5">🔄 Update Rank</button>
-                    <button onclick="autoSelectTop()" class="px-3 py-1.5 text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-sm transition">✨ Auto-Select Top</button>
-                    <button onclick="clearAllSelections()" class="px-3 py-1.5 text-xs font-semibold bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg border border-rose-200 transition">Clear</button>
-                    <button onclick="switchTab('step3')" class="px-3 py-1.5 text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-sm transition">📊 Proceed to Report →</button>
-                </div>
-            </div>
-
-            <!-- Main Candidates Table -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="p-4 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
-                    <h3 id="sansthaDisplayTitle" class="font-bold text-slate-800 text-sm sm:text-base">PDM.DR.VASANTDADA PATIL SHIKSHAN SANSTHA RAHIMATPUR</h3>
-                    <span class="text-xs text-slate-500">100 Marks Evaluated Merit Order</span>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse text-xs">
-                        <thead>
-                            <tr class="bg-slate-100 text-slate-700 uppercase font-semibold text-[11px] border-b border-slate-200">
-                                <th class="p-3">Sr.</th>
-                                <th class="p-3">Applicant Name</th>
-                                <th class="p-3">Post & Subject</th>
-                                <th class="p-3">Caste</th>
-                                <th class="p-3">Rec. Category</th>
-                                <th class="p-3">TAIT (Locked)</th>
-                                <th class="p-3">TAIT Score (Max 75)</th>
-                                <th class="p-3">Prof. (Max 5)</th>
-                                <th class="p-3">Prof. Ext (Max 3)</th>
-                                <th class="p-3">Acad. (Max 5)</th>
-                                <th class="p-3">Acad. Ext (Max 2)</th>
-                                <th class="p-3">Intv. (Max 5)</th>
-                                <th class="p-3">Lesson (Max 5)</th>
-                                <th class="p-3 bg-blue-50 text-blue-900">Total (100)</th>
-                                <th class="p-3">Rank</th>
-                                <th class="p-3">Step 2 Action</th>
-                                <th class="p-3">Selection / Rejection Remark</th>
-                            </tr>
-                        </thead>
-                        <tbody id="candidateTableBody" class="divide-y divide-slate-200">
-                            <!-- Populated dynamically -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 3: STEP 3 - SUMMARY & REPORT -->
-        <section id="tabContent3" class="space-y-6 hidden">
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 print:shadow-none print:border-none" id="reportPrintArea">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-slate-200 gap-4">
-                    <div>
-                        <h2 class="text-xl font-bold text-slate-900">Sanstha Recruitment Selection Summary & Final Report</h2>
-                        <p id="reportSansthaSubtitle" class="text-xs sm:text-sm text-slate-500 mt-1">PDM.DR.VASANTDADA PATIL SHIKSHAN SANSTHA RAHIMATPUR TAL-KOREGAON (273103SC005)</p>
-                    </div>
-                    <div class="flex gap-2 print:hidden">
-                        <button onclick="exportToExcel()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg shadow transition flex items-center gap-1.5">📥 Export Excel</button>
-                        <button onclick="downloadPDF()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg shadow transition flex items-center gap-1.5">📄 Download PDF</button>
-                        <button onclick="window.print()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-semibold rounded-lg transition">🖨️ Print</button>
-                    </div>
-                </div>
-
-                <!-- Statistics Grid -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 my-6">
-                    <div class="bg-blue-50 border border-blue-100 rounded-xl p-4">
-                        <p class="text-xs font-medium text-blue-600 uppercase">Total Advertised Posts</p>
-                        <p id="statTotalPosts" class="text-2xl font-bold text-blue-900 mt-1">0</p>
-                    </div>
-                    <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-4">
-                        <p class="text-xs font-medium text-emerald-600 uppercase">Selected Candidates</p>
-                        <p id="statSelectedCount" class="text-2xl font-bold text-emerald-900 mt-1">0</p>
-                    </div>
-                    <div class="bg-amber-50 border border-amber-100 rounded-xl p-4">
-                        <p class="text-xs font-medium text-amber-600 uppercase">Vacant Posts Remaining</p>
-                        <p id="statVacantCount" class="text-2xl font-bold text-amber-900 mt-1">0</p>
-                    </div>
-                </div>
-
-                <!-- Subject-wise breakdown table -->
-                <h3 class="font-bold text-slate-800 text-sm sm:text-base mt-6 mb-3">Subject & Post-wise Selection Status</h3>
-                <div class="overflow-x-auto mb-8">
-                    <table class="w-full text-left border-collapse text-xs">
-                        <thead>
-                            <tr class="bg-slate-100 text-slate-700 uppercase font-semibold text-[11px] border-b border-slate-200">
-                                <th class="p-3">Post & Subject</th>
-                                <th class="p-3">Total Sanctioned Posts</th>
-                                <th class="p-3">Filled</th>
-                                <th class="p-3">Vacant</th>
-                                <th class="p-3">Selected Candidate Details</th>
-                            </tr>
-                        </thead>
-                        <tbody id="subjectSummaryBody" class="divide-y divide-slate-200">
-                            <!-- Populated dynamically -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Final Selected List Table -->
-                <h3 class="font-bold text-slate-800 text-sm sm:text-base mt-6 mb-3">Final Selected Candidates Roster</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse text-xs">
-                        <thead>
-                            <tr class="bg-slate-100 text-slate-700 uppercase font-semibold text-[11px] border-b border-slate-200">
-                                <th class="p-3">Sr.</th>
-                                <th class="p-3">Applicant Name</th>
-                                <th class="p-3">Post & Subject</th>
-                                <th class="p-3">Category</th>
-                                <th class="p-3">Total Score</th>
-                                <th class="p-3">Merit Rank</th>
-                            </tr>
-                        </thead>
-                        <tbody id="finalSelectedBody" class="divide-y divide-slate-200">
-                            <!-- Populated dynamically -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-white border-t border-slate-200 py-4 mt-auto text-center text-xs text-slate-500">
-        <p>PAVITRA Teacher Recruitment Portal &bull; Designed for Merit Transparency & Accurate Post Allocation</p>
-    </footer>
-
-    <!-- Application JavaScript Logic -->
-    <script>
-        // Global State & Default Data
-        let taitEditable = false;
-
-        // FIXED: Subject Posts with Mathematics set to 2 posts as requested by the user
-        let subjectVacancies = {
-            "Graduate Teacher std(9-10) | (Aided) (Consolidated Pay - GT 9-10 (18000)) Mathematics": { total: 2, filled: 0 },
-            "Graduate Teacher std(9-10) | (Aided) (Consolidated Pay - GT 9-10 (18000)) Science": { total: 1, filled: 0 },
-            "Graduate Teacher std(9-10) | (Aided) (Consolidated Pay - GT 9-10 (18000)) Language (Marathi)": { total: 1, filled: 0 },
-            "Graduate Teacher std(6-8) | (Aided) (Consolidated Pay - GT 6-8 (16000)) Language (Hindi)": { total: 1, filled: 0 },
-            "Graduate Teacher std(6-8) | (Aided) (Consolidated Pay - GT 6-8 (16000)) Special Teacher (Arts)": { total: 1, filled: 0 },
-            "Graduate Teacher std(9-10) | (Aided) (Consolidated Pay - GT 9-10 (18000)) Physical Education": { total: 1, filled: 0 }
-        };
-
-        let candidatesData = [
-            { id: 1, name: "SHITAL SHASHANK BHOSALE", appId: "3120003667", post: "Graduate Teacher std(9-10) | (Aided) (Consolidated Pay - GT 9-10 (18000)) Mathematics", caste: "GENERAL", recCat: "General - (Women)", tait: 153, prof: 0, profExt: 0, acad: 0, acadExt: 0, intv: 0, lesson: 0, selected: false },
-            { id: 2, name: "SWATI RAHUL JADHAV", appId: "3120003028", post: "Graduate Teacher std(9-10) | (Aided) (Consolidated Pay - GT 9-10 (18000)) Science", caste: "SEBC", recCat: "General - (Women)", tait: 152, prof: 0, profExt: 0, acad: 0, acadExt: 0, intv: 0, lesson: 0, selected: false },
-            { id: 3, name: "KOMAL ABHIJIT SALUNKHE", appId: "3120002962", post: "Graduate Teacher std(9-10) | (Aided) (Consolidated Pay - GT 9-10 (18000)) Mathematics", caste: "SEBC", recCat: "General - (Women)", tait: 148, prof: 0, profExt: 0, acad: 0, acadExt: 0, intv: 0, lesson: 0, selected: false },
-            { id: 4, name: "PRIYANKA AJAY CHAVAN", appId: "3120004410", post: "Graduate Teacher std(9-10) | (Aided) (Consolidated Pay - GT 9-10 (18000)) Mathematics", caste: "GENERAL", recCat: "General - (NA)", tait: 146, prof: 0, profExt: 0, acad: 0, acadExt: 0, intv: 0, lesson: 0, selected: false },
-            { id: 5, name: "PRAJAKTA NIKHIL SABALE", appId: "3120001910", post: "Graduate Teacher std(9-10) | (Aided) (Consolidated Pay - GT 9-10 (18000)) Science", caste: "GENERAL", recCat: "General - (NA)", tait: 145, prof: 0, profExt: 0, acad: 0, acadExt: 0, intv: 0, lesson: 0, selected: false },
-            { id: 6, name: "NISHA SHRINIVAS PHALKE", appId: "3120001237", post: "Graduate Teacher std(9-10) | (Aided) (Consolidated Pay - GT 9-10 (18000)) Mathematics", caste: "GENERAL", recCat: "General - (NA)", tait: 144, prof: 0, profExt: 0, acad: 0, acadExt: 0, intv: 0, lesson: 0, selected: false },
-            { id: 7, name: "PRIYA PRASAD JAGTAP", appId: "3120001129", post: "Graduate Teacher std(9-10) | (Aided) (Consolidated Pay - GT 9-10 (18000)) Mathematics", caste: "OBC", recCat: "General - (NA)", tait: 142, prof: 0, profExt: 0, acad: 0, acadExt: 0, intv: 0, lesson: 0, selected: false },
-            { id: 8, name: "CHAITRALI CHANDRAKANT KULKARNI", appId: "1920009226", post: "Graduate Teacher std(9-10) | (Aided) (Consolidated Pay - GT 9-10 (18000)) Science", caste: "EWS", recCat: "EWS - (Women)", tait: 142, prof: 0, profExt: 0, acad: 0, acadExt: 0, intv: 0, lesson: 0, selected: false },
-            { id: 9, name: "PRASAD PRADIP KALE", appId: "3120000446", post: "Graduate Teacher std(9-10) | (Aided) (Consolidated Pay - GT 9-10 (18000)) Science", caste: "OBC", recCat: "OBC - (NA)", tait: 135, prof: 0, profExt: 0, acad: 0, acadExt: 0, intv: 0, lesson: 0, selected: false },
-            { id: 10, name: "SANJAY GOPAL DIWALE", appId: "3820017088", post: "Graduate Teacher std(9-10) | (Aided) (Consolidated Pay - GT 9-10 (18000)) Science", caste: "OBC", recCat: "OBC - (NA)", tait: 133, prof: 0, profExt: 0, acad: 0, acadExt: 0, intv: 0, lesson: 0, selected: false },
-            { id: 11, name: "BHAGYASHREE PRATHMESH KULKARNI", appId: "1920005723", post: "Graduate Teacher std(9-10) | (Aided) (Consolidated Pay - GT 9-10 (18000)) Mathematics", caste: "EWS", recCat: "EWS - (Women)", tait: 133, prof: 0, profExt: 0, acad: 0, acadExt: 0, intv: 0, lesson: 0, selected: false },
-            { id: 12, name: "CHARUSHILA DATTATRAY JADHAV", appId: "2720000657", post: "Graduate Teacher std(9-10) | (Aided) (Consolidated Pay - GT 9-10 (18000)) Language (Marathi)", caste: "OBC", recCat: "OBC - (Women)", tait: 122, prof: 0, profExt: 0, acad: 0, acadExt: 0, intv: 0, lesson: 0, selected: false },
-            { id: 13, name: "GOURI HANAMANT KUDALE", appId: "3320006482", post: "Graduate Teacher std(9-10) | (Aided) (Consolidated Pay - GT 9-10 (18000)) Language (Marathi)", caste: "OBC", recCat: "OBC - (Women)", tait: 119, prof: 0, profExt: 0, acad: 0, acadExt: 0, intv: 0, lesson: 0, selected: false },
-            { id: 14, name: "ARCHANA NAVNATH ADLINGE", appId: "3120001998", post: "Graduate Teacher std(6-8) | (Aided) (Consolidated Pay - GT 6-8 (16000)) Language (Hindi)", caste: "OBC", recCat: "OBC - (Women)", tait: 116, prof: 0, profExt: 0, acad: 0, acadExt: 0, intv: 0, lesson: 0, selected: false },
-            { id: 15, name: "SHUBHANGI VINAYAK PATSUTE", appId: "3020004936", post: "Graduate Teacher std(6-8) | (Aided) (Consolidated Pay - GT 6-8 (16000)) Language (Hindi)", caste: "SC", recCat: "SC - (NA)", tait: 115, prof: 0, profExt: 0, acad: 0, acadExt: 0, intv: 0, lesson: 0, selected: false },
-            { id: 16, name: "VIKAS KISAN HEGADE", appId: "3020003651", post: "Graduate Teacher std(6-8) | (Aided) (Consolidated Pay - GT 6-8 (16000)) Language (Hindi)", caste: "SC", recCat: "SC - (NA)", tait: 105, prof: 0, profExt: 0, acad: 0, acadExt: 0, intv: 0, lesson: 0, selected: false },
-            { id: 17, name: "SACHIN BABANRAO VAIDYA", appId: "3520001780", post: "Graduate Teacher std(6-8) | (Aided) (Consolidated Pay - GT 6-8 (16000)) Special Teacher (Arts)", caste: "OBC", recCat: "OBC - (NA)", tait: 103, prof: 0, profExt: 0, acad: 0, acadExt: 0, intv: 0, lesson: 0, selected: false },
-            { id: 18, name: "SIDDHARTH MANIKRAO NAGTHANKAR", appId: "2020003083", post: "Graduate Teacher std(6-8) | (Aided) (Consolidated Pay - GT 6-8 (16000)) Special Teacher (Arts)", caste: "SC", recCat: "SC - (NA)", tait: 101, prof: 0, profExt: 0, acad: 0, acadExt: 0, intv: 0, lesson: 0, selected: false },
-            { id: 19, name: "SHRIKANT RAMRAO SURYAVANSHI", appId: "2420006466", post: "Graduate Teacher std(9-10) | (Aided) (Consolidated Pay - GT 9-10 (18000)) Science", caste: "GENERAL", recCat: "General - (NA)", tait: 100, prof: 0, profExt: 0, acad: 0, acadExt: 0, intv: 0, lesson: 0, selected: false },
-            { id: 20, name: "VAISHALI ADHIKRAO PATIL", appId: "3120004098", post: "Graduate Teacher std(9-10) | (Aided) (Consolidated Pay - GT 9-10 (18000)) Language (Marathi)", caste: "GENERAL", recCat: "General - (NA)", tait: 97, prof: 0, profExt: 0, acad: 0, acadExt: 0, intv: 0, lesson: 0, selected: false },
-            { id: 21, name: "DIPAK DAVAJI BHUSARA", appId: "3820004941", post: "Graduate Teacher std(9-10) | (Aided) (Consolidated Pay - GT 9-10 (18000)) Physical Education", caste: "ST", recCat: "ST - (NA)", tait: 80, prof: 0, profExt: 0, acad: 0, acadExt: 0, intv: 0, lesson: 0, selected: false },
-            { id: 22, name: "SHIVSAGAR GANPAT ADHAV", appId: "2320002026", post: "Graduate Teacher std(6-8) | (Aided) (Consolidated Pay - GT 6-8 (16000)) Special Teacher (Arts)", caste: "ST", recCat: "ST - (NA)", tait: 80, prof: 0, profExt: 0, acad: 0, acadExt: 0, intv: 0, lesson: 0, selected: false },
-            { id: 23, name: "FIROJ MAHEMOOD TADAVI", appId: "1520021820", post: "Graduate Teacher std(9-10) | (Aided) (Consolidated Pay - GT 9-10 (18000)) Physical Education", caste: "ST", recCat: "ST - (NA)", tait: 74, prof: 0, profExt: 0, acad: 0, acadExt: 0, intv: 0, lesson: 0, selected: false }
-        ];
-
-        // Navigation Tabs
-        function switchTab(tabId) {
-            document.getElementById('tabContent1').classList.add('hidden');
-            document.getElementById('tabContent2').classList.add('hidden');
-            document.getElementById('tabContent3').classList.add('hidden');
-            
-            document.getElementById('tabBtn1').className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300 transition";
-            document.getElementById('tabBtn2').className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300 transition";
-            document.getElementById('tabBtn3').className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300 transition";
-
-            if (tabId === 'step1') {
-                document.getElementById('tabContent1').classList.remove('hidden');
-                document.getElementById('tabBtn1').className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 text-white shadow-sm transition";
-            } else if (tabId === 'step2') {
-                document.getElementById('tabContent2').classList.remove('hidden');
-                document.getElementById('tabBtn2').className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 text-white shadow-sm transition";
-                renderCandidateTable();
-            } else if (tabId === 'step3') {
-                document.getElementById('tabContent3').classList.remove('hidden');
-                document.getElementById('tabBtn3').className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 text-white shadow-sm transition";
-                generateSummaryReport();
+            if (sansthaName) {
+                mainTitle.textContent = sansthaName;
+                step2Banner.classList.remove('d-none');
+                step2Text.textContent = sansthaName;
+                step3Top.textContent = `📊 ${sansthaName} — Final Selection Goshwara & Merit Summary Report`;
+            } else {
+                mainTitle.textContent = "PAVITRA Teacher Recruitment (With Interview) TAIT-2025";
+                step2Banner.classList.add('d-none');
+                step3Top.textContent = "📊 Step 3: Final Selection Goshwara & Merit Summary Report";
             }
         }
 
-        // Calculation Helpers (100 Marks formula)
-        function calculateTotal(c) {
-            const taitScore = (Number(c.tait) / 200) * 75;
-            const total = taitScore + Number(c.prof) + Number(c.profExt) + Number(c.acad) + Number(c.acadExt) + Number(c.intv) + Number(c.lesson);
-            return Math.round(total * 100) / 100;
+        function switchToTab(tabId) {
+            const tabEl = document.getElementById(tabId);
+            if (tabEl) {
+                const tab = new bootstrap.Tab(tabEl);
+                tab.show();
+            }
+        }
+
+        function goToStep3Report() {
+            if (candidatesList.length === 0) {
+                alert("प्रथम Step 1 मध्ये PDF डेटा लोड करा!");
+                switchToTab('step1-tab');
+                return;
+            }
+            if (isRankDirty) {
+                alert("Report पाहण्यापूर्वी 'Update Rank' बटणावर क्लिक करा!");
+                return;
+            }
+            switchToTab('step3-tab');
+            renderSummaryReportInTab();
+        }
+
+        function makeCatKey(str) {
+            return str.replace(/[\(\)\s]+/g, '').toUpperCase().replace('NOMADICTRIBESNT-C', 'NT-C');
+        }
+
+        function formatCategoryDisplay(str) {
+            let s = str.replace(/\s+/g, ' ').trim();
+            if (s.includes('Nomadic Tribes (NT-C)')) s = s.replace('Nomadic Tribes (NT-C)', 'NT-C');
+            if (!s.includes('(') && s.includes('-')) {
+                let parts = s.split('-');
+                s = `${parts[0].trim()} - (${parts[1].trim()})`;
+            }
+            return s;
+        }
+
+        function getTotalAdvertisedPosts() {
+            const subSum = Object.values(subjectLimits).reduce((a, b) => a + b, 0);
+            const catSum = Object.values(categoryLimits).reduce((a, b) => a + b, 0);
+            if (catSum > 0 && subSum > 0) return Math.min(subSum, catSum) === subSum ? subSum : catSum;
+            return Math.max(subSum, catSum) || 1;
+        }
+
+        function getDefaultSubLimit() {
+            const catSum = Object.values(categoryLimits).reduce((a, b) => a + b, 0);
+            return catSum > 0 ? catSum : 1;
+        }
+
+        function toggleTaitLock() {
+            isTaitUnlocked = document.getElementById('unlockTaitSwitch').checked;
+            document.querySelectorAll('.tait-field').forEach(inp => {
+                if (isTaitUnlocked) {
+                    inp.removeAttribute('readonly');
+                    inp.removeAttribute('tabindex');
+                    inp.classList.remove('tait-locked');
+                    inp.classList.add('tait-unlocked');
+                } else {
+                    inp.setAttribute('readonly', true);
+                    inp.setAttribute('tabindex', '-1');
+                    inp.classList.remove('tait-unlocked');
+                    inp.classList.add('tait-locked');
+                }
+            });
+        }
+
+        function cleanSubjectName(s) {
+            // Remove pay-scale & aid percentage brackets like (Partialy Aided 40%) (S-10: 29200-92300)
+            let str = s.replace(/\([^)]*(?:Aided|Unaided|S-\d+|29200|35400|38600|41800|25500|%)[^)]*\)/gi, ' ')
+                       .replace(/\s+/g, ' ')
+                       .trim();
+            if (!str || str === '--' || str === '-' || /^all\s*subjects?$/i.test(str)) return "All Subjects";
+            if (/Work Education/i.test(str)) return "Work Education";
+            return str;
+        }
+
+        function parseFullPDF() {
+            const raw = document.getElementById('pdfRawText').value;
+            if (!raw.trim()) {
+                alert("प्रथम PDF मधील मजकूर पेस्ट करा!");
+                return;
+            }
+
+            let currentInputVal = document.getElementById('sansthaNameInput').value.trim();
+            let detectedName = extractSansthaName(raw);
+            let finalSanstha = detectedName || currentInputVal;
+            document.getElementById('sansthaNameInput').value = finalSanstha;
+            syncSansthaName(finalSanstha);
+
+            let flatText = raw.replace(/[\r\n\t]+/g, ' ')
+                              .replace(/\s+/g, ' ')
+                              .replace(/std\s*\(\s*9\s*-\s*10\s*\)/gi, 'std(9-10)')
+                              .replace(/std\s*\(\s*6\s*-\s*8\s*\)/gi, 'std(6-8)')
+                              .replace(/std\s*\(\s*1\s*-\s*4\/5\s*\)/gi, 'std(1-4/5)')
+                              .replace(/std\s*\(\s*11\s*-\s*12\s*\)/gi, 'std(11-12)')
+                              .replace(/Non-\s+PH/gi, 'Non-PH')
+                              .replace(/Non-\s+Orphan/gi, 'Non-Orphan')
+                              .replace(/PH\s*-\s*\(\s*Ortho\s*\)/gi, 'PH - (Ortho)');
+
+            // Strip pay-scale and aid-type parenthetical tags so 40% or 29200-92300 never pollute subject names or post counts
+            let cleanFlatText = flatText.replace(/\([^)]*(?:Aided|Unaided|S-\d+|29200|35400|38600|41800|25500|%)[^)]*\)/gi, ' ')
+                                        .replace(/\s+/g, ' ');
+
+            // 1. Parse Category Limits
+            categoryLimits = {};
+            categoryDisplayNames = {};
+            let catEndIdx = cleanFlatText.search(/End\s+Report|POST\s+SUBJECT/i);
+            let catPart = catEndIdx !== -1 ? cleanFlatText.substring(0, catEndIdx) : cleanFlatText;
+
+            const catRegex = /((?:General|ST|SC|OBC|VJ-A|NT-B|NT-C|NT-D|SBC|SEBC|EWS|Nomadic\s+Tribes\s*\(NT-C\))\s*-\s*\(?[A-Za-z_\s]+\)?)\s+(\d+|--)\s+\d+\s+(?:\d+|--)/gi;
+            let cm;
+            while ((cm = catRegex.exec(catPart)) !== null) {
+                let cKey = makeCatKey(cm[1]);
+                let cDisp = formatCategoryDisplay(cm[1]);
+                let posts = cm[2] === '--' ? 0 : parseInt(cm[2], 10);
+                if (posts > 0) {
+                    categoryLimits[cKey] = (categoryLimits[cKey] || 0) + posts;
+                    categoryDisplayNames[cKey] = cDisp;
+                }
+            }
+
+            // 2. Parse Subject Limits
+            subjectLimits = {};
+            let subjPart = cleanFlatText.split(/Applicant\s+Name|APPLICANT\s+MERIT\s+LIST/i)[0] || "";
+            const subjRegex = /(Under Graduate Teacher std\(1-4\/5\)|Graduate Teacher std\(6-8\)|Graduate Teacher std\(9-10\)|Higher Secondary Teacher std\(11-12\))\s+([A-Za-z0-9\(\)\/\-\s]+?)\s+(?:Marathi|English|Hindi|Urdu|Gujarati|Kannada|Telugu|--)\s+(?:Aided|Unaided|Partialy\s*Aided|Partially\s*Aided|Self\s*Financed|--)\s+(\d+)/gi;
+            let sm;
+            while ((sm = subjRegex.exec(subjPart)) !== null) {
+                let pName = sm[1].trim();
+                let sName = cleanSubjectName(sm[2]);
+                let pCount = parseInt(sm[3], 10);
+                let key = `${pName} | ${sName}`;
+                subjectLimits[key] = (subjectLimits[key] || 0) + pCount;
+            }
+
+            // 3. Parse Candidates
+            let firstApplicantHeader = cleanFlatText.search(/Applicant\s+Name|APPLICANT\s+MERIT\s+LIST/i);
+            let meritText = firstApplicantHeader !== -1 ? cleanFlatText.substring(firstApplicantHeader) : cleanFlatText;
+            meritText = meritText.replace(/Print Date:.*?Recom\s*mended\s*on\s*Orphan/gi, ' ');
+
+            const candRegex = /([A-Z][A-Z\s\.]+?\(\d{8,12}\))\s+(\d{2}[\/\.\-]\d{2}[\/\.\-]\d{4})\s+(\d+(?:\.\d+)?)\s+([\s\S]*?)(?=[A-Z][A-Z\s\.]+?\(\d{8,12}\)\s+\d{2}[\/\.\-]\d{2}[\/\.\-]\d{4}|\*{5,}|General\s+Merit\s+List|End\s+Report|$)/g;
+
+            candidatesList = [];
+            let match;
+
+            while ((match = candRegex.exec(meritText)) !== null) {
+                let name = match[1].trim();
+                let taitRaw = parseFloat(match[3]);
+                let rest = match[4].trim();
+
+                let post = "Graduate Teacher std(6-8)";
+                let subject = "All Subjects";
+
+                let postSubMatch = rest.match(/(Under Graduate Teacher std\(1-4\/5\)|Graduate Teacher std\(6-8\)|Graduate Teacher std\(9-10\)|Higher Secondary Teacher std\(11-12\))\s+([\s\S]*?)\s+(?:Marathi|English|Hindi|Urdu|Gujarati|Kannada|Telugu|--)\s+(?:General|OBC|SEBC|EWS|SC|ST|VJ-A|NT-B|NT-C|NT-D|SBC)\b/i);
+                if (postSubMatch) {
+                    post = postSubMatch[1].trim();
+                    subject = cleanSubjectName(postSubMatch[2]);
+                } else {
+                    if (/Under Graduate Teacher std\(1-4\/5\)/i.test(rest)) post = "Under Graduate Teacher std(1-4/5)";
+                    else if (/Graduate Teacher std\(9-10\)/i.test(rest)) post = "Graduate Teacher std(9-10)";
+                    else if (/Graduate Teacher std\(6-8\)/i.test(rest)) post = "Graduate Teacher std(6-8)";
+                    else if (/Higher Secondary Teacher std\(11-12\)/i.test(rest)) post = "Higher Secondary Teacher std(11-12)";
+
+                    if (/Language\s*\([A-Za-z]+\)/i.test(rest)) subject = rest.match(/Language\s*\([A-Za-z]+\)/i)[0];
+                    else if (/Mathematics/i.test(rest)) subject = "Mathematics";
+                    else if (/Science/i.test(rest)) subject = "Science";
+                    else if (/Social\s*Science/i.test(rest)) subject = "Social Science";
+                    else if (/History/i.test(rest)) subject = "History";
+                    else if (/Physical Education/i.test(rest)) subject = "Physical Education";
+                    else if (/Work Education/i.test(rest)) subject = "Work Education";
+                }
+
+                let casteMatch = rest.match(/(?:Marathi|English|Hindi|Urdu|Gujarati|Kannada|Telugu|--)\s+(General|OBC|SEBC|EWS|SC|ST|VJ-A|NT-B|NT-C|NT-D|SBC)\b/i);
+                let caste = casteMatch ? casteMatch[1].toUpperCase() : "General";
+
+                let recMatch = rest.match(/((?:General|OBC|SEBC|EWS|SC|ST|VJ-A|NT-B|NT-C|NT-D|SBC)\s*-\s*\(?[A-Za-z_\-\s]+\)?)/i);
+                let rawRec = recMatch ? recMatch[1] : `${caste} - (NA)`;
+                let recCategoryDisplay = formatCategoryDisplay(rawRec);
+                let recCategoryKey = makeCatKey(rawRec);
+                if (!categoryDisplayNames[recCategoryKey]) {
+                    categoryDisplayNames[recCategoryKey] = recCategoryDisplay;
+                }
+
+                let isPH = /PH\s*-\s*\(Ortho\)|PH_Ortho/i.test(rest);
+                let appIdMatch = name.match(/\((\d+)\)/);
+                let appId = appIdMatch ? appIdMatch[1] : name;
+
+                candidatesList.push({
+                    id: candidatesList.length + 1,
+                    appId: appId,
+                    name: name,
+                    post: post,
+                    subject: subject,
+                    caste: caste,
+                    recCategory: recCategoryDisplay,
+                    recCatKey: recCategoryKey,
+                    isPH: isPH,
+                    taitRaw: taitRaw,
+                    prof1: 0,
+                    prof2: 0,
+                    acad1: 0,
+                    acad2: 0,
+                    interview: 0,
+                    lesson: 0,
+                    globalRank: candidatesList.length + 1,
+                    isSelected: false
+                });
+            }
+
+            if (candidatesList.length === 0) {
+                alert("कोणताही उमेदवार आढळला नाही. कृपया PDF मधील संपूर्ण मजकूर पेस्ट केला आहे का ते तपासा.");
+                return;
+            }
+
+            // Sync subjectLimits if single Post|Subject or empty subjectLimits
+            const uniqueSubKeys = [...new Set(candidatesList.map(c => `${c.post} | ${c.subject}`))];
+            const totalCatQuota = Object.values(categoryLimits).reduce((a, b) => a + b, 0);
+            if (uniqueSubKeys.length === 1) {
+                let onlyKey = uniqueSubKeys[0];
+                let currentSubVal = subjectLimits[onlyKey] || 0;
+                if (totalCatQuota > 0 && currentSubVal !== totalCatQuota) {
+                    subjectLimits[onlyKey] = totalCatQuota;
+                }
+            } else if (Object.keys(subjectLimits).length === 0) {
+                uniqueSubKeys.forEach(k => subjectLimits[k] = 1);
+            }
+
+            let subSummary = Object.entries(subjectLimits).map(([k, v]) => `${k}: ${v}`).join(' | ');
+            let catSummary = Object.entries(categoryLimits).map(([k, v]) => `${k}: ${v}`).join(' | ');
+            document.getElementById('parseStatus').textContent = `✅ Loaded ${candidatesList.length} candidates | Posts: ${subSummary} | Quotas: ${catSummary}`;
+            populateDropdown();
+            recalculateRanks();
+
+            switchToTab('step2-tab');
+        }
+
+        function populateDropdown() {
+            const filter = document.getElementById('subjectFilter');
+            filter.innerHTML = `<option value="ALL">All Subjects &amp; Posts (${candidatesList.length})</option>`;
+            const uniqueKeys = [...new Set(candidatesList.map(c => `${c.post} | ${c.subject}`))];
+            uniqueKeys.forEach(key => {
+                const opt = document.createElement('option');
+                opt.value = key;
+                let limit = subjectLimits[key] !== undefined ? subjectLimits[key] : 1;
+                opt.textContent = `${key} (Posts: ${limit})`;
+                filter.appendChild(opt);
+            });
         }
 
         function recalculateRanks() {
-            // Sort by Total score descending
-            candidatesData.sort((a, b) => calculateTotal(b) - calculateTotal(a));
-            renderCandidateTable();
+            candidatesList.forEach(c => {
+                let tait75 = Math.round(((Number(c.taitRaw) / 200) * 75) * 100) / 100;
+                let total = tait75 + Number(c.prof1) + Number(c.prof2) + Number(c.acad1) + Number(c.acad2) + Number(c.interview) + Number(c.lesson);
+                c.tait75 = tait75;
+                c.totalScore = Math.round(total * 100) / 100;
+            });
+
+            candidatesList.sort((a, b) => b.totalScore - a.totalScore || b.taitRaw - a.taitRaw);
+            candidatesList.forEach((c, idx) => c.globalRank = idx + 1);
+
+            isRankDirty = false;
+            document.getElementById('pendingBanner').classList.add('d-none');
+            renderTable();
         }
 
-        function toggleTaitEdit() {
-            taitEditable = !taitEditable;
-            const btn = document.getElementById('taitEditBtn');
-            if (taitEditable) {
-                btn.textContent = "🔒 Lock TAIT Edit";
-                btn.className = "px-3 py-1.5 text-xs font-semibold rounded-lg border border-blue-500 bg-blue-50 text-blue-700 shadow-sm transition";
-            } else {
-                btn.textContent = "🔒 Unlock TAIT Edit";
-                btn.className = "px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-100 transition";
+        function getSelectionDetails() {
+            let usedSub = {};
+            let subWinners = {};
+            let usedCat = {};
+            let catWinners = {};
+            let selectedAppMap = {};
+            let totalSelected = 0;
+
+            candidatesList.forEach(c => {
+                if (c.isSelected) {
+                    totalSelected++;
+                    let subKey = `${c.post} | ${c.subject}`;
+                    let winnerObj = {
+                        rank: c.globalRank,
+                        text: `${c.name} (Rank #${c.globalRank} | Post: ${c.post} | Sub: ${c.subject} | Rec. Cat: ${c.recCategory})`
+                    };
+
+                    usedSub[subKey] = (usedSub[subKey] || 0) + 1;
+                    if (!subWinners[subKey]) subWinners[subKey] = [];
+                    subWinners[subKey].push(winnerObj);
+
+                    if (!c.isPH) {
+                        usedCat[c.recCatKey] = (usedCat[c.recCatKey] || 0) + 1;
+                        if (!catWinners[c.recCatKey]) catWinners[c.recCatKey] = [];
+                        catWinners[c.recCatKey].push(winnerObj);
+                    }
+
+                    selectedAppMap[c.appId] = `${c.post} - ${c.subject} | Rec. Cat: ${c.recCategory} (Rank #${c.globalRank})`;
+                }
+            });
+            return { usedSub, subWinners, usedCat, catWinners, selectedAppMap, totalSelected };
+        }
+
+        function toggleSelectCandidate(id) {
+            if (isRankDirty) {
+                alert("प्रथम 'Update Rank' बटणावर क्लिक करा!");
+                return;
             }
-            renderCandidateTable();
+            const cand = candidatesList.find(c => c.id === id);
+            if (!cand) return;
+
+            if (cand.isSelected) {
+                cand.isSelected = false;
+                renderTable();
+                return;
+            }
+
+            const { usedSub, subWinners, usedCat, catWinners, selectedAppMap } = getSelectionDetails();
+            let subKey = `${cand.post} | ${cand.subject}`;
+            let maxSub = subjectLimits[subKey] !== undefined ? subjectLimits[subKey] : 1;
+            let maxCat = categoryLimits[cand.recCatKey] !== undefined ? categoryLimits[cand.recCatKey] : 1;
+
+            if (selectedAppMap[cand.appId]) {
+                alert(`हा उमेदवार आधीच निवडला गेला आहे:\n${selectedAppMap[cand.appId]}`);
+                return;
+            }
+            if ((usedSub[subKey] || 0) >= maxSub) {
+                alert(`Subject (${cand.post} - ${cand.subject}) ची जागा आधीच भरली गेली आहे:\n${subWinners[subKey].map(w => w.text).join('\n')}`);
+                return;
+            }
+            if (!cand.isPH && (usedCat[cand.recCatKey] || 0) >= maxCat) {
+                alert(`Rec. Category (${cand.recCategory}) ची जागा आधीच भरली गेली आहे:\n${catWinners[cand.recCatKey].map(w => w.text).join('\n')}`);
+                return;
+            }
+
+            cand.isSelected = true;
+            renderTable();
         }
 
-        function updateCandidateField(id, field, val) {
-            const c = candidatesData.find(item => item.id === id);
-            if (c) {
-                c[field] = Number(val) || 0;
+        function autoSelectTopMerit() {
+            if (isRankDirty) {
                 recalculateRanks();
             }
-        }
+            candidatesList.forEach(c => c.isSelected = false);
 
-        function toggleSelection(id) {
-            const c = candidatesData.find(item => item.id === id);
-            if (c) {
-                c.selected = !c.selected;
-                renderCandidateTable();
-            }
-        }
+            let usedSub = {};
+            let usedCat = {};
+            let selectedAppIds = new Set();
 
-        function clearAllSelections() {
-            candidatesData.forEach(c => c.selected = false);
-            renderCandidateTable();
-        }
+            candidatesList.forEach(c => {
+                let subKey = `${c.post} | ${c.subject}`;
+                let maxSub = subjectLimits[subKey] !== undefined ? subjectLimits[subKey] : 1;
+                let maxCat = categoryLimits[c.recCatKey] !== undefined ? categoryLimits[c.recCatKey] : 1;
 
-        function autoSelectTop() {
-            clearAllSelections();
-            // Reset filled counts
-            for (let s in subjectVacancies) {
-                subjectVacancies[s].filled = 0;
-            }
-
-            // Iterate in rank order and select eligible top candidates
-            candidatesData.forEach(c => {
-                const sv = subjectVacancies[c.post];
-                if (sv && sv.filled < sv.total) {
-                    sv.filled++;
-                    c.selected = true;
+                if (!selectedAppIds.has(c.appId) && (usedSub[subKey] || 0) < maxSub && (c.isPH || (usedCat[c.recCatKey] || 0) < maxCat)) {
+                    c.isSelected = true;
+                    usedSub[subKey] = (usedSub[subKey] || 0) + 1;
+                    if (!c.isPH) usedCat[c.recCatKey] = (usedCat[c.recCatKey] || 0) + 1;
+                    selectedAppIds.add(c.appId);
                 }
             });
-            renderCandidateTable();
+            renderTable();
         }
 
-        // Render Candidate Table
-        function renderCandidateTable() {
-            const tbody = document.getElementById('candidateTableBody');
+        function clearSelections() {
+            candidatesList.forEach(c => c.isSelected = false);
+            renderTable();
+        }
+
+        function getCandidateRemarkAndAction(c, details) {
+            const { usedSub, subWinners, usedCat, catWinners, selectedAppMap } = details;
+
+            if (isRankDirty) {
+                return {
+                    actionHtml: `<button class="btn btn-warning btn-sm fw-bold" disabled>⏳ Update Rank First</button>`,
+                    remarkHtml: `<span class="text-warning fw-semibold">Marks edited — waiting for rank update</span>`,
+                    remarkPlain: "Marks edited - waiting for rank update"
+                };
+            }
+
+            if (c.isSelected) {
+                let msg = `Selected | Post: ${c.post} | Subject: ${c.subject} | Rec. Cat: ${c.recCategory}`;
+                return {
+                    actionHtml: `<button type="button" class="btn btn-success btn-sm fw-bold px-2" onclick="toggleSelectCandidate(${c.id})">✅ Selected (Undo)</button>`,
+                    remarkHtml: `<span class="text-success fw-bold">✅ ${msg}</span>`,
+                    remarkPlain: msg
+                };
+            }
+
+            let subKey = `${c.post} | ${c.subject}`;
+            let maxSub = subjectLimits[subKey] !== undefined ? subjectLimits[subKey] : 1;
+            let maxCat = categoryLimits[c.recCatKey] !== undefined ? categoryLimits[c.recCatKey] : 1;
+
+            let curSubUsed = usedSub[subKey] || 0;
+            let curCatUsed = usedCat[c.recCatKey] || 0;
+
+            let isDup = !!selectedAppMap[c.appId];
+            let isSubFull = curSubUsed >= maxSub;
+            let isCatFull = !c.isPH && curCatUsed >= maxCat;
+
+            if (!isDup && !isSubFull && !isCatFull) {
+                return {
+                    actionHtml: `<button type="button" class="btn btn-outline-primary btn-sm fw-bold px-2" onclick="toggleSelectCandidate(${c.id})">Select Candidate</button>`,
+                    remarkHtml: `<span class="text-primary">Eligible (Subject: ${c.subject} [${curSubUsed}/${maxSub}] & Rec. Cat: ${c.recCategory} [${curCatUsed}/${maxCat}] available)</span>`,
+                    remarkPlain: `Eligible (Subject: ${c.subject} [${curSubUsed}/${maxSub}] & Rec. Cat: ${c.recCategory} [${curCatUsed}/${maxCat}] available)`
+                };
+            }
+
+            let higherSubWinners = (subWinners[subKey] || []).filter(w => w.rank < c.globalRank);
+            let laterSubWinners = (subWinners[subKey] || []).filter(w => w.rank > c.globalRank);
+
+            let higherCatWinners = (catWinners[c.recCatKey] || []).filter(w => w.rank < c.globalRank);
+            let laterCatWinners = (catWinners[c.recCatKey] || []).filter(w => w.rank > c.globalRank);
+
+            let remarkLines = [];
+            let plainLines = [];
+
+            if (isDup) {
+                remarkLines.push(`<span class="text-danger">❌ Already selected in <strong>${selectedAppMap[c.appId]}</strong></span>`);
+                plainLines.push(`Already selected in ${selectedAppMap[c.appId]}`);
+            }
+
+            if (!c.isPH) {
+                if (higherCatWinners.length >= maxCat) {
+                    let names = higherCatWinners.map(w => w.text).join('; ');
+                    remarkLines.push(`<span class="text-danger">❌ Not Selected due to Rec. Category <strong>${c.recCategory}</strong> (${higherCatWinners.length}/${maxCat}) already filled by <strong>${names}</strong></span>`);
+                    plainLines.push(`Not Selected due to Rec. Category ${c.recCategory} (${higherCatWinners.length}/${maxCat}) already filled by ${names}`);
+                } else if (isCatFull) {
+                    let laterNames = laterCatWinners.map(w => w.text).join('; ');
+                    remarkLines.push(`<span class="text-success">✅ Rec. Category <strong>${c.recCategory}</strong> was VACANT (${higherCatWinners.length}/${maxCat}) at Rank #${c.globalRank}</span> <span class="text-muted">(later filled by ${laterNames})</span>`);
+                    plainLines.push(`Rec. Category ${c.recCategory} was VACANT (${higherCatWinners.length}/${maxCat}) at Rank #${c.globalRank} (later filled by ${laterNames})`);
+                } else {
+                    remarkLines.push(`<span class="text-success">✅ Rec. Category <strong>${c.recCategory}</strong> post is VACANT (${curCatUsed}/${maxCat})</span>`);
+                    plainLines.push(`Rec. Category ${c.recCategory} post is VACANT (${curCatUsed}/${maxCat})`);
+                }
+            }
+
+            if (higherSubWinners.length >= maxSub) {
+                let names = higherSubWinners.map(w => w.text).join('; ');
+                remarkLines.push(`<span class="text-danger">❌ Not Selected due to Subject post <strong>${c.post} - ${c.subject}</strong> (${higherSubWinners.length}/${maxSub}) already filled by <strong>${names}</strong></span>`);
+                plainLines.push(`Not Selected due to Subject post ${c.post} - ${c.subject} (${higherSubWinners.length}/${maxSub}) already filled by ${names}`);
+            } else if (isSubFull) {
+                let laterNames = laterSubWinners.map(w => w.text).join('; ');
+                remarkLines.push(`<span class="text-success">✅ Subject post <strong>${c.post} - ${c.subject}</strong> was VACANT (${higherSubWinners.length}/${maxSub}) at Rank #${c.globalRank}</span> <span class="text-muted">(later filled by ${laterNames})</span>`);
+                plainLines.push(`Subject post ${c.post} - ${c.subject} was VACANT (${higherSubWinners.length}/${maxSub}) at Rank #${c.globalRank} (later filled by ${laterNames})`);
+            } else {
+                remarkLines.push(`<span class="text-success">✅ Subject post <strong>${c.post} - ${c.subject}</strong> is VACANT (${curSubUsed}/${maxSub})</span>`);
+                plainLines.push(`Subject post ${c.post} - ${c.subject} is VACANT (${curSubUsed}/${maxSub})`);
+            }
+
+            return {
+                actionHtml: `<button class="btn btn-outline-secondary btn-sm" disabled>Not Eligible</button>`,
+                remarkHtml: remarkLines.join('<br>'),
+                remarkPlain: plainLines.join(' | ')
+            };
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            const selectedFilter = document.getElementById('subjectFilter').value;
             tbody.innerHTML = '';
 
-            // Update subject filter dropdown options
-            const filterSelect = document.getElementById('subjectFilter');
-            const currentFilter = filterSelect.value;
-            filterSelect.innerHTML = '<option value="">All Subjects & Posts (23)</option>';
-            
-            const uniquePosts = [...new Set(candidatesData.map(c => c.post))];
-            uniquePosts.forEach(p => {
-                const opt = document.createElement('option');
-                opt.value = p;
-                opt.textContent = p.replace(/\s+/g, ' ');
-                if (p === currentFilter) opt.selected = true;
-                filterSelect.appendChild(opt);
-            });
+            const details = getSelectionDetails();
+            const totalAdvertised = getTotalAdvertisedPosts();
+            const countText = `${details.totalSelected} / ${totalAdvertised}`;
+            document.getElementById('selectionCounter').textContent = countText;
+            document.getElementById('tabSelectedBadge').textContent = countText;
 
-            const filterVal = filterSelect.value;
-            let totalSelectedCount = 0;
+            let displayList = candidatesList;
+            if (selectedFilter !== 'ALL') {
+                displayList = candidatesList.filter(c => `${c.post} | ${c.subject}` === selectedFilter);
+            }
 
-            // Recalculate filled counts for reporting
-            for (let s in subjectVacancies) subjectVacancies[s].filled = 0;
-            candidatesData.forEach(c => {
-                if (c.selected && subjectVacancies[c.post]) {
-                    subjectVacancies[c.post].filled++;
-                    totalSelectedCount++;
+            displayList.forEach((c, index) => {
+                let tait75 = Math.round(((Number(c.taitRaw) / 200) * 75) * 100) / 100;
+                let totalScore = Math.round((tait75 + Number(c.prof1) + Number(c.prof2) + Number(c.acad1) + Number(c.acad2) + Number(c.interview) + Number(c.lesson)) * 100) / 100;
+
+                let tr = document.createElement('tr');
+                tr.id = `row-${c.id}`;
+                if (!isRankDirty && c.isSelected) {
+                    tr.classList.add('table-success');
                 }
-            });
 
-            document.getElementById('selectionCounterBadge').textContent = `Selected: ${totalSelectedCount} / ${candidatesData.length}`;
-
-            candidatesData.forEach((c, index) => {
-                if (filterVal && c.post !== filterVal) return;
-
-                const rank = index + 1;
-                const totalScore = calculateTotal(c);
-                const taitMaxScore = ((c.tait / 200) * 75).toFixed(2);
-
-                const tr = document.createElement('tr');
-                tr.className = c.selected ? "bg-emerald-50/60 border-b border-slate-200 hover:bg-emerald-50 transition" : "border-b border-slate-200 hover:bg-slate-50 transition";
+                const { actionHtml, remarkHtml } = getCandidateRemarkAndAction(c, details);
+                let taitAttr = isTaitUnlocked ? `class="form-control form-control-sm tait-unlocked tait-field mx-auto"` : `readonly tabindex="-1" class="form-control form-control-sm tait-locked tait-field mx-auto"`;
 
                 tr.innerHTML = `
-                    <td class="p-3 font-semibold text-slate-600">#${rank}</td>
-                    <td class="p-3 font-bold text-slate-900">${c.name}<br><span class="text-[10px] text-slate-500 font-normal">(${c.appId})</span></td>
-                    <td class="p-3 text-slate-700 max-w-xs">${c.post}</td>
-                    <td class="p-3 text-slate-600">${c.caste}</td>
-                    <td class="p-3 font-medium text-slate-700">${c.recCat}</td>
-                    <td class="p-3">${taitEditable ? `<input type="number" value="${c.tait}" onchange="updateCandidateField(${c.id}, 'tait', this.value)" class="w-16 border rounded p-1 text-center font-bold">` : `<span class="font-bold">${c.tait}</span>`}</td>
-                    <td class="p-3 font-semibold text-slate-800">${taitMaxScore}</td>
-                    <td class="p-3"><input type="number" min="0" max="5" value="${c.prof}" onchange="updateCandidateField(${c.id}, 'prof', this.value)" class="w-12 border rounded p-1 text-center"></td>
-                    <td class="p-3"><input type="number" min="0" max="3" value="${c.profExt}" onchange="updateCandidateField(${c.id}, 'profExt', this.value)" class="w-12 border rounded p-1 text-center"></td>
-                    <td class="p-3"><input type="number" min="0" max="5" value="${c.acad}" onchange="updateCandidateField(${c.id}, 'acad', this.value)" class="w-12 border rounded p-1 text-center"></td>
-                    <td class="p-3"><input type="number" min="0" max="2" value="${c.acadExt}" onchange="updateCandidateField(${c.id}, 'acadExt', this.value)" class="w-12 border rounded p-1 text-center"></td>
-                    <td class="p-3"><input type="number" min="0" max="5" value="${c.intv}" onchange="updateCandidateField(${c.id}, 'intv', this.value)" class="w-12 border rounded p-1 text-center"></td>
-                    <td class="p-3"><input type="number" min="0" max="5" value="${c.lesson}" onchange="updateCandidateField(${c.id}, 'lesson', this.value)" class="w-12 border rounded p-1 text-center"></td>
-                    <td class="p-3 font-bold text-blue-600 text-sm">${totalScore}</td>
-                    <td class="p-3 font-bold text-slate-800">#${rank}</td>
-                    <td class="p-3">
-                        <button onclick="toggleSelection(${c.id})" class="px-3 py-1.5 rounded-lg text-xs font-semibold shadow-sm transition ${c.selected ? 'bg-emerald-600 text-white hover:bg-emerald-700' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'}">
-                            ${c.selected ? '✅ Selected (Undo)' : '[Select Candidate]'}
-                        </button>
-                    </td>
-                    <td class="p-3 text-[11px] text-slate-600">
-                        ${c.selected ? `<span class="text-emerald-700 font-semibold">✅ Selected for Post</span>` : `<span class="text-slate-500">Eligible / Available</span>`}
-                    </td>
+                    <td class="text-center">${index + 1}</td>
+                    <td><strong>${c.name}</strong></td>
+                    <td>${c.post}<br><span class="text-primary fw-bold">${c.subject}</span></td>
+                    <td class="text-center">${c.caste}</td>
+                    <td class="text-center fw-bold">${c.recCategory}</td>
+                    <td class="text-center"><input type="number" step="0.5" min="0" max="200" ${taitAttr} value="${c.taitRaw}" onfocus="if(isTaitUnlocked) this.select()" onchange="updateMark(${c.id}, 'taitRaw', this, 200)"></td>
+                    <td id="tait75-${c.id}" class="text-center fw-semibold text-secondary">${tait75.toFixed(2)}</td>
+                    <td class="text-center"><input type="number" step="0.5" min="0" max="5" class="form-control form-control-sm editable-input mx-auto" value="${c.prof1}" onfocus="this.select()" onchange="updateMark(${c.id}, 'prof1', this, 5)"></td>
+                    <td class="text-center"><input type="number" step="0.5" min="0" max="3" class="form-control form-control-sm editable-input mx-auto" value="${c.prof2}" onfocus="this.select()" onchange="updateMark(${c.id}, 'prof2', this, 3)"></td>
+                    <td class="text-center"><input type="number" step="0.5" min="0" max="5" class="form-control form-control-sm editable-input mx-auto" value="${c.acad1}" onfocus="this.select()" onchange="updateMark(${c.id}, 'acad1', this, 5)"></td>
+                    <td class="text-center"><input type="number" step="0.5" min="0" max="2" class="form-control form-control-sm editable-input mx-auto" value="${c.acad2}" onfocus="this.select()" onchange="updateMark(${c.id}, 'acad2', this, 2)"></td>
+                    <td class="text-center"><input type="number" step="0.5" min="0" max="5" class="form-control form-control-sm editable-input mx-auto" value="${c.interview}" onfocus="this.select()" onchange="updateMark(${c.id}, 'interview', this, 5)"></td>
+                    <td class="text-center"><input type="number" step="0.5" min="0" max="5" class="form-control form-control-sm editable-input mx-auto" value="${c.lesson}" onfocus="this.select()" onchange="updateMark(${c.id}, 'lesson', this, 5)"></td>
+                    <td id="total-${c.id}" class="text-center fw-bold text-primary">${totalScore.toFixed(2)}</td>
+                    <td class="text-center fw-bold rank-cell">${isRankDirty ? '<span class="text-muted">--</span>' : '#' + c.globalRank}</td>
+                    <td class="text-center status-cell">${actionHtml}</td>
+                    <td class="remark-box remark-cell">${remarkHtml}</td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        function filterTable() {
-            renderCandidateTable();
+        function updateMark(id, field, inputEl, maxLimit) {
+            let num = parseFloat(inputEl.value);
+            if (isNaN(num) || num < 0) num = 0;
+            if (num > maxLimit) num = maxLimit;
+            inputEl.value = num;
+
+            let cand = candidatesList.find(c => c.id === id);
+            if (cand) {
+                cand[field] = num;
+
+                let tait75 = Math.round(((Number(cand.taitRaw) / 200) * 75) * 100) / 100;
+                let totalScore = Math.round((tait75 + Number(cand.prof1) + Number(cand.prof2) + Number(cand.acad1) + Number(cand.acad2) + Number(cand.interview) + Number(cand.lesson)) * 100) / 100;
+
+                const taitCell = document.getElementById(`tait75-${id}`);
+                const totalCell = document.getElementById(`total-${id}`);
+                if (taitCell) taitCell.textContent = tait75.toFixed(2);
+                if (totalCell) totalCell.textContent = totalScore.toFixed(2);
+
+                if (!isRankDirty) {
+                    isRankDirty = true;
+                    document.getElementById('pendingBanner').classList.remove('d-none');
+
+                    document.querySelectorAll('#tableBody tr').forEach(tr => tr.classList.remove('table-success'));
+                    document.querySelectorAll('.rank-cell').forEach(cell => cell.innerHTML = '<span class="text-muted">--</span>');
+                    document.querySelectorAll('.status-cell').forEach(cell => cell.innerHTML = '<button class="btn btn-warning btn-sm fw-bold" disabled>⏳ Update Rank First</button>');
+                    document.querySelectorAll('.remark-cell').forEach(cell => cell.innerHTML = '<span class="text-warning fw-semibold">Marks edited — waiting for rank update</span>');
+                }
+            }
         }
 
-        // Generate Summary Report
-        function generateSummaryReport() {
-            let totalPostsCount = 0;
-            let totalSelectedCount = 0;
+        function getSansthaSubBannerHtml() {
+            return sansthaName ? `<span class="sec-sanstha-sub">🏫 ${sansthaName}</span>` : '';
+        }
 
-            for (let key in subjectVacancies) {
-                totalPostsCount += subjectVacancies[key].total;
-                totalSelectedCount += subjectVacancies[key].filled;
-            }
+        // Section 1: Subject vs Recommended Category Goshwara Matrix
+        function buildGoshwaraMatrixHtml(selectedCands) {
+            let allSubKeys = [...new Set([
+                ...Object.keys(subjectLimits),
+                ...candidatesList.map(c => `${c.post} | ${c.subject}`)
+            ])];
 
-            document.getElementById('statTotalPosts').textContent = totalPostsCount;
-            document.getElementById('statSelectedCount').textContent = totalSelectedCount;
-            document.getElementById('statVacantCount').textContent = totalPostsCount - totalSelectedCount;
+            let allCatKeys = [...new Set([
+                ...Object.keys(categoryLimits),
+                ...selectedCands.map(c => c.recCatKey)
+            ])];
 
-            // Subject Summary Table
-            const subBody = document.getElementById('subjectSummaryBody');
-            subBody.innerHTML = '';
+            let headerCols = allCatKeys.map(ck => {
+                let label = categoryDisplayNames[ck] || ck;
+                let quota = categoryLimits[ck] !== undefined ? categoryLimits[ck] : '-';
+                return `<th class="text-center">${label}<br><span style="font-weight:normal; color:#ffc107;">(Quota: ${quota})</span></th>`;
+            }).join('');
 
-            for (let sub in subjectVacancies) {
-                const info = subjectVacancies[sub];
-                const vacant = info.total - info.filled;
-                const selectedList = candidatesData.filter(c => c.post === sub && c.selected).map(c => `${c.name} (#${c.id} - ${c.recCat})`).join(', ') || 'None';
+            let bodyRows = allSubKeys.map((sk, idx) => {
+                let advPosts = subjectLimits[sk] !== undefined ? subjectLimits[sk] : 1;
+                let rowSelectedCount = 0;
 
-                const tr = document.createElement('tr');
-                tr.className = "border-b border-slate-200";
-                tr.innerHTML = `
-                    <td class="p-3 font-semibold text-slate-800">${sub}</td>
-                    <td class="p-3 text-slate-700 font-bold">${info.total}</td>
-                    <td class="p-3 text-emerald-700 font-bold">${info.filled}</td>
-                    <td class="p-3 text-amber-700 font-bold">${vacant}</td>
-                    <td class="p-3 text-slate-600">${selectedList}</td>
+                let catCells = allCatKeys.map(ck => {
+                    let matched = selectedCands.filter(c => `${c.post} | ${c.subject}` === sk && c.recCatKey === ck);
+                    rowSelectedCount += matched.length;
+                    if (matched.length > 0) {
+                        let items = matched.map(m => `<div class="mb-1"><strong>#${m.globalRank} ${m.name}</strong><br><span class="text-muted">Score: ${m.totalScore.toFixed(2)}</span></div>`).join('');
+                        return `<td class="table-success text-start">${items}</td>`;
+                    } else {
+                        return `<td class="text-center text-muted">--</td>`;
+                    }
+                }).join('');
+
+                let vacantCount = Math.max(0, advPosts - rowSelectedCount);
+                return `
+                    <tr>
+                        <td class="text-center fw-bold">${idx + 1}</td>
+                        <td><strong>${sk}</strong></td>
+                        <td class="text-center fw-bold">${advPosts}</td>
+                        ${catCells}
+                        <td class="text-center fw-bold text-success">${rowSelectedCount}</td>
+                        <td class="text-center fw-bold ${vacantCount > 0 ? 'text-danger' : 'text-muted'}">${vacantCount}</td>
+                    </tr>
                 `;
-                subBody.appendChild(tr);
+            }).join('');
+
+            let colTotalCells = allCatKeys.map(ck => {
+                let filled = selectedCands.filter(c => c.recCatKey === ck).length;
+                let quota = categoryLimits[ck] !== undefined ? categoryLimits[ck] : '-';
+                return `<td class="text-center fw-bold">${filled} / ${quota}</td>`;
+            }).join('');
+
+            let totalAdv = allSubKeys.reduce((acc, sk) => acc + (subjectLimits[sk] !== undefined ? subjectLimits[sk] : 1), 0);
+            let totalFilled = selectedCands.length;
+            let totalVacant = Math.max(0, totalAdv - totalFilled);
+
+            return `
+                <table class="table table-bordered table-sm align-middle goshwara-table">
+                    <thead class="table-dark text-center">
+                        <tr>
+                            <th>Sr.</th>
+                            <th>Post &amp; Subject</th>
+                            <th>Posts</th>
+                            ${headerCols}
+                            <th>Filled</th>
+                            <th>Vacant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${bodyRows}
+                        <tr class="table-secondary fw-bold">
+                            <td colspan="2" class="text-end">Total Filled / Quota:</td>
+                            <td class="text-center">${totalAdv}</td>
+                            ${colTotalCells}
+                            <td class="text-center text-success">${totalFilled}</td>
+                            <td class="text-center text-danger">${totalVacant}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+        }
+
+        // Shared Full-Scoring Table Header & Row Builder for Report Lists
+        function getFullScoringTableHeadHtml(srLabel = "Sr.", extraColHeader = "Post &amp; Subject", headClass = "table-dark") {
+            return `
+                <thead class="${headClass} text-center">
+                    <tr>
+                        <th>${srLabel}</th>
+                        <th>Rank</th>
+                        <th>Applicant Name</th>
+                        ${extraColHeader ? `<th>${extraColHeader}</th>` : ''}
+                        <th>Caste</th>
+                        <th>Rec. Cat.</th>
+                        <th>TAIT<br>(200)</th>
+                        <th>TAIT<br>(75)</th>
+                        <th>Prof.<br>(5)</th>
+                        <th>Prof.Ext<br>(3)</th>
+                        <th>Acad.<br>(5)</th>
+                        <th>Acad.Ext<br>(2)</th>
+                        <th>Intv.<br>(5)</th>
+                        <th>Lesson<br>(5)</th>
+                        <th>Total<br>(100)</th>
+                        <th>Status / Remark</th>
+                    </tr>
+                </thead>
+            `;
+        }
+
+        function getFullScoringRowHtml(c, indexNum, showPostSubCol, details) {
+            const { remarkHtml } = getCandidateRemarkAndAction(c, details);
+            const rowClass = c.isSelected ? 'table-success' : '';
+            const statusBadge = c.isSelected
+                ? '<span class="badge bg-success mb-1">SELECTED</span><br>'
+                : '<span class="badge bg-secondary mb-1">WAITLIST</span><br>';
+
+            return `
+                <tr class="${rowClass}">
+                    <td class="text-center fw-bold">${indexNum}</td>
+                    <td class="text-center fw-bold">#${c.globalRank}</td>
+                    <td><strong>${c.name}</strong></td>
+                    ${showPostSubCol ? `<td>${c.post}<br><span class="text-primary fw-bold">${c.subject}</span></td>` : ''}
+                    <td class="text-center">${c.caste}</td>
+                    <td class="text-center fw-bold">${c.recCategory}</td>
+                    <td class="text-center">${Number(c.taitRaw).toFixed(2)}</td>
+                    <td class="text-center fw-semibold">${Number(c.tait75).toFixed(2)}</td>
+                    <td class="text-center">${Number(c.prof1).toFixed(1)}</td>
+                    <td class="text-center">${Number(c.prof2).toFixed(1)}</td>
+                    <td class="text-center">${Number(c.acad1).toFixed(1)}</td>
+                    <td class="text-center">${Number(c.acad2).toFixed(1)}</td>
+                    <td class="text-center">${Number(c.interview).toFixed(1)}</td>
+                    <td class="text-center">${Number(c.lesson).toFixed(1)}</td>
+                    <td class="text-center fw-bold text-primary">${Number(c.totalScore).toFixed(2)}</td>
+                    <td>${statusBadge}${remarkHtml}</td>
+                </tr>
+            `;
+        }
+
+        // Section 4: Subject-wise Complete Merit List (All Scoring Fields)
+        function buildSubjectWiseListsHtml(details) {
+            let allSubKeys = [...new Set([
+                ...Object.keys(subjectLimits),
+                ...candidatesList.map(c => `${c.post} | ${c.subject}`)
+            ])];
+
+            return allSubKeys.map((sk, idx) => {
+                let subCands = candidatesList.filter(c => `${c.post} | ${c.subject}` === sk);
+                let advPosts = subjectLimits[sk] !== undefined ? subjectLimits[sk] : 1;
+                let selCount = subCands.filter(c => c.isSelected).length;
+
+                let rows = subCands.map((c, i) => getFullScoringRowHtml(c, i + 1, false, details)).join('');
+
+                return `
+                    <div class="sub-sec-block">
+                        <div class="sub-sec-title">
+                            4.${idx + 1}) Subject: ${sk} — <span class="text-primary">Advertised Posts: ${advPosts}</span> | <span class="text-success">Selected: ${selCount}</span> | Total Applicants: ${subCands.length}
+                        </div>
+                        <table class="table table-bordered table-sm align-middle">
+                            ${getFullScoringTableHeadHtml("Sr.", "", "table-dark")}
+                            <tbody>${rows}</tbody>
+                        </table>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Section 5: Category-wise Complete Merit List (All Scoring Fields)
+        function buildCategoryWiseListsHtml(details) {
+            let allCatKeys = [...new Set([
+                ...Object.keys(categoryLimits),
+                ...candidatesList.map(c => c.recCatKey)
+            ])];
+
+            return allCatKeys.map((ck, idx) => {
+                let catCands = candidatesList.filter(c => c.recCatKey === ck);
+                let label = categoryDisplayNames[ck] || ck;
+                let quota = categoryLimits[ck] !== undefined ? categoryLimits[ck] : 0;
+                let selCount = catCands.filter(c => c.isSelected).length;
+
+                let rows = catCands.map((c, i) => getFullScoringRowHtml(c, i + 1, true, details)).join('');
+
+                return `
+                    <div class="sub-sec-block">
+                        <div class="sub-sec-title" style="border-left-color: #198754;">
+                            5.${idx + 1}) Recommended Category: ${label} — <span class="text-primary">Category Quota: ${quota}</span> | <span class="text-success">Selected: ${selCount}</span> | Total Applicants: ${catCands.length}
+                        </div>
+                        <table class="table table-bordered table-sm align-middle">
+                            ${getFullScoringTableHeadHtml("Sr.", "Post &amp; Subject", "table-dark")}
+                            <tbody>${rows}</tbody>
+                        </table>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderSummaryReportInTab() {
+            const container = document.getElementById('summaryReportContent');
+            if (candidatesList.length === 0) {
+                container.innerHTML = `<div class="card-box text-center text-muted py-5">प्रथम <strong>Step 1</strong> मध्ये PDF डेटा लोड करा!</div>`;
+                return;
             }
-
-            // Final Selected Roster Table
-            const finalBody = document.getElementById('finalSelectedBody');
-            finalBody.innerHTML = '';
-
-            const selectedCandidates = candidatesData.filter(c => c.selected);
-            if (selectedCandidates.length === 0) {
-                finalBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-500">No candidates selected yet. Go to Step 2 to select candidates.</td></tr>`;
+            if (isRankDirty) {
+                container.innerHTML = `
+                    <div class="card-box text-center py-5">
+                        <h6 class="text-warning fw-bold mb-3">⚠️ गुणांमध्ये बदल केले आहेत! अहवाल तयार करण्यापूर्वी रँक अपडेट करा.</h6>
+                        <button type="button" class="btn btn-warning fw-bold" onclick="recalculateRanks(); renderSummaryReportInTab();">🔄 Update Rank &amp; Generate Report</button>
+                    </div>
+                `;
                 return;
             }
 
-            selectedCandidates.forEach((c, idx) => {
-                const rank = candidatesData.indexOf(c) + 1;
-                const totalScore = calculateTotal(c);
+            const details = getSelectionDetails();
+            const totalAdvertised = getTotalAdvertisedPosts();
+            const selectedCands = candidatesList.filter(c => c.isSelected);
+            const waitlistedCands = candidatesList.filter(c => !c.isSelected);
+            const nowStr = new Date().toLocaleString('en-IN');
 
-                const tr = document.createElement('tr');
-                tr.className = "border-b border-slate-200";
-                tr.innerHTML = `
-                    <td class="p-3 font-semibold">${idx + 1}</td>
-                    <td class="p-3 font-bold text-slate-900">${c.name} (${c.appId})</td>
-                    <td class="p-3 text-slate-700">${c.post}</td>
-                    <td class="p-3 text-slate-600">${c.recCat}</td>
-                    <td class="p-3 font-bold text-blue-600">${totalScore}</td>
-                    <td class="p-3 font-bold">#${rank}</td>
-                `;
-                finalBody.appendChild(tr);
-            });
+            const reportMainTitle = sansthaName
+                ? `${sansthaName}`
+                : `PAVITRA Teacher Recruitment (With Interview) TAIT-2025`;
+            const sansthaSubHtml = getSansthaSubBannerHtml();
+
+            // 1. Goshwara Matrix
+            const goshwaraHtml = buildGoshwaraMatrixHtml(selectedCands);
+
+            // 2. Selected Candidates List (All Scoring Fields)
+            let selectedRows = selectedCands.map((c, idx) => getFullScoringRowHtml(c, idx + 1, true, details)).join('');
+            if (!selectedRows) {
+                selectedRows = `<tr><td colspan="16" class="text-center text-muted">No candidate selected yet.</td></tr>`;
+            }
+
+            // 3. Waitlisted Candidates List (All Scoring Fields)
+            let waitlistedRows = waitlistedCands.map((c, idx) => getFullScoringRowHtml(c, idx + 1, true, details)).join('');
+            if (!waitlistedRows) {
+                waitlistedRows = `<tr><td colspan="16" class="text-center text-muted">No waitlisted candidates.</td></tr>`;
+            }
+
+            // 4. Subject-wise List & 5. Category-wise List (All Scoring Fields)
+            const subjectWiseHtml = buildSubjectWiseListsHtml(details);
+            const categoryWiseHtml = buildCategoryWiseListsHtml(details);
+
+            container.innerHTML = `
+                <div id="pdfExportContainer">
+                    <!-- PAGE 1: HEADER + DISCLAIMER + GOSHWARA -->
+                    <div>
+                        <div class="text-center border-bottom pb-2 mb-2">
+                            <h4 class="fw-bold text-primary mb-0">${reportMainTitle}</h4>
+                            <div class="fw-bold text-dark" style="font-size: 0.85rem;">Final Selection Goshwara &amp; 100 Marks Merit Summary Report</div>
+                            <small class="text-muted">Created by Bhaskar Thorat | Generated on: ${nowStr}</small>
+                        </div>
+
+                        <div class="alert alert-warning py-1 px-2 mb-2" style="font-size: 0.68rem;">
+                            <div class="mb-1"><strong>⚠️ Disclaimer:</strong> This report is generated strictly for helping and reference purposes only. Any data shown here may be inaccurate; please verify officially and use at your own risk.</div>
+                            <div><strong>⚠️ अस्वीकरण (Disclaimer):</strong> हा अहवाल केवळ मदतीसाठी आणि संदर्भासाठी (Helping &amp; Reference Purpose) तयार करण्यात आला आहे. येथे दर्शविलेली कोणतीही माहिती अचूक असेलच असे नाही; कृपया अधिकृत पडताळणी करूनच आपल्या स्वतःच्या जबाबदारीवर याचा वापर करावा.</div>
+                        </div>
+
+                        <div class="row text-center mb-2 g-2">
+                            <div class="col-4">
+                                <div class="border rounded p-1 bg-light">
+                                    <div class="small text-muted">Total Advertised Posts</div>
+                                    <div class="fs-6 fw-bold text-dark">${totalAdvertised}</div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="border rounded p-1 bg-success bg-opacity-10">
+                                    <div class="small text-success fw-bold">Selected Candidates</div>
+                                    <div class="fs-6 fw-bold text-success">${selectedCands.length}</div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="border rounded p-1 bg-danger bg-opacity-10">
+                                    <div class="small text-danger fw-bold">Vacant Posts</div>
+                                    <div class="fs-6 fw-bold text-danger">${Math.max(0, totalAdvertised - selectedCands.length)}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sec-banner">
+                            ${sansthaSubHtml}
+                            📊 1. Subject vs. Recommended Category Goshwara (Selected Candidates Matrix)
+                        </div>
+                        ${goshwaraHtml}
+                    </div>
+
+                    <!-- NEW PAGE: PART 2 - SELECTED CANDIDATES LIST -->
+                    <div class="pdf-page-break">
+                        <div class="sec-banner text-success" style="border-left-color: #198754;">
+                            ${sansthaSubHtml}
+                            ✅ 2. Selected Candidates List (${selectedCands.length})
+                        </div>
+                        <table class="table table-bordered table-sm align-middle">
+                            ${getFullScoringTableHeadHtml("Sr.", "Post &amp; Subject", "table-success")}
+                            <tbody>${selectedRows}</tbody>
+                        </table>
+                    </div>
+
+                    <!-- NEW PAGE: PART 3 - WAITLISTED CANDIDATES LIST -->
+                    <div class="pdf-page-break">
+                        <div class="sec-banner text-dark" style="border-left-color: #ffc107;">
+                            ${sansthaSubHtml}
+                            ⏳ 3. Waitlisted / Non-Selected Candidates List (${waitlistedCands.length})
+                        </div>
+                        <table class="table table-bordered table-sm align-middle">
+                            ${getFullScoringTableHeadHtml("WL Sr.", "Post &amp; Subject", "table-warning")}
+                            <tbody>${waitlistedRows}</tbody>
+                        </table>
+                    </div>
+
+                    <!-- NEW PAGE: PART 4 - SUBJECT-WISE MERIT LIST -->
+                    <div class="pdf-page-break">
+                        <div class="sec-banner">
+                            ${sansthaSubHtml}
+                            📚 4. Subject-Wise Complete Merit List
+                        </div>
+                        ${subjectWiseHtml}
+                    </div>
+
+                    <!-- NEW PAGE: PART 5 - CATEGORY-WISE MERIT LIST -->
+                    <div class="pdf-page-break">
+                        <div class="sec-banner">
+                            ${sansthaSubHtml}
+                            🏷️ 5. Recommended Category-Wise Complete Merit List
+                        </div>
+                        ${categoryWiseHtml}
+                    </div>
+                </div>
+            `;
         }
 
-        // Export to Excel
-        function exportToExcel() {
-            let wb = XLSX.utils.book_new();
-            
-            // Export Candidates
-            let wsData = [["Sr", "Name", "App ID", "Post & Subject", "Caste", "Rec Category", "TAIT Score", "Total Score", "Rank", "Status"]];
-            candidatesData.forEach((c, i) => {
-                wsData.push([i+1, c.name, c.appId, c.post, c.caste, c.recCat, c.tait, calculateTotal(c), i+1, c.selected ? "Selected" : "Not Selected"]);
-            });
-            let ws = XLSX.utils.aoa_to_sheet(wsData);
-            XLSX.utils.book_append_sheet(wb, ws, "Candidates Merit");
+        function downloadReportPDF() {
+            const element = document.getElementById('pdfExportContainer');
+            if (!element) {
+                alert("प्रथम Step 1 मध्ये PDF डेटा लोड करा!");
+                return;
+            }
+            const btn = document.getElementById('downloadPdfBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ Generating PDF...';
 
-            XLSX.writeFile(wb, "PAVITRA_Merit_Selection_Report.xlsx");
-        }
+            let safeFileName = sansthaName
+                ? sansthaName.replace(/[^a-zA-Z0-9\s\-]/g, '').trim().replace(/\s+/g, '_').substring(0, 45) + '_Goshwara_Report.pdf'
+                : 'Sanstha_Goshwara_Summary_Report.pdf';
 
-        // Download PDF
-        function downloadPDF() {
-            const element = document.getElementById('reportPrintArea');
             const opt = {
-                margin:       0.5,
-                filename:     'PAVITRA_Recruitment_Report.pdf',
+                margin:       [7, 7, 7, 7],
+                filename:     safeFileName,
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true },
-                jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
+                html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' },
+                pagebreak:    { mode: ['css', 'legacy'] }
             };
-            html2pdf().from(element).set(opt).save();
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                btn.disabled = false;
+                btn.textContent = '📥 Download PDF File';
+            }).catch(() => {
+                btn.disabled = false;
+                btn.textContent = '📥 Download PDF File';
+                window.print();
+            });
         }
 
-        // PDF / Vacancy Text Parser for Step 1
-        function parseAndLoadData() {
-            const rawText = document.getElementById('rawPdfInput').value;
-            const sansthaName = document.getElementById('sansthaNameInput').value;
-            if (sansthaName) {
-                document.getElementById('sansthaDisplayTitle').textContent = sansthaName;
-                document.getElementById('reportSansthaSubtitle').textContent = sansthaName;
-            }
-            if (!rawText.trim()) {
-                alert("Please paste Sanstha advertisement text or PDF data first.");
+        function exportCSV() {
+            if (candidatesList.length === 0) {
+                alert("प्रथम Step 1 मध्ये PDF डेटा लोड करा!");
                 return;
             }
-            // Simple parsing demonstration or fallback notice
-            alert("Sanstha data and post counts successfully parsed! Mathematics posts updated to 2. Switching to Selection Portal.");
-            switchTab('step2');
+            if (isRankDirty) {
+                alert("Export करण्यापूर्वी 'Update Rank' बटणावर क्लिक करा!");
+                return;
+            }
+            const details = getSelectionDetails();
+            let headerPrefix = sansthaName ? `${sansthaName} | ` : '';
+            let csv = `${headerPrefix}Created by Bhaskar Thorat (Disclaimer: For helping purpose only; data may be inaccurate; use at your own risk | अस्वीकरण: हे पोर्टल केवळ मदतीसाठी तयार केले आहे; माहिती अचूक असेलच असे नाही; स्वतःच्या जबाबदारीवर वापरावे)\n`;
+            csv += 'Sr.No,Applicant Name,Post,Subject,Caste,Rec. Category,TAIT (200),TAIT Score (75),Prof (5),Prof Extra (3),Acad (5),Acad Extra (2),Interview (5),Lesson (5),Total (100),Rank,Status,Selection / Rejection Remark\n';
+            candidatesList.forEach((c, i) => {
+                let tait75 = (Math.round(((Number(c.taitRaw) / 200) * 75) * 100) / 100).toFixed(2);
+                let total = (Number(tait75) + Number(c.prof1) + Number(c.prof2) + Number(c.acad1) + Number(c.acad2) + Number(c.interview) + Number(c.lesson)).toFixed(2);
+                const { remarkPlain } = getCandidateRemarkAndAction(c, details);
+                csv += `${i+1},"${c.name}","${c.post}","${c.subject}","${c.caste}","${c.recCategory}",${Number(c.taitRaw).toFixed(2)},${tait75},${c.prof1},${c.prof2},${c.acad1},${c.acad2},${c.interview},${c.lesson},${total},${c.globalRank},"${c.isSelected ? 'SELECTED' : 'NOT SELECTED'}","${remarkPlain}"\n`;
+            });
+            let blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            let link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'Sanstha_Final_Selection_Report.csv';
+            link.click();
         }
-
-        function loadSampleData() {
-            alert("Default demo dataset loaded successfully with 2 Mathematics posts configured!");
-            switchTab('step2');
-        }
-
-        // Initialize table on load
-        window.onload = function() {
-            recalculateRanks();
-        };
     </script>
 </body>
 </html>
