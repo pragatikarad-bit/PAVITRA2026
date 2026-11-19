@@ -303,7 +303,13 @@
         function getTotalAdvertisedPosts() {
             const subSum = Object.values(subjectLimits).reduce((a, b) => a + b, 0);
             const catSum = Object.values(categoryLimits).reduce((a, b) => a + b, 0);
-            return Math.max(subSum, catSum) || 2;
+            if (catSum > 0 && subSum > 0) return Math.min(subSum, catSum) === subSum ? subSum : catSum;
+            return Math.max(subSum, catSum) || 1;
+        }
+
+        function getDefaultSubLimit() {
+            const catSum = Object.values(categoryLimits).reduce((a, b) => a + b, 0);
+            return catSum > 0 ? catSum : 1;
         }
 
         function toggleTaitLock() {
@@ -324,8 +330,11 @@
         }
 
         function cleanSubjectName(s) {
-            let str = s.replace(/\s+/g, ' ').trim();
-            if (!str || str === '--') return "All Subjects";
+            // Remove pay-scale & aid percentage brackets like (Partialy Aided 40%) (S-10: 29200-92300)
+            let str = s.replace(/\([^)]*(?:Aided|Unaided|S-\d+|29200|35400|38600|41800|25500|%)[^)]*\)/gi, ' ')
+                       .replace(/\s+/g, ' ')
+                       .trim();
+            if (!str || str === '--' || str === '-' || /^all\s*subjects?$/i.test(str)) return "All Subjects";
             if (/Work Education/i.test(str)) return "Work Education";
             return str;
         }
@@ -348,15 +357,20 @@
                               .replace(/std\s*\(\s*9\s*-\s*10\s*\)/gi, 'std(9-10)')
                               .replace(/std\s*\(\s*6\s*-\s*8\s*\)/gi, 'std(6-8)')
                               .replace(/std\s*\(\s*1\s*-\s*4\/5\s*\)/gi, 'std(1-4/5)')
+                              .replace(/std\s*\(\s*11\s*-\s*12\s*\)/gi, 'std(11-12)')
                               .replace(/Non-\s+PH/gi, 'Non-PH')
                               .replace(/Non-\s+Orphan/gi, 'Non-Orphan')
                               .replace(/PH\s*-\s*\(\s*Ortho\s*\)/gi, 'PH - (Ortho)');
 
-            // 1. Parse Category Limits (Supports General, Women, Ex-Servicemen, NA, PH_Ortho, Sports, etc.)
+            // Strip pay-scale and aid-type parenthetical tags so 40% or 29200-92300 never pollute subject names or post counts
+            let cleanFlatText = flatText.replace(/\([^)]*(?:Aided|Unaided|S-\d+|29200|35400|38600|41800|25500|%)[^)]*\)/gi, ' ')
+                                        .replace(/\s+/g, ' ');
+
+            // 1. Parse Category Limits
             categoryLimits = {};
             categoryDisplayNames = {};
-            let catEndIdx = flatText.search(/End\s+Report|POST\s+SUBJECT/i);
-            let catPart = catEndIdx !== -1 ? flatText.substring(0, catEndIdx) : flatText;
+            let catEndIdx = cleanFlatText.search(/End\s+Report|POST\s+SUBJECT/i);
+            let catPart = catEndIdx !== -1 ? cleanFlatText.substring(0, catEndIdx) : cleanFlatText;
 
             const catRegex = /((?:General|ST|SC|OBC|VJ-A|NT-B|NT-C|NT-D|SBC|SEBC|EWS|Nomadic\s+Tribes\s*\(NT-C\))\s*-\s*\(?[A-Za-z_\s]+\)?)\s+(\d+|--)\s+\d+\s+(?:\d+|--)/gi;
             let cm;
@@ -372,20 +386,20 @@
 
             // 2. Parse Subject Limits
             subjectLimits = {};
-            let subjPart = flatText.split(/Applicant\s+Name|APPLICANT\s+MERIT\s+LIST/i)[0] || "";
-            const subjRegex = /(Under Graduate Teacher std\(1-4\/5\)|Graduate Teacher std\(6-8\)|Graduate Teacher std\(9-10\)|Higher Secondary Teacher std\(11-12\))\s+([A-Za-z0-9\(\)\/\-\s]+?)\s+(Marathi|English|Hindi|Urdu|Gujarati|Kannada|Telugu|--)\s+(Aided|Unaided|Self\s*Financed)\s+(\d+)/gi;
+            let subjPart = cleanFlatText.split(/Applicant\s+Name|APPLICANT\s+MERIT\s+LIST/i)[0] || "";
+            const subjRegex = /(Under Graduate Teacher std\(1-4\/5\)|Graduate Teacher std\(6-8\)|Graduate Teacher std\(9-10\)|Higher Secondary Teacher std\(11-12\))\s+([A-Za-z0-9\(\)\/\-\s]+?)\s+(?:Marathi|English|Hindi|Urdu|Gujarati|Kannada|Telugu|--)\s+(?:Aided|Unaided|Partialy\s*Aided|Partially\s*Aided|Self\s*Financed|--)\s+(\d+)/gi;
             let sm;
             while ((sm = subjRegex.exec(subjPart)) !== null) {
                 let pName = sm[1].trim();
                 let sName = cleanSubjectName(sm[2]);
-                let pCount = parseInt(sm[5], 10);
+                let pCount = parseInt(sm[3], 10);
                 let key = `${pName} | ${sName}`;
                 subjectLimits[key] = (subjectLimits[key] || 0) + pCount;
             }
 
             // 3. Parse Candidates
-            let firstApplicantHeader = flatText.search(/Applicant\s+Name|APPLICANT\s+MERIT\s+LIST/i);
-            let meritText = firstApplicantHeader !== -1 ? flatText.substring(firstApplicantHeader) : flatText;
+            let firstApplicantHeader = cleanFlatText.search(/Applicant\s+Name|APPLICANT\s+MERIT\s+LIST/i);
+            let meritText = firstApplicantHeader !== -1 ? cleanFlatText.substring(firstApplicantHeader) : cleanFlatText;
             meritText = meritText.replace(/Print Date:.*?Recom\s*mended\s*on\s*Orphan/gi, ' ');
 
             const candRegex = /([A-Z][A-Z\s\.]+?\(\d{8,12}\))\s+(\d{2}[\/\.\-]\d{2}[\/\.\-]\d{4})\s+(\d+(?:\.\d+)?)\s+([\s\S]*?)(?=[A-Z][A-Z\s\.]+?\(\d{8,12}\)\s+\d{2}[\/\.\-]\d{2}[\/\.\-]\d{4}|\*{5,}|General\s+Merit\s+List|End\s+Report|$)/g;
@@ -398,7 +412,6 @@
                 let taitRaw = parseFloat(match[3]);
                 let rest = match[4].trim();
 
-                // Extract Post and Dynamic Subject between Post and Medium
                 let post = "Graduate Teacher std(6-8)";
                 let subject = "All Subjects";
 
@@ -463,8 +476,22 @@
                 return;
             }
 
+            // Sync subjectLimits if single Post|Subject or empty subjectLimits
+            const uniqueSubKeys = [...new Set(candidatesList.map(c => `${c.post} | ${c.subject}`))];
+            const totalCatQuota = Object.values(categoryLimits).reduce((a, b) => a + b, 0);
+            if (uniqueSubKeys.length === 1) {
+                let onlyKey = uniqueSubKeys[0];
+                let currentSubVal = subjectLimits[onlyKey] || 0;
+                if (totalCatQuota > 0 && currentSubVal !== totalCatQuota) {
+                    subjectLimits[onlyKey] = totalCatQuota;
+                }
+            } else if (Object.keys(subjectLimits).length === 0) {
+                uniqueSubKeys.forEach(k => subjectLimits[k] = 1);
+            }
+
+            let subSummary = Object.entries(subjectLimits).map(([k, v]) => `${k}: ${v}`).join(' | ');
             let catSummary = Object.entries(categoryLimits).map(([k, v]) => `${k}: ${v}`).join(' | ');
-            document.getElementById('parseStatus').textContent = `✅ Loaded ${candidatesList.length} candidates | Quotas: ${catSummary}`;
+            document.getElementById('parseStatus').textContent = `✅ Loaded ${candidatesList.length} candidates | Posts: ${subSummary} | Quotas: ${catSummary}`;
             populateDropdown();
             recalculateRanks();
 
