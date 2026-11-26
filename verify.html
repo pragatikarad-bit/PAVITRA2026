@@ -107,10 +107,15 @@
     /* =========================================
        A4 PRINT STYLES (@media print)
        ========================================= */
-    @media print {
-      @page {
+    @page {
         size: A4 portrait;
-        margin: 10mm 12mm;
+        margin: 10mm 12mm 14mm 12mm;
+        @bottom-center {
+          content: "Page " counter(page) " of " counter(pages);
+          font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
+          font-size: 8.5pt;
+          color: #334155;
+        }
       }
 
       body {
