@@ -1962,7 +1962,7 @@
     function syncAllForms() {
       const f = appState.fields;
 
-      const fullNameMr = [f.firstNameMr, f.middleNameMr, f.surnameMr].filter(Boolean).join(' ').trim();
+      const fullNameMr = [f.surnameMr, f.firstNameMr, f.middleNameMr].filter(Boolean).join(' ').trim();
       const fullNameEn = [f.surnameEn, f.firstNameEn, f.middleNameEn].filter(Boolean).join(' ').trim().toUpperCase();
 
       const computedValues = {
