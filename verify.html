@@ -262,24 +262,27 @@
               पवित्र प्रणाली २०२५ — कागदपत्र पडताळणी प्रणाली Created by - BHASKAR THORAT
             </h1>
             <p class="text-xs text-slate-300">
-              इंग्रजीत टाईप करून <strong>Space</strong> दाबल्यास आपोआप मराठी होईल | फक्त निवडलेल्या रिपोर्टची आवश्यक फील्ड्स हिरवी/लाल दिसतील
+              फक्त निवडलेल्या Live Form साठी आवश्यक असलेली फील्ड्सच स्क्रीनवर दिसतील (भरलेली हिरवी / बाकी लाल)
             </p>
           </div>
         </div>
 
         <div class="flex flex-wrap items-center gap-2 text-xs">
+          <button type="button" id="btn-filter-fields" onclick="toggleShowOnlyRequiredFields()" class="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3 py-1.5 rounded-lg shadow transition">
+            🎯 फक्त Live Form फील्ड्स: चालू
+          </button>
           <button type="button" id="btn-toggle-split" onclick="toggleSplitView()" class="inline-flex items-center gap-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-3 py-1.5 rounded-lg shadow transition">
-            🖥️ Split View: चालू (Form + Live Report)
+            🖥️ Split View: चालू
           </button>
           <button type="button" onclick="printAllForms()" class="inline-flex items-center gap-1.5 bg-rose-600 hover:bg-rose-700 text-white font-semibold px-3 py-1.5 rounded-lg shadow transition">
-            🖨️ सर्व नमुने PDF (Print All)
+            🖨️ सर्व नमुने PDF
           </button>
           <button type="button" onclick="downloadAllWordForms()" class="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-3 py-1.5 rounded-lg shadow transition">
-            📄 सर्व नमुने Word (.doc)
+            📄 Word (.doc)
           </button>
           <span id="save-status" class="inline-flex items-center gap-1.5 bg-slate-800 text-emerald-400 px-2.5 py-1 rounded-full border border-slate-700">
             <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-            माहिती जतन (Auto-Saved)
+            जतन केले
           </span>
         </div>
       </div>
@@ -287,7 +290,7 @@
       <!-- Multi-Candidate Selector Bar -->
       <div id="candidate-manager-bar" class="mt-2 pt-2 border-t border-slate-700/80 flex flex-wrap items-center justify-between gap-2 text-xs">
         <div class="flex flex-wrap items-center gap-2">
-          <span class="font-bold text-amber-400">उमेदवार निवडा (Saved Candidates):</span>
+          <span class="font-bold text-amber-400">उमेदवार निवडा:</span>
           <select id="candidate-selector" onchange="switchCandidate(this.value)" class="bg-slate-800 text-white border border-slate-600 rounded-lg px-2.5 py-1 font-semibold min-w-[240px] focus:outline-none focus:border-amber-400"></select>
           <button type="button" onclick="createNewCandidate()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-2.5 py-1 rounded-lg transition">➕ नवीन उमेदवार</button>
           <button type="button" onclick="duplicateCandidate()" class="bg-slate-700 hover:bg-slate-600 text-white font-semibold px-2.5 py-1 rounded-lg transition">📋 कॉपी करा</button>
@@ -336,10 +339,12 @@
     <section id="tab-entry" class="tab-pane active-print-target">
       <div class="no-print bg-white rounded-xl shadow-sm border border-slate-200 p-3.5 mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h2 class="text-sm sm:text-base font-bold text-slate-900">एकाच विंडोमध्ये माहिती संकलन व संपूर्ण लाईव्ह रिपोर्ट</h2>
+          <h2 id="active-filter-banner" class="text-sm sm:text-base font-bold text-slate-900">
+            सध्या फक्त "लहान कुटुंबाचे घोषणापत्र (नमुना 'अ')" साठी आवश्यक फील्ड्स दिसत आहेत
+          </h2>
           <p class="text-xs text-slate-600">
             <strong>मराठी टायपिंग:</strong> इंग्रजीत टाईप करा व <strong>Space</strong> दाबा (उदा. <code>bhaskar</code> + Space = <strong>भास्कर</strong>).
-            <strong>रंग निर्देश:</strong> उजवीकडे निवडलेल्या रिपोर्टची भरलेली फील्ड्स <span class="bg-emerald-100 text-emerald-800 px-1.5 rounded font-bold border border-emerald-400">हिरवी</span> व रिकामी फील्ड्स <span class="bg-rose-100 text-rose-800 px-1.5 rounded font-bold border border-rose-400">लाल</span> दिसतील.
+            भरलेली माहिती <span class="bg-emerald-100 text-emerald-800 px-1.5 rounded font-bold border border-emerald-400">हिरवी</span> व भरायची बाकी माहिती <span class="bg-rose-100 text-rose-800 px-1.5 rounded font-bold border border-rose-400">लाल</span> दिसेल.
           </p>
         </div>
         <div class="flex flex-wrap items-center gap-2">
@@ -366,43 +371,43 @@
           <form id="candidate-form" class="space-y-5" onsubmit="return false;">
 
             <!-- SECTION 1: NAME & PERSONAL INFO -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="form-section-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
               <div class="bg-slate-800 text-white px-4 py-2 font-bold text-sm">
                 १. नाव व वैयक्तिक माहिती (Name & Personal Info)
               </div>
               <div class="p-4 space-y-3.5">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 p-3 bg-amber-50/60 rounded-lg border border-amber-200">
-                  <div>
+                <div class="grid-group grid grid-cols-1 md:grid-cols-3 gap-3 p-3 bg-amber-50/60 rounded-lg border border-amber-200">
+                  <div class="field-box">
                     <label class="form-label">पहिले नाव (मराठीत - Type & Space)</label>
                     <input type="text" data-field="firstNameMr" class="form-input marathi-input" placeholder="उदा. संजीवनी">
                   </div>
-                  <div>
+                  <div class="field-box">
                     <label class="form-label">मधले नाव (मराठीत - Type & Space)</label>
                     <input type="text" data-field="middleNameMr" class="form-input marathi-input" placeholder="उदा. सागर">
                   </div>
-                  <div>
+                  <div class="field-box">
                     <label class="form-label">आडनाव (मराठीत - Type & Space)</label>
                     <input type="text" data-field="surnameMr" class="form-input marathi-input" placeholder="उदा. कुंभार">
                   </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
-                  <div>
+                <div class="grid-group grid grid-cols-1 md:grid-cols-3 gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                  <div class="field-box">
                     <label class="form-label">FIRST NAME (ENGLISH)</label>
                     <input type="text" data-field="firstNameEn" class="form-input uppercase" placeholder="SANJIVANI">
                   </div>
-                  <div>
+                  <div class="field-box">
                     <label class="form-label">MIDDLE NAME (ENGLISH)</label>
                     <input type="text" data-field="middleNameEn" class="form-input uppercase" placeholder="SAGAR">
                   </div>
-                  <div>
+                  <div class="field-box">
                     <label class="form-label">SURNAME (ENGLISH)</label>
                     <input type="text" data-field="surnameEn" class="form-input uppercase" placeholder="KUMBHAR">
                   </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  <div>
+                <div class="grid-group grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div class="field-box">
                     <label class="form-label">लिंग (Gender)</label>
                     <select data-field="gender" class="form-input">
                       <option value="स्त्री (Female)">स्त्री (Female)</option>
@@ -410,50 +415,50 @@
                       <option value="इतर (Other)">इतर (Other)</option>
                     </select>
                   </div>
-                  <div>
+                  <div class="field-box">
                     <label class="form-label">वैवाहिक स्थिती (Marital Status)</label>
                     <select data-field="maritalStatus" class="form-input">
                       <option value="विवाहित">विवाहित (Married)</option>
                       <option value="अविवाहित">अविवाहित (Unmarried)</option>
                     </select>
                   </div>
-                  <div>
+                  <div class="field-box">
                     <label class="form-label">टोपण नाव / नावात बदल</label>
                     <input type="text" data-field="aliases" class="form-input marathi-input" placeholder="नाही">
                   </div>
 
-                  <div class="md:col-span-3">
+                  <div class="field-box md:col-span-3">
                     <label class="form-label">लग्नानंतरचे नाव (विवाह निबंधक / राजपत्र तपशील)</label>
                     <input type="text" data-field="marriedName" class="form-input marathi-input" placeholder="लागू नसल्यास 'लागू नाही'">
                   </div>
 
-                  <div>
+                  <div class="field-box">
                     <label class="form-label">मोबाईल क्रमांक</label>
                     <input type="text" data-field="mobile" class="form-input" placeholder="10 अंकी क्रमांक">
                   </div>
-                  <div>
+                  <div class="field-box">
                     <label class="form-label">आधार कार्ड क्रमांक</label>
                     <input type="text" data-field="aadhaar" class="form-input" placeholder="XXXX-XXXX-XXXX">
                   </div>
-                  <div>
+                  <div class="field-box">
                     <label class="form-label">पॅन क्रमांक (PAN)</label>
                     <input type="text" data-field="pan" class="form-input uppercase" placeholder="ABCDE1234F">
                   </div>
 
-                  <div>
+                  <div class="field-box">
                     <label class="form-label">राष्ट्रीयत्व</label>
                     <input type="text" data-field="nationality" class="form-input" value="भारतीय / INDIAN">
                   </div>
-                  <div>
+                  <div class="field-box">
                     <label class="form-label">धर्म (Religion)</label>
                     <input type="text" data-field="religion" class="form-input marathi-input" placeholder="हिंदू">
                   </div>
-                  <div>
+                  <div class="field-box">
                     <label class="form-label">मूळ जात व प्रवर्ग</label>
                     <input type="text" data-field="casteCategory" class="form-input marathi-input" placeholder="उदा. कुंभार (OBC)">
                   </div>
 
-                  <div>
+                  <div class="field-box">
                     <label class="form-label">जात वैधता प्रमाणपत्र</label>
                     <select data-field="casteValidityStatus" class="form-input">
                       <option value="आहे">आहे (Yes)</option>
@@ -461,66 +466,66 @@
                       <option value="लागू नाही">लागू नाही (N/A)</option>
                     </select>
                   </div>
-                  <div>
+                  <div class="field-box">
                     <label class="form-label">जात वैधता क्र.</label>
                     <input type="text" data-field="casteValidityNo" class="form-input">
                   </div>
-                  <div>
+                  <div class="field-box">
                     <label class="form-label">जात वैधता दिनांक</label>
                     <input type="date" data-field="casteValidityDate" class="form-input">
                   </div>
 
-                  <div>
+                  <div class="field-box">
                     <label class="form-label">NCL - उपविभागीय अधिकारी</label>
                     <input type="text" data-field="nclSdo" class="form-input marathi-input">
                   </div>
-                  <div>
+                  <div class="field-box">
                     <label class="form-label">NCL प्रमाणपत्र क्र.</label>
                     <input type="text" data-field="nclNo" class="form-input">
                   </div>
-                  <div>
+                  <div class="field-box">
                     <label class="form-label">NCL दिनांक</label>
                     <input type="date" data-field="nclDate" class="form-input">
                   </div>
 
-                  <div>
+                  <div class="field-box">
                     <label class="form-label">जन्मदिनांक (DOB)</label>
                     <input type="date" data-field="dob" id="input-dob" class="form-input">
                   </div>
-                  <div>
+                  <div class="field-box">
                     <label class="form-label">दि. १४-०५-२०२५ रोजीचे वय</label>
                     <input type="text" data-field="ageOnCutoff" id="input-age-cutoff" class="form-input" readonly>
                   </div>
-                  <div>
+                  <div class="field-box">
                     <label class="form-label">सध्याचे वय (वर्षे)</label>
                     <input type="text" data-field="presentAge" id="input-present-age" class="form-input marathi-input" placeholder="उदा. ३२ वर्षे">
                   </div>
 
-                  <div>
+                  <div class="field-box">
                     <label class="form-label">मॅट्रिक (१० वी) मधील वय</label>
                     <input type="text" data-field="ageAtMatric" class="form-input marathi-input" placeholder="१६ वर्षे">
                   </div>
-                  <div class="md:col-span-2">
+                  <div class="field-box md:col-span-2">
                     <label class="form-label">जन्मस्थान, जिल्हा आणि राज्य</label>
                     <input type="text" data-field="placeOfBirth" class="form-input marathi-input" placeholder="सातारा, महाराष्ट्र">
                   </div>
 
-                  <div>
+                  <div class="field-box">
                     <label class="form-label">तुमचा जिल्हा आणि राज्य</label>
                     <input type="text" data-field="homeDistrictState" class="form-input marathi-input" value="सातारा, महाराष्ट्र">
                   </div>
-                  <div>
+                  <div class="field-box">
                     <label class="form-label">वडिलांचा मूळ जिल्हा व राज्य</label>
                     <input type="text" data-field="fatherDistrictState" class="form-input marathi-input" value="सातारा, महाराष्ट्र">
                   </div>
-                  <div>
+                  <div class="field-box">
                     <label class="form-label">रहिवासी दाखला (Domicile)</label>
                     <select data-field="domicileType" class="form-input">
                       <option value="महाराष्ट्र राज्याचा रहिवाशी दाखला आहे (तहसीलदार)">महाराष्ट्र राज्याचा रहिवाशी दाखला आहे</option>
                       <option value="महाराष्ट्र-कर्नाटक सीमा भागातील ८६५ गावांमधील रहिवासी दाखला आहे">सीमा भागातील ८६५ गावांमधील रहिवासी</option>
                     </select>
                   </div>
-                  <div class="md:col-span-3">
+                  <div class="field-box md:col-span-3">
                     <label class="form-label">रहिवासी दाखला क्रमांक व दिनांक</label>
                     <input type="text" data-field="domicileDetails" class="form-input marathi-input">
                   </div>
@@ -529,24 +534,24 @@
             </div>
 
             <!-- SECTION 2: SMALL FAMILY DECLARATION -->
-            <div class="bg-white rounded-xl shadow-sm border-2 border-amber-400 overflow-hidden">
+            <div class="form-section-card bg-white rounded-xl shadow-sm border-2 border-amber-400 overflow-hidden">
               <div class="bg-amber-500 text-slate-950 px-4 py-2 font-bold text-sm">
                 २. लहान कुटुंबाचे घोषणापत्र तपशील (नमुना 'अ' — नियम २००५)
               </div>
-              <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-3 bg-amber-50/30">
-                <div>
+              <div class="p-4 grid-group grid grid-cols-1 md:grid-cols-2 gap-3 bg-amber-50/30">
+                <div class="field-box">
                   <label class="form-label">आज रोजी एकूण हयात अपत्ये (अंकी)</label>
                   <input type="text" data-field="totalChildren" class="form-input" placeholder="उदा. १ किंवा २">
                 </div>
-                <div>
+                <div class="field-box">
                   <label class="form-label">आज रोजी एकूण हयात अपत्ये (अक्षरी)</label>
                   <input type="text" data-field="totalChildrenWords" class="form-input marathi-input" placeholder="उदा. एक किंवा दोन">
                 </div>
-                <div>
+                <div class="field-box">
                   <label class="form-label">दिनांक २८ मार्च, २००५ नंतर जन्मलेल्या अपत्यांची संख्या</label>
                   <input type="text" data-field="childrenAfter2005" class="form-input" placeholder="उदा. १ किंवा ०">
                 </div>
-                <div>
+                <div class="field-box">
                   <label class="form-label">२८/०३/२००५ नंतर जन्मलेल्या अपत्याची जन्मतारीख</label>
                   <input type="text" data-field="childDob" class="form-input marathi-input" placeholder="उदा. १५/०६/२०१८ किंवा लागू नाही">
                 </div>
@@ -554,27 +559,27 @@
             </div>
 
             <!-- SECTION 3: ADDRESSES & PAST 5 YEARS RESIDENCE -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="form-section-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
               <div class="bg-slate-800 text-white px-4 py-2 font-bold text-sm">
                 ३. पत्ता व मागील ५ वर्षांचा निवास तपशील (साक्षांकन क्र. २, ३, १०)
               </div>
               <div class="p-4 space-y-3">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div>
+                <div class="grid-group grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div class="field-box">
                     <label class="form-label">सध्याचा संपूर्ण पत्ता</label>
                     <textarea data-field="presentAddress" rows="2" class="form-input marathi-input"></textarea>
                   </div>
-                  <div>
+                  <div class="field-box">
                     <label class="form-label">घरचा कायमचा पूर्ण पत्ता</label>
                     <textarea data-field="homeAddress" rows="2" class="form-input marathi-input"></textarea>
                   </div>
-                  <div class="md:col-span-2">
+                  <div class="field-box md:col-span-2">
                     <label class="form-label">पाकिस्तान/बांग्लादेश स्थलांतर तपशील</label>
                     <input type="text" data-field="migrationDetails" class="form-input" value="लागू नाही / Not Applicable">
                   </div>
                 </div>
 
-                <div class="pt-2 border-t border-slate-200">
+                <div class="dynamic-table-box pt-2 border-t border-slate-200" data-for-forms="attestation">
                   <div class="flex items-center justify-between mb-2">
                     <span class="text-xs font-bold text-slate-800">मागील ५ वर्षांत राहिलेल्या ठिकाणांचा तपशील (क्र. १०)</span>
                     <button type="button" onclick="addResidenceRow()" class="px-2.5 py-1 rounded bg-slate-800 text-white text-xs font-semibold">+ ओळ जोडा</button>
@@ -598,48 +603,48 @@
             </div>
 
             <!-- SECTION 4: FAMILY DETAILS -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="form-section-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
               <div class="bg-slate-800 text-white px-4 py-2 font-bold text-sm">
                 ४. कुटुंबाचा तपशील (साक्षांकन क्र. ११ व १२)
               </div>
               <div class="p-4 space-y-4">
-                <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+                <div class="sub-card p-3 bg-slate-50 rounded-lg border border-slate-200">
                   <h4 class="text-xs font-bold text-slate-900 mb-2">अ) वडिलांचा तपशील</h4>
-                  <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5">
-                    <div><label class="form-label">पूर्ण नाव</label><input type="text" data-field="fatherName" class="form-input marathi-input"></div>
-                    <div><label class="form-label">राष्ट्रीयत्व</label><input type="text" data-field="fatherNationality" class="form-input" value="भारतीय (जन्माने)"></div>
-                    <div><label class="form-label">जन्मस्थान</label><input type="text" data-field="fatherBirthPlace" class="form-input marathi-input"></div>
-                    <div><label class="form-label">व्यवसाय व पत्ता</label><input type="text" data-field="fatherOccupation" class="form-input marathi-input"></div>
-                    <div><label class="form-label">सध्याचा पत्ता</label><input type="text" data-field="fatherPresentAddr" class="form-input marathi-input"></div>
-                    <div><label class="form-label">कायमचा पत्ता</label><input type="text" data-field="fatherPermAddr" class="form-input marathi-input"></div>
+                  <div class="grid-group grid grid-cols-1 md:grid-cols-3 gap-2.5">
+                    <div class="field-box"><label class="form-label">पूर्ण नाव</label><input type="text" data-field="fatherName" class="form-input marathi-input"></div>
+                    <div class="field-box"><label class="form-label">राष्ट्रीयत्व</label><input type="text" data-field="fatherNationality" class="form-input" value="भारतीय (जन्माने)"></div>
+                    <div class="field-box"><label class="form-label">जन्मस्थान</label><input type="text" data-field="fatherBirthPlace" class="form-input marathi-input"></div>
+                    <div class="field-box"><label class="form-label">व्यवसाय व पत्ता</label><input type="text" data-field="fatherOccupation" class="form-input marathi-input"></div>
+                    <div class="field-box"><label class="form-label">सध्याचा पत्ता</label><input type="text" data-field="fatherPresentAddr" class="form-input marathi-input"></div>
+                    <div class="field-box"><label class="form-label">कायमचा पत्ता</label><input type="text" data-field="fatherPermAddr" class="form-input marathi-input"></div>
                   </div>
                 </div>
 
-                <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+                <div class="sub-card p-3 bg-slate-50 rounded-lg border border-slate-200">
                   <h4 class="text-xs font-bold text-slate-900 mb-2">ब) आईचा तपशील</h4>
-                  <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5">
-                    <div><label class="form-label">पूर्ण नाव</label><input type="text" data-field="motherName" class="form-input marathi-input"></div>
-                    <div><label class="form-label">राष्ट्रीयत्व</label><input type="text" data-field="motherNationality" class="form-input" value="भारतीय (जन्माने)"></div>
-                    <div><label class="form-label">जन्मस्थान</label><input type="text" data-field="motherBirthPlace" class="form-input marathi-input"></div>
-                    <div><label class="form-label">व्यवसाय व पत्ता</label><input type="text" data-field="motherOccupation" class="form-input marathi-input" value="गृहिणी"></div>
-                    <div><label class="form-label">सध्याचा पत्ता</label><input type="text" data-field="motherPresentAddr" class="form-input marathi-input"></div>
-                    <div><label class="form-label">कायमचा पत्ता</label><input type="text" data-field="motherPermAddr" class="form-input marathi-input"></div>
+                  <div class="grid-group grid grid-cols-1 md:grid-cols-3 gap-2.5">
+                    <div class="field-box"><label class="form-label">पूर्ण नाव</label><input type="text" data-field="motherName" class="form-input marathi-input"></div>
+                    <div class="field-box"><label class="form-label">राष्ट्रीयत्व</label><input type="text" data-field="motherNationality" class="form-input" value="भारतीय (जन्माने)"></div>
+                    <div class="field-box"><label class="form-label">जन्मस्थान</label><input type="text" data-field="motherBirthPlace" class="form-input marathi-input"></div>
+                    <div class="field-box"><label class="form-label">व्यवसाय व पत्ता</label><input type="text" data-field="motherOccupation" class="form-input marathi-input" value="गृहिणी"></div>
+                    <div class="field-box"><label class="form-label">सध्याचा पत्ता</label><input type="text" data-field="motherPresentAddr" class="form-input marathi-input"></div>
+                    <div class="field-box"><label class="form-label">कायमचा पत्ता</label><input type="text" data-field="motherPermAddr" class="form-input marathi-input"></div>
                   </div>
                 </div>
 
-                <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+                <div class="sub-card p-3 bg-slate-50 rounded-lg border border-slate-200">
                   <h4 class="text-xs font-bold text-slate-900 mb-2">क) पती / पत्नी तपशील</h4>
-                  <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5">
-                    <div><label class="form-label">पूर्ण नाव</label><input type="text" data-field="spouseName" class="form-input marathi-input" value="लागू नाही"></div>
-                    <div><label class="form-label">राष्ट्रीयत्व</label><input type="text" data-field="spouseNationality" class="form-input" value="-"></div>
-                    <div><label class="form-label">जन्मस्थान</label><input type="text" data-field="spouseBirthPlace" class="form-input marathi-input" value="-"></div>
-                    <div><label class="form-label">व्यवसाय व पत्ता</label><input type="text" data-field="spouseOccupation" class="form-input marathi-input" value="-"></div>
-                    <div><label class="form-label">सध्याचा पत्ता</label><input type="text" data-field="spousePresentAddr" class="form-input marathi-input" value="-"></div>
-                    <div><label class="form-label">कायमचा पत्ता</label><input type="text" data-field="spousePermAddr" class="form-input marathi-input" value="-"></div>
+                  <div class="grid-group grid grid-cols-1 md:grid-cols-3 gap-2.5">
+                    <div class="field-box"><label class="form-label">पूर्ण नाव</label><input type="text" data-field="spouseName" class="form-input marathi-input" value="लागू नाही"></div>
+                    <div class="field-box"><label class="form-label">राष्ट्रीयत्व</label><input type="text" data-field="spouseNationality" class="form-input" value="-"></div>
+                    <div class="field-box"><label class="form-label">जन्मस्थान</label><input type="text" data-field="spouseBirthPlace" class="form-input marathi-input" value="-"></div>
+                    <div class="field-box"><label class="form-label">व्यवसाय व पत्ता</label><input type="text" data-field="spouseOccupation" class="form-input marathi-input" value="-"></div>
+                    <div class="field-box"><label class="form-label">सध्याचा पत्ता</label><input type="text" data-field="spousePresentAddr" class="form-input marathi-input" value="-"></div>
+                    <div class="field-box"><label class="form-label">कायमचा पत्ता</label><input type="text" data-field="spousePermAddr" class="form-input marathi-input" value="-"></div>
                   </div>
                 </div>
 
-                <div>
+                <div class="dynamic-table-box" data-for-forms="attestation">
                   <div class="flex items-center justify-between mb-2">
                     <span class="text-xs font-bold text-slate-800">मुलगा/मुलगी बाहेर देशात असल्यास माहिती (क्र. १२)</span>
                     <button type="button" onclick="addChildAbroadRow()" class="px-2.5 py-1 rounded bg-slate-800 text-white text-xs font-semibold">+ ओळ जोडा</button>
@@ -664,29 +669,29 @@
             </div>
 
             <!-- SECTION 5: PAVITRA PORTAL & RECRUITMENT DETAILS -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="form-section-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
               <div class="bg-slate-800 text-white px-4 py-2 font-bold text-sm">
                 ५. पवित्र प्रणाली व पदभरती तपशील (परिशिष्ट - अ व घोषणापत्रासाठी)
               </div>
-              <div class="p-4 grid grid-cols-1 md:grid-cols-3 gap-3">
-                <div>
+              <div class="p-4 grid-group grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div class="field-box">
                   <label class="form-label">संस्था कोड (Sanstha Code)</label>
                   <input type="text" data-field="sansthaCode" class="form-input">
                 </div>
-                <div class="md:col-span-2">
+                <div class="field-box md:col-span-2">
                   <label class="form-label">संस्थेचे नाव (Sanstha Name)</label>
                   <input type="text" data-field="sansthaName" class="form-input marathi-input">
                 </div>
 
-                <div>
+                <div class="field-box">
                   <label class="form-label">पडताळणी दिनांक</label>
                   <input type="date" data-field="verificationDate" class="form-input">
                 </div>
-                <div>
+                <div class="field-box">
                   <label class="form-label">गुणवत्ता यादी अनुक्रमांक</label>
                   <input type="text" data-field="meritListSerial" class="form-input">
                 </div>
-                <div>
+                <div class="field-box">
                   <label class="form-label">स्वप्रमाणपत्र (आहे/नाही)</label>
                   <select data-field="selfCertStatus" class="form-input">
                     <option value="आहे">आहे</option>
@@ -694,7 +699,7 @@
                   </select>
                 </div>
 
-                <div>
+                <div class="field-box">
                   <label class="form-label">शिफारस झालेला गट</label>
                   <select data-field="recommendedGroup" class="form-input">
                     <option value="इयत्ता १ ते ५">इयत्ता १ ते ५</option>
@@ -703,24 +708,24 @@
                     <option value="इयत्ता ११ ते १२ वी">इयत्ता ११ ते १२ वी</option>
                   </select>
                 </div>
-                <div>
+                <div class="field-box">
                   <label class="form-label">शिफारस पदाचा विषय</label>
                   <input type="text" data-field="recommendedSubject" class="form-input marathi-input">
                 </div>
-                <div>
+                <div class="field-box">
                   <label class="form-label">शिकविण्याचे माध्यम</label>
                   <input type="text" data-field="teachingMedium" class="form-input marathi-input" value="मराठी">
                 </div>
 
-                <div>
+                <div class="field-box">
                   <label class="form-label">निवड प्रवर्ग</label>
                   <input type="text" data-field="selectionCategory" class="form-input marathi-input">
                 </div>
-                <div>
+                <div class="field-box">
                   <label class="form-label">समांतर आरक्षण</label>
                   <input type="text" data-field="parallelReservation" class="form-input marathi-input">
                 </div>
-                <div>
+                <div class="field-box">
                   <label class="form-label">समांतर लाभ यापूर्वी घेतला?</label>
                   <select data-field="parallelAvailedBefore" class="form-input">
                     <option value="नाही">नाही</option>
@@ -729,30 +734,30 @@
                   </select>
                 </div>
 
-                <div><label class="form-label">समांतर प्रमाणपत्र क्र.</label><input type="text" data-field="parallelCertNo" class="form-input" value="लागू नाही"></div>
-                <div><label class="form-label">समांतर प्रमाणपत्र दिनांक</label><input type="date" data-field="parallelCertDate" class="form-input"></div>
-                <div><label class="form-label">सक्षम प्राधिकारी</label><input type="text" data-field="parallelAuthority" class="form-input marathi-input" value="लागू नाही"></div>
+                <div class="field-box"><label class="form-label">समांतर प्रमाणपत्र क्र.</label><input type="text" data-field="parallelCertNo" class="form-input" value="लागू नाही"></div>
+                <div class="field-box"><label class="form-label">समांतर प्रमाणपत्र दिनांक</label><input type="date" data-field="parallelCertDate" class="form-input"></div>
+                <div class="field-box"><label class="form-label">सक्षम प्राधिकारी</label><input type="text" data-field="parallelAuthority" class="form-input marathi-input" value="लागू नाही"></div>
 
-                <div><label class="form-label">दिव्यांग प्रकार</label><input type="text" data-field="divyangType" class="form-input marathi-input" value="लागू नाही"></div>
-                <div><label class="form-label">दिव्यांग %</label><input type="text" data-field="divyangPercent" class="form-input" value="-"></div>
-                <div><label class="form-label">UDID क्रमांक</label><input type="text" data-field="udidNo" class="form-input" value="-"></div>
+                <div class="field-box"><label class="form-label">दिव्यांग प्रकार</label><input type="text" data-field="divyangType" class="form-input marathi-input" value="लागू नाही"></div>
+                <div class="field-box"><label class="form-label">दिव्यांग %</label><input type="text" data-field="divyangPercent" class="form-input" value="-"></div>
+                <div class="field-box"><label class="form-label">UDID क्रमांक</label><input type="text" data-field="udidNo" class="form-input" value="-"></div>
 
-                <div>
+                <div class="field-box">
                   <label class="form-label">आत्महत्याग्रस्त शेतकरी पाल्य?</label>
                   <select data-field="farmerSuicideWard" class="form-input"><option value="नाही">नाही</option><option value="होय">होय</option></select>
                 </div>
-                <div><label class="form-label">प्रमाणपत्र क्र. व दिनांक</label><input type="text" data-field="farmerSuicideCert" class="form-input" value="लागू नाही"></div>
-                <div><label class="form-label">नाते</label><input type="text" data-field="farmerSuicideRelation" class="form-input marathi-input" value="लागू नाही"></div>
+                <div class="field-box"><label class="form-label">प्रमाणपत्र क्र. व दिनांक</label><input type="text" data-field="farmerSuicideCert" class="form-input" value="लागू नाही"></div>
+                <div class="field-box"><label class="form-label">नाते</label><input type="text" data-field="farmerSuicideRelation" class="form-input marathi-input" value="लागू नाही"></div>
 
-                <div>
+                <div class="field-box">
                   <label class="form-label">सध्या अन्यत्र सेवेत आहे?</label>
                   <select data-field="currentlyEmployed" class="form-input"><option value="नाही">नाही</option><option value="होय">होय</option></select>
                 </div>
-                <div><label class="form-label">आस्थापनेचे नाव व पद</label><input type="text" data-field="currentEmployerInfo" class="form-input marathi-input" value="लागू नाही"></div>
-                <div><label class="form-label">NOC पत्र क्र. व दिनांक</label><input type="text" data-field="currentNocDetails" class="form-input" value="लागू नाही"></div>
+                <div class="field-box"><label class="form-label">आस्थापनेचे नाव व पद</label><input type="text" data-field="currentEmployerInfo" class="form-input marathi-input" value="लागू नाही"></div>
+                <div class="field-box"><label class="form-label">NOC पत्र क्र. व दिनांक</label><input type="text" data-field="currentNocDetails" class="form-input" value="लागू नाही"></div>
 
-                <div><label class="form-label">शालार्थ आयडी</label><input type="text" data-field="shalarthId" class="form-input" value="लागू नाही"></div>
-                <div>
+                <div class="field-box"><label class="form-label">शालार्थ आयडी</label><input type="text" data-field="shalarthId" class="form-input" value="लागू नाही"></div>
+                <div class="field-box">
                   <label class="form-label">लहान कुटुंब घोषणापत्र जोडले?</label>
                   <select data-field="smallFamilyDecl" class="form-input">
                     <option value="जोडलेले आहे">जोडलेले आहे</option>
@@ -760,7 +765,7 @@
                     <option value="नाही">नाही</option>
                   </select>
                 </div>
-                <div>
+                <div class="field-box">
                   <label class="form-label">TET गैरप्रकार यादीत नाव?</label>
                   <select data-field="tetMalpracticeList" class="form-input"><option value="नाही">नाही</option><option value="आहे">आहे</option></select>
                 </div>
@@ -768,12 +773,12 @@
             </div>
 
             <!-- SECTION 6: EDUCATIONAL & PROFESSIONAL QUALIFICATIONS -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="form-section-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
               <div class="bg-slate-800 text-white px-4 py-2 font-bold text-sm">
                 ६. शैक्षणिक व व्यावसायिक अर्हता
               </div>
               <div class="p-4 space-y-4">
-                <div>
+                <div class="dynamic-table-box" data-for-forms="attestation">
                   <div class="flex items-center justify-between mb-2">
                     <span class="text-xs font-bold text-slate-800">अ) शालेय व महाविद्यालयीन शिक्षण (साक्षांकन क्र. १३)</span>
                     <button type="button" onclick="addEducationRow()" class="px-2.5 py-1 rounded bg-slate-800 text-white text-xs font-semibold">+ शाळा जोडा</button>
@@ -794,7 +799,7 @@
                   </div>
                 </div>
 
-                <div class="pt-2 border-t border-slate-200">
+                <div class="dynamic-table-box pt-2 border-t border-slate-200" data-for-forms="checklist">
                   <h4 class="text-xs font-bold text-slate-800 mb-2">ब) परिशिष्ट-अ मधील गुणपत्रक तपशील</h4>
                   <div class="overflow-x-auto">
                     <table class="w-full text-xs border border-slate-300">
@@ -816,50 +821,50 @@
                   </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 border-t border-slate-200">
-                  <div><label class="form-label">वाढीव शैक्षणिक अर्हता</label><input type="text" data-field="extraAcademicQual" class="form-input marathi-input" value="नाही"></div>
-                  <div><label class="form-label">वाढीव व्यावसायिक अर्हता</label><input type="text" data-field="extraProfQual" class="form-input marathi-input" value="नाही"></div>
+                <div class="grid-group grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 border-t border-slate-200">
+                  <div class="field-box"><label class="form-label">वाढीव शैक्षणिक अर्हता</label><input type="text" data-field="extraAcademicQual" class="form-input marathi-input" value="नाही"></div>
+                  <div class="field-box"><label class="form-label">वाढीव व्यावसायिक अर्हता</label><input type="text" data-field="extraProfQual" class="form-input marathi-input" value="नाही"></div>
 
-                  <div class="md:col-span-2 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                  <div class="sub-card md:col-span-2 p-3 bg-slate-50 rounded-lg border border-slate-200">
                     <h5 class="text-xs font-bold text-slate-900 mb-2">TET / CTET तपशील</h5>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
-                      <div><label class="form-label">परीक्षा/पेपर</label><input type="text" data-field="tetPaper" class="form-input"></div>
-                      <div><label class="form-label">विषय</label><input type="text" data-field="tetSubject" class="form-input marathi-input"></div>
-                      <div><label class="form-label">महिना/वर्ष</label><input type="text" data-field="tetPassYear" class="form-input"></div>
-                      <div><label class="form-label">प्राप्त गुण</label><input type="text" data-field="tetMarks" class="form-input"></div>
-                      <div><label class="form-label">प्रमाणपत्र क्र.</label><input type="text" data-field="tetCertNo" class="form-input"></div>
-                      <div><label class="form-label">दिनांक</label><input type="date" data-field="tetCertDate" class="form-input"></div>
+                    <div class="grid-group grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
+                      <div class="field-box"><label class="form-label">परीक्षा/पेपर</label><input type="text" data-field="tetPaper" class="form-input"></div>
+                      <div class="field-box"><label class="form-label">विषय</label><input type="text" data-field="tetSubject" class="form-input marathi-input"></div>
+                      <div class="field-box"><label class="form-label">महिना/वर्ष</label><input type="text" data-field="tetPassYear" class="form-input"></div>
+                      <div class="field-box"><label class="form-label">प्राप्त गुण</label><input type="text" data-field="tetMarks" class="form-input"></div>
+                      <div class="field-box"><label class="form-label">प्रमाणपत्र क्र.</label><input type="text" data-field="tetCertNo" class="form-input"></div>
+                      <div class="field-box"><label class="form-label">दिनांक</label><input type="date" data-field="tetCertDate" class="form-input"></div>
                     </div>
                   </div>
 
-                  <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+                  <div class="sub-card p-3 bg-slate-50 rounded-lg border border-slate-200">
                     <h5 class="text-xs font-bold text-slate-900 mb-2">TAIT-२०२५</h5>
-                    <div class="grid grid-cols-2 gap-2">
-                      <div><label class="form-label">प्राप्त गुण</label><input type="text" data-field="taitScore" class="form-input"></div>
-                      <div><label class="form-label">बैठक क्र.</label><input type="text" data-field="taitSeatNo" class="form-input"></div>
+                    <div class="grid-group grid grid-cols-2 gap-2">
+                      <div class="field-box"><label class="form-label">प्राप्त गुण</label><input type="text" data-field="taitScore" class="form-input"></div>
+                      <div class="field-box"><label class="form-label">बैठक क्र.</label><input type="text" data-field="taitSeatNo" class="form-input"></div>
                     </div>
                   </div>
 
-                  <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+                  <div class="sub-card p-3 bg-slate-50 rounded-lg border border-slate-200">
                     <h5 class="text-xs font-bold text-slate-900 mb-2">MSCIT</h5>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                      <div><label class="form-label">महिना/वर्ष</label><input type="text" data-field="mscitYear" class="form-input"></div>
-                      <div><label class="form-label">गुण/%</label><input type="text" data-field="mscitMarks" class="form-input"></div>
-                      <div><label class="form-label">प्र.क्र.</label><input type="text" data-field="mscitCertNo" class="form-input"></div>
-                      <div><label class="form-label">दिनांक</label><input type="date" data-field="mscitDate" class="form-input"></div>
+                    <div class="grid-group grid grid-cols-2 sm:grid-cols-4 gap-2">
+                      <div class="field-box"><label class="form-label">महिना/वर्ष</label><input type="text" data-field="mscitYear" class="form-input"></div>
+                      <div class="field-box"><label class="form-label">गुण/%</label><input type="text" data-field="mscitMarks" class="form-input"></div>
+                      <div class="field-box"><label class="form-label">प्र.क्र.</label><input type="text" data-field="mscitCertNo" class="form-input"></div>
+                      <div class="field-box"><label class="form-label">दिनांक</label><input type="date" data-field="mscitDate" class="form-input"></div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- SECTION 7: PREVIOUS EMPLOYMENT & CHARACTER -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <!-- SECTION 7: PREVIOUS EMPLOYMENT, CHARACTER & DECLARATION PLACE/DATE -->
+            <div class="form-section-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
               <div class="bg-slate-800 text-white px-4 py-2 font-bold text-sm">
-                ७. पूर्वीची नोकरी, चारित्र्यविषयक प्रश्न व संदर्भी व्यक्ती (साक्षांकन क्र. १४, १५, १६)
+                ७. ठिकाण, दिनांक, पूर्वीची नोकरी व संदर्भी व्यक्ती
               </div>
               <div class="p-4 space-y-4">
-                <div>
+                <div class="dynamic-table-box" data-for-forms="attestation">
                   <div class="flex items-center justify-between mb-2">
                     <span class="text-xs font-bold text-slate-800">पूर्वी धारण केलेले पद (क्र. १४ अ)</span>
                     <button type="button" onclick="addEmploymentRow()" class="px-2.5 py-1 rounded bg-slate-800 text-white text-xs font-semibold">+ नोकरी जोडा</button>
@@ -879,61 +884,61 @@
                       <tbody id="employment-tbody"></tbody>
                     </table>
                   </div>
-                  <div class="mt-2">
+                  <div class="field-box mt-2">
                     <label class="form-label">१४ (ब) शिस्तभंग कार्यवाही तपशील</label>
                     <input type="text" data-field="prevDisciplinary" class="form-input" value="नाही / लागू नाही">
                   </div>
                 </div>
 
-                <div class="pt-2 border-t border-slate-200">
+                <div class="sub-card pt-2 border-t border-slate-200">
                   <h4 class="text-xs font-bold text-slate-800 mb-2">साक्षांकन क्र. १५ (१) प्रश्न</h4>
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
-                    <div class="flex items-center justify-between p-2 bg-slate-50 rounded border border-slate-200">
+                  <div class="grid-group grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                    <div class="field-box flex items-center justify-between p-2 bg-slate-50 rounded border border-slate-200">
                       <span>अ) स्थानबद्ध ठेवले होते का?</span>
                       <select data-field="q15a" class="border border-slate-300 rounded px-2 py-1 font-semibold"><option value="नाही / No">नाही / No</option><option value="होय / Yes">होय / Yes</option></select>
                     </div>
-                    <div class="flex items-center justify-between p-2 bg-slate-50 rounded border border-slate-200">
+                    <div class="field-box flex items-center justify-between p-2 bg-slate-50 rounded border border-slate-200">
                       <span>ब) अटक करण्यात आली होती का?</span>
                       <select data-field="q15b" class="border border-slate-300 rounded px-2 py-1 font-semibold"><option value="नाही / No">नाही / No</option><option value="होय / Yes">होय / Yes</option></select>
                     </div>
-                    <div class="flex items-center justify-between p-2 bg-slate-50 rounded border border-slate-200">
+                    <div class="field-box flex items-center justify-between p-2 bg-slate-50 rounded border border-slate-200">
                       <span>क) खटला दाखल केला आहे का?</span>
                       <select data-field="q15c" class="border border-slate-300 rounded px-2 py-1 font-semibold"><option value="नाही / No">नाही / No</option><option value="होय / Yes">होय / Yes</option></select>
                     </div>
-                    <div class="flex items-center justify-between p-2 bg-slate-50 rounded border border-slate-200">
+                    <div class="field-box flex items-center justify-between p-2 bg-slate-50 rounded border border-slate-200">
                       <span>ड) फौजदारी खटला प्रलंबित आहे का?</span>
                       <select data-field="q15d" class="border border-slate-300 rounded px-2 py-1 font-semibold"><option value="नाही / No">नाही / No</option><option value="होय / Yes">होय / Yes</option></select>
                     </div>
-                    <div class="flex items-center justify-between p-2 bg-slate-50 rounded border border-slate-200">
+                    <div class="field-box flex items-center justify-between p-2 bg-slate-50 rounded border border-slate-200">
                       <span>इ) सिद्ध अपराधी ठरविले आहे का?</span>
                       <select data-field="q15e" class="border border-slate-300 rounded px-2 py-1 font-semibold"><option value="नाही / No">नाही / No</option><option value="होय / Yes">होय / Yes</option></select>
                     </div>
-                    <div class="flex items-center justify-between p-2 bg-slate-50 rounded border border-slate-200">
+                    <div class="field-box flex items-center justify-between p-2 bg-slate-50 rounded border border-slate-200">
                       <span>फ) प्रशिक्षण संस्थेने काढले आहे का?</span>
                       <select data-field="q15f" class="border border-slate-300 rounded px-2 py-1 font-semibold"><option value="नाही / No">नाही / No</option><option value="होय / Yes">होय / Yes</option></select>
                     </div>
-                    <div class="flex items-center justify-between p-2 bg-slate-50 rounded border border-slate-200">
+                    <div class="field-box flex items-center justify-between p-2 bg-slate-50 rounded border border-slate-200">
                       <span>ज) विद्यापीठाने काढून टाकले आहे का?</span>
                       <select data-field="q15g" class="border border-slate-300 rounded px-2 py-1 font-semibold"><option value="नाही / No">नाही / No</option><option value="होय / Yes">होय / Yes</option></select>
                     </div>
-                    <div class="flex items-center justify-between p-2 bg-slate-50 rounded border border-slate-200">
+                    <div class="field-box flex items-center justify-between p-2 bg-slate-50 rounded border border-slate-200">
                       <span>च) लोकसेवा आयोगाने अनर्ह ठरविले आहे का?</span>
                       <select data-field="q15h" class="border border-slate-300 rounded px-2 py-1 font-semibold"><option value="नाही / No">नाही / No</option><option value="होय / Yes">होय / Yes</option></select>
                     </div>
                   </div>
-                  <div class="mt-2">
+                  <div class="field-box mt-2">
                     <label class="form-label">१५ (२) होय असल्यास तपशील</label>
                     <input type="text" data-field="q15Particulars" class="form-input" value="लागू नाही / Not Applicable">
                   </div>
                 </div>
 
-                <div class="pt-2 border-t border-slate-200 grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div><label class="form-label">१६ (१) संदर्भी व्यक्ती क्र. १</label><input type="text" data-field="ref1" class="form-input marathi-input"></div>
-                  <div><label class="form-label">१६ (२) संदर्भी व्यक्ती क्र. २</label><input type="text" data-field="ref2" class="form-input marathi-input"></div>
-                  <div><label class="form-label">ठिकाण (Place)</label><input type="text" data-field="declPlace" class="form-input marathi-input" value="कराड"></div>
-                  <div><label class="form-label">दिनांक (Date)</label><input type="date" data-field="declDate" class="form-input" value="2026-11-27"></div>
-                  <div><label class="form-label">(कार्यालयीन) नियुक्ती प्राधिकारी</label><input type="text" data-field="officeAuthority" class="form-input marathi-input"></div>
-                  <div><label class="form-label">(कार्यालयीन) विचारात घेतलेले पद</label><input type="text" data-field="officePost" class="form-input"></div>
+                <div class="grid-group pt-2 border-t border-slate-200 grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div class="field-box"><label class="form-label">१६ (१) संदर्भी व्यक्ती क्र. १</label><input type="text" data-field="ref1" class="form-input marathi-input"></div>
+                  <div class="field-box"><label class="form-label">१६ (२) संदर्भी व्यक्ती क्र. २</label><input type="text" data-field="ref2" class="form-input marathi-input"></div>
+                  <div class="field-box"><label class="form-label">ठिकाण (Place)</label><input type="text" data-field="declPlace" class="form-input marathi-input" value="कराड"></div>
+                  <div class="field-box"><label class="form-label">दिनांक (Date)</label><input type="date" data-field="declDate" class="form-input" value="2026-11-27"></div>
+                  <div class="field-box"><label class="form-label">(कार्यालयीन) नियुक्ती प्राधिकारी</label><input type="text" data-field="officeAuthority" class="form-input marathi-input"></div>
+                  <div class="field-box"><label class="form-label">(कार्यालयीन) विचारात घेतलेले पद</label><input type="text" data-field="officePost" class="form-input"></div>
                 </div>
               </div>
             </div>
@@ -945,7 +950,7 @@
           <div class="no-print bg-slate-900 text-white px-3 py-2 rounded-lg mb-3 flex flex-wrap items-center justify-between gap-2 text-xs">
             <div class="flex items-center gap-2">
               <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              <strong>लाईव्ह रिपोर्ट प्रिव्ह्यू (फक्त या रिपोर्टची आवश्यक फील्ड्स डावीकडे हायलाइट होतील):</strong>
+              <strong>लाईव्ह रिपोर्ट प्रिव्ह्यू निवडा:</strong>
             </div>
             <div class="flex items-center gap-1.5">
               <select id="live-preview-selector" onchange="switchLivePreviewDoc(this.value)" class="bg-slate-800 text-amber-300 border border-slate-600 rounded px-2 py-1 font-bold">
@@ -1343,7 +1348,7 @@
                 याद्वारे असे जाहीर <span data-bind="genderVerb">करते</span> की,—
               </p>
 
-              <ol style="padding-left: 24px; text-align: justify; font-size: 11.5pt; line-height: 1.85; space-y: 12px;">
+              <ol style="padding-left: 24px; text-align: justify; font-size: 11.5pt; line-height: 1.85;">
                 <li style="margin-bottom: 14px;">
                   मी <strong class="underline decoration-dotted underline-offset-4 px-1" data-bind="sansthaFullDisplay">—</strong> येथे
                   <strong class="underline decoration-dotted underline-offset-4 px-1" data-bind="postFullDisplay">—</strong>
@@ -1475,7 +1480,7 @@
     // =========================================================================
     // MULTI-CANDIDATE STATE & FORM-SPECIFIC REQUIRED FIELDS
     // =========================================================================
-    const MULTI_DB_KEY = 'pavitra_2025_bhaskar_thorat_multi_db_full_v6';
+    const MULTI_DB_KEY = 'pavitra_2025_bhaskar_thorat_multi_db_full_v7';
 
     const QUAL_ROWS_CONFIG = [
       { key: 'ssc', label: '२२. शालांत परीक्षा प्रमाणपत्र (S.S.C.) गुणपत्रक व प्रमाणपत्र', hasSubject: false },
@@ -1487,7 +1492,14 @@
       { key: 'med', label: '२९. एम.एड / एम.पी.एड / पी.एच.डी', hasSubject: false }
     ];
 
-    // ONLY required fields for each Live Form Report will be highlighted Light Green / Light Red
+    const FORM_TITLES = {
+      'small-family': "लहान कुटुंबाचे घोषणापत्र (नमुना 'अ')",
+      'attestation': "साक्षांकन नमुना (Attestation Form)",
+      'checklist': "परिशिष्ट - अ (Checklist 40)",
+      'affidavit': "Notarized शपथपत्र"
+    };
+
+    // Exact fields needed for each Live Form
     const FORM_REQUIRED_FIELDS = {
       'small-family': [
         'firstNameMr', 'middleNameMr', 'surnameMr', 'gender',
@@ -1503,21 +1515,35 @@
       'attestation': [
         'firstNameMr', 'middleNameMr', 'surnameMr',
         'firstNameEn', 'middleNameEn', 'surnameEn',
-        'presentAddress', 'homeAddress', 'aadhaar', 'pan',
+        'aliases', 'presentAddress', 'homeAddress', 'migrationDetails',
+        'aadhaar', 'pan', 'nationality',
         'dob', 'presentAge', 'ageAtMatric', 'placeOfBirth',
+        'homeDistrictState', 'fatherDistrictState',
         'religion', 'casteCategory',
-        'fatherName', 'fatherBirthPlace', 'fatherOccupation', 'fatherPresentAddr', 'fatherPermAddr',
-        'motherName', 'motherBirthPlace', 'motherPresentAddr', 'motherPermAddr',
-        'ref1', 'ref2', 'declPlace', 'declDate'
+        'fatherName', 'fatherNationality', 'fatherBirthPlace', 'fatherOccupation', 'fatherPresentAddr', 'fatherPermAddr',
+        'motherName', 'motherNationality', 'motherBirthPlace', 'motherOccupation', 'motherPresentAddr', 'motherPermAddr',
+        'spouseName', 'spouseNationality', 'spouseBirthPlace', 'spouseOccupation', 'spousePresentAddr', 'spousePermAddr',
+        'prevDisciplinary', 'q15a', 'q15b', 'q15c', 'q15d', 'q15e', 'q15f', 'q15g', 'q15h', 'q15Particulars',
+        'ref1', 'ref2', 'declPlace', 'declDate', 'officeAuthority', 'officePost'
       ],
       'checklist': [
         'firstNameMr', 'middleNameMr', 'surnameMr',
         'firstNameEn', 'middleNameEn', 'surnameEn',
-        'sansthaCode', 'sansthaName', 'verificationDate', 'meritListSerial',
-        'recommendedGroup', 'recommendedSubject', 'teachingMedium',
-        'presentAddress', 'maritalStatus', 'mobile', 'aadhaar',
-        'casteCategory', 'selectionCategory', 'parallelReservation',
-        'dob', 'taitScore', 'taitSeatNo'
+        'sansthaCode', 'sansthaName', 'verificationDate', 'meritListSerial', 'selfCertStatus',
+        'recommendedGroup', 'recommendedSubject', 'teachingMedium', 'marriedName',
+        'presentAddress', 'maritalStatus', 'mobile', 'aadhaar', 'nationality',
+        'domicileType', 'domicileDetails', 'casteCategory',
+        'casteValidityStatus', 'casteValidityNo', 'casteValidityDate',
+        'selectionCategory', 'parallelReservation', 'parallelAvailedBefore',
+        'parallelCertNo', 'parallelCertDate', 'parallelAuthority',
+        'nclSdo', 'nclNo', 'nclDate',
+        'dob', 'ageOnCutoff', 'extraAcademicQual', 'extraProfQual',
+        'tetPaper', 'tetSubject', 'tetPassYear', 'tetMarks', 'tetCertNo', 'tetCertDate',
+        'taitScore', 'taitSeatNo', 'mscitYear', 'mscitMarks', 'mscitCertNo', 'mscitDate',
+        'divyangType', 'divyangPercent', 'udidNo',
+        'farmerSuicideWard', 'farmerSuicideCert', 'farmerSuicideRelation',
+        'currentlyEmployed', 'currentEmployerInfo', 'currentNocDetails',
+        'shalarthId', 'smallFamilyDecl', 'totalChildren', 'tetMalpracticeList'
       ]
     };
 
@@ -1634,6 +1660,80 @@
     let isSplitView = true;
     let activeLivePreviewKey = 'small-family';
     let marathiTypingEnabled = true;
+    let showOnlyRequiredFields = true; // Default: show ONLY fields required for the active live form
+
+    // =========================================================================
+    // FILTER FORM TO SHOW ONLY FIELDS NEEDED FOR SELECTED LIVE REPORT
+    // =========================================================================
+    function toggleShowOnlyRequiredFields() {
+      showOnlyRequiredFields = !showOnlyRequiredFields;
+      const btn = document.getElementById('btn-filter-fields');
+      if (showOnlyRequiredFields) {
+        btn.textContent = '🎯 फक्त Live Form फील्ड्स: चालू';
+        btn.className = 'inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3 py-1.5 rounded-lg shadow transition';
+      } else {
+        btn.textContent = '📋 सर्व फील्ड्स दाखवा: चालू';
+        btn.className = 'inline-flex items-center gap-1.5 bg-slate-700 hover:bg-slate-600 text-white font-bold px-3 py-1.5 rounded-lg shadow transition';
+      }
+      updateFieldVisibilityAndColors();
+    }
+
+    function updateFieldVisibilityAndColors() {
+      const requiredList = FORM_REQUIRED_FIELDS[activeLivePreviewKey] || [];
+      const banner = document.getElementById('active-filter-banner');
+      if (banner) {
+        banner.textContent = showOnlyRequiredFields
+          ? `🎯 सध्या फक्त "${FORM_TITLES[activeLivePreviewKey]}" साठी आवश्यक फील्ड्स स्क्रीनवर दिसत आहेत`
+          : `📋 सध्या सर्व विभागांची संपूर्ण माहिती स्क्रीनवर दिसत आहे`;
+      }
+
+      // 1. Highlight & Show/Hide individual field boxes
+      document.querySelectorAll('.field-box').forEach(box => {
+        const input = box.querySelector('[data-field]');
+        if (!input) return;
+        const key = input.getAttribute('data-field');
+        const isNeeded = requiredList.includes(key);
+
+        input.classList.remove('field-filled', 'field-empty');
+
+        if (isNeeded) {
+          box.style.display = '';
+          const val = (input.value || '').trim();
+          if (val !== '') {
+            input.classList.add('field-filled'); // Light Green
+          } else {
+            input.classList.add('field-empty');  // Light Red
+          }
+        } else {
+          box.style.display = showOnlyRequiredFields ? 'none' : '';
+        }
+      });
+
+      // 2. Show/Hide dynamic tables (Residences, Education, Marks, Employment) based on active form
+      document.querySelectorAll('.dynamic-table-box').forEach(tblBox => {
+        const allowedForms = (tblBox.getAttribute('data-for-forms') || '').split(',');
+        const isNeeded = allowedForms.includes(activeLivePreviewKey);
+        tblBox.style.display = (!showOnlyRequiredFields || isNeeded) ? '' : 'none';
+      });
+
+      // 3. Hide empty grid wrappers & sub-cards when all child field-boxes are hidden
+      document.querySelectorAll('.grid-group').forEach(grid => {
+        const visibleChildren = Array.from(grid.children).filter(ch => ch.style.display !== 'none');
+        grid.style.display = visibleChildren.length > 0 ? '' : 'none';
+      });
+
+      document.querySelectorAll('.sub-card').forEach(sub => {
+        const hasVisibleContent = Array.from(sub.querySelectorAll('.field-box')).some(fb => fb.style.display !== 'none');
+        sub.style.display = hasVisibleContent ? '' : 'none';
+      });
+
+      // 4. Hide whole section cards that have ZERO visible inputs for the current Live Form
+      document.querySelectorAll('.form-section-card').forEach(card => {
+        const hasVisibleField = Array.from(card.querySelectorAll('.field-box')).some(fb => fb.style.display !== 'none');
+        const hasVisibleTable = Array.from(card.querySelectorAll('.dynamic-table-box')).some(tb => tb.style.display !== 'none');
+        card.style.display = (hasVisibleField || hasVisibleTable) ? '' : 'none';
+      });
+    }
 
     // =========================================================================
     // GOOGLE INPUT TOOLS LIVE MARATHI TRANSLITERATION ENGINE
@@ -1779,27 +1879,6 @@
     }
 
     // =========================================================================
-    // ONLY HIGHLIGHT REQUIRED FIELDS FOR CURRENT LIVE FORM
-    // =========================================================================
-    function updateFieldValidationVisuals() {
-      const requiredList = FORM_REQUIRED_FIELDS[activeLivePreviewKey] || [];
-      document.querySelectorAll('[data-field]').forEach(el => {
-        const key = el.getAttribute('data-field');
-        el.classList.remove('field-filled', 'field-empty');
-
-        // Apply Light Green or Light Red ONLY if field is required for the active Live Form
-        if (requiredList.includes(key)) {
-          const val = (el.value || '').trim();
-          if (val !== '') {
-            el.classList.add('field-filled'); // Light Green
-          } else {
-            el.classList.add('field-empty');  // Light Red
-          }
-        }
-      });
-    }
-
-    // =========================================================================
     // MULTI-CANDIDATE DATABASE OPERATIONS
     // =========================================================================
     function loadDatabase() {
@@ -1940,14 +2019,14 @@
       if (isSplitView) {
         container.classList.add('split-active');
         liveCol.classList.remove('hidden');
-        btn.textContent = '🖥️ Split View: चालू (Form + Live Report)';
+        btn.textContent = '🖥️ Split View: चालू';
         btn.classList.replace('bg-slate-700', 'bg-amber-500');
         btn.classList.replace('text-white', 'text-slate-950');
         refreshLivePreviewClone();
       } else {
         container.classList.remove('split-active');
         liveCol.classList.add('hidden');
-        btn.textContent = '🖥️ Split View: बंद (Only Form)';
+        btn.textContent = '🖥️ Split View: बंद';
         btn.classList.replace('bg-amber-500', 'bg-slate-700');
         btn.classList.replace('text-slate-950', 'text-white');
       }
@@ -2264,7 +2343,7 @@
         <tr><td class="text-center font-bold">${sr}</td><td>${label}</td><td>${val}</td></tr>
       `).join('');
 
-      updateFieldValidationVisuals();
+      updateFieldVisibilityAndColors();
       refreshLivePreviewClone();
     }
 
@@ -2473,7 +2552,7 @@
         const key = el.getAttribute('data-field');
         el.value = appState.fields[key] !== undefined ? appState.fields[key] : '';
       });
-      updateFieldValidationVisuals();
+      updateFieldVisibilityAndColors();
     }
 
     function attachInputListeners() {
